@@ -1,0 +1,21 @@
+"Gamemode"
+{
+	"name"		"MiniTank Deathmatch"
+	"version"	"0.1 Alpha"
+
+	"author_name"	"BMCha"
+	"author_email"	""
+	"author_url"	""
+	
+	"icon"		""
+	"info"		""
+	"hide"		"0"
+
+	"fretta_maps"
+	{
+		"1"	"^mt_"
+	}
+
+	"selectable"	"1"
+	"description"	"Arcadey Deathmatch...with Tanks."
+}
