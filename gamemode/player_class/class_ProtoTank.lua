@@ -7,7 +7,7 @@ This gamemode is licenced under the MIT License, reproduced in shared.lua
 
 local CLASS = {}
  
-CLASS.DisplayName			= "M4 Sherman"
+CLASS.DisplayName			= "ProtoTank"
 CLASS.WalkSpeed 			= 400
 CLASS.CrouchedWalkSpeed 	= 0.2
 CLASS.RunSpeed				= 600
@@ -34,8 +34,17 @@ function CLASS:Loadout( pl )
 end
  
 function CLASS:OnSpawn( pl )
-	local playermodel=pl:GetModel()
-	pl:SetModel("BMCha\MiniTanks\ProtoTank_Body")
+	pl:SetModel( "lolidk" )
+	local TankEnt = ents.Create( "ProtoTank" )
+	TankEnt:Spawn()
+	TankEnt:SetPos(pl:GetPos())
+	TankEnt:SetAngles(pl:GetAngles())	
+	TankEnt:SetParent(pl)
+	pl:SetPos(pl:GetPos()+Vector(0,0,100))
+	TankEnt:SetPlayerModel(pl:GetModel())
+	pl:DrawShadow(false)
+	pl:SetColor( Color(0,0,0,100) )
+	pl.TankEnt = TankEnt
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
@@ -53,19 +62,19 @@ end
 function CLASS:OnKeyRelease( pl, key )
 end
  
+
 function CLASS:CalcView( ply, origin, angles, fov )
-	local view = {}
- 
-	view.origin = ply:GetPos() + (ply:GetForward()*-200) + Vector(0,0,100)
-	view.angles=angles
-	view.fov=fov
- 
-	return view
+	local View = {}
+	View.origin = Origin - pl:GetForward*-400
+	View.angles = Angles
+	View.fov = FieldOfView 
+	return View
 end
 
-function CLASS:ShouldDrawLocalPlayer(ply)  
-    return true 
+
+function CLASS:ShouldDrawLocalPlayer(ply)  //don't show the player themselves, not that it really matters, as they're invisible anyway, and the visuals are done by an attached SENT
+    return false
 end  
  
-player_class.Register( "M4_Sherman", CLASS )
+player_class.Register( "ProtoTank", CLASS )
  
