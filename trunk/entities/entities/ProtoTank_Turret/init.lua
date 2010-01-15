@@ -1,7 +1,13 @@
+ /*
+MiniTank Wars
+Copyright (c) 2010 BMCha
+This gamemode is licenced under the MIT License, reproduced in /shared.lua
+*/
+
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
-
+MyPlayer=NULL
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -30,7 +36,7 @@ function ENT:SetPlayerModel( playersmodel )
     self.PlayerEnt:SetBoneMatrix(index, matrix)
 	index = self.PlayerEnt:LookupBone("ValveBiped.Bip01_Spine")
 	matrix = self.PlayerEnt:GetBoneMatrix(index) 
-    matrix:Rotate(Angle(0,0,45))
+    matrix:Rotate(Angle(0,45,0))
     self.PlayerEnt:SetBoneMatrix(index, matrix)
 	//local BonePos , BoneAng = self.PlayerEnt:GetBonePosition( self.PlayerEnt:LookupBone("ValveBiped.Bip01_R_UpperArm") )
 	//self.PlayerEnt:SetBonePosition(BonePos, BoneAng + Angle(-45,0,0))

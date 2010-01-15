@@ -18,6 +18,7 @@ function GM:PaintSplashScreen(w, h)
 	surface.SetMaterial( Material( "MiniTankWars/USSR_Flag" ) )
 	surface.DrawTexturedRect( 720*SF, 48*SF, 512*SF2, 128*SF2 )
 	
-	//surface.SetMaterial( Material( "MiniTankWars/MiniTankWarsLogo" ) )
-	//surface.DrawTexturedRect( 50*SF, 500*SF, 512*SF2, 256*SF2 )
+	surface.SetDrawColor(Color(150,150,150,200))
+	surface.SetMaterial( Material( "MiniTankWars/MiniTankWarsLogo" ) )
+	surface.DrawTexturedRect( 262*SF, 255*SF, 512*SF, 256*SF )
 end
