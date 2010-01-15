@@ -34,14 +34,16 @@ function CLASS:Loadout( pl )
 end
  
 function CLASS:OnSpawn( pl )
-	pl:SetModel( "lolidk" )
+	//pl:SetScale(0,0,0)
 	local TankEnt = ents.Create( "ProtoTank" )
-	TankEnt:Spawn()
 	TankEnt:SetPos(pl:GetPos())
 	TankEnt:SetAngles(pl:GetAngles())	
-	TankEnt:SetParent(pl)
-	pl:SetPos(pl:GetPos()+Vector(0,0,100))
+	TankEnt:Spawn()
+	TankEnt:SetParent(pl)	
+	TankEnt:SetAngles(TankEnt:GetAngles()+Angle(0,180,0))
 	TankEnt:SetPlayerModel(pl:GetModel())
+	TankEnt:SetMyPlayer(pl)
+	pl:SetPos(pl:GetPos()+Vector(0,0,200))
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,100) )
 	pl.TankEnt = TankEnt
@@ -61,20 +63,10 @@ end
  
 function CLASS:OnKeyRelease( pl, key )
 end
- 
 
-function CLASS:CalcView( ply, origin, angles, fov )
-	local View = {}
-	View.origin = Origin - pl:GetForward*-400
-	View.angles = Angles
-	View.fov = FieldOfView 
-	return View
-end
-
-
+/*
 function CLASS:ShouldDrawLocalPlayer(ply)  //don't show the player themselves, not that it really matters, as they're invisible anyway, and the visuals are done by an attached SENT
-    return false
-end  
+    return true
+end  */
  
-player_class.Register( "ProtoTank", CLASS )
- 
+player_class.Register( "ProtoTank", CLASS )  

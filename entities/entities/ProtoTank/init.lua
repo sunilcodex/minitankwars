@@ -1,7 +1,13 @@
+ /*
+MiniTank Wars
+Copyright (c) 2010 BMCha
+This gamemode is licenced under the MIT License, reproduced in /shared.lua
+*/
+
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
-
+MyPlayer = NULL
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -29,4 +35,10 @@ end
 ---------------------------------------------------------*/
 function ENT:SetPlayerModel( playersmodel )
 	self.TurretEnt:SetPlayerModel( playersmodel)
+end
+
+function ENT:SetMyPlayer( pl )
+	MyPlayer=pl
+	self.TurretEnt.MyPlayer=pl
+	self.TrackEnt.MyPlayer=pl
 end

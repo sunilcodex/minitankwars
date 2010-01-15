@@ -87,11 +87,11 @@ function GM:CreateTeams()
  
 	if ( !GAMEMODE.TeamBased ) then return end
  
-	team.SetUp( TEAM_USA, "USA", Color( 0, 0, 150 ), true )
+	team.SetUp( TEAM_USA, "USA", Color( 41, 41, 222 ), true )
 	team.SetSpawnPoint( TEAM_USA, { "info_player_start", "info_player_counterterrorist" } )
-	team.SetClass( TEAM_USA, { "ProtoTank"}) //, "M4_Sherman", "M1A2_Abrams", "M60_Patton", "M551_Sheridan" } )
+	team.SetClass( TEAM_USA, { "ProtoTank"} ) //, "M4_Sherman", "M1A2_Abrams", "M60_Patton", "M551_Sheridan" } )
 	
-	team.SetUp( TEAM_USSR, "USSR", Color( 128, 0, 0 ), true )
+	team.SetUp( TEAM_USSR, "USSR", Color( 189, 0, 0 ), true )
 	team.SetSpawnPoint( TEAM_USSR, { "info_player_start", "info_player_terrorist" } )
 	team.SetClass( TEAM_USSR, { "ProtoTank"} ) //, "T34", "T72" } )
  
@@ -100,3 +100,14 @@ function GM:CreateTeams()
  
 end
  
+function GM:CalcView( pl, origin, angles, fov )
+	local View = {}
+	View.origin = Origin + pl:GetForward() * -400
+	View.angles = Angles
+	View.fov = FieldOfView 
+	return View
+end
+
+function GM:ShouldCollide(ent1, ent2)
+	if ((ent1 == ent2.MyPlayer) or (ent1.MyPlayer and ent2) then return true end
+end
