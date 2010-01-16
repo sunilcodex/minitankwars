@@ -22,3 +22,13 @@ function GM:PaintSplashScreen(w, h)
 	surface.SetMaterial( Material( "MiniTankWars/MiniTankWarsLogo" ) )
 	surface.DrawTexturedRect( 262*SF, 255*SF, 512*SF, 256*SF )
 end
+
+/*function GM:CalcView( pl, origin, angles, fov )
+	local View = pl:CallClassFunction( "CalcView", origin, angles, fov ) or { ["origin"] = origin, ["angles"] = angles, ["fov"] = fov };
+	View.origin = origin+(pl:GetForward() * -400)+Vector(0,0,100)
+	View.angles = pl:EyeAngles()
+	View.fov = fov 
+	return View
+	//return the modified values
+    //return GM:CalcView(ply,origin,angles,fov)
+end*/
