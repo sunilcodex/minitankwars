@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 */
 
-GM.Name 	= "MiniTank Deathmatch"
+GM.Name 	= "MiniTank Wars"
 GM.Author 	= "BMCha"
 GM.Email 	= ""
 GM.Website 	= ""
@@ -99,15 +99,7 @@ function GM:CreateTeams()
 	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_combine", "info_player_rebel" } ) 
  
 end
- 
-function GM:CalcView( pl, origin, angles, fov )
-	local View = {}
-	View.origin = Origin + pl:GetForward() * -400
-	View.angles = Angles
-	View.fov = FieldOfView 
-	return View
-end
 
 function GM:ShouldCollide(ent1, ent2)
-	if ((ent1 == ent2.MyPlayer) or (ent1.MyPlayer and ent2) then return true end
+	if ((ent1 == ent2.MyPlayer) or (ent1.MyPlayer == ent2)) then return false end
 end

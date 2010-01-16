@@ -7,12 +7,12 @@ This gamemode is licenced under the MIT License, reproduced in /shared.lua
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
-MyPlayer=NULL
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
 function ENT:Initialize()
-
+	self.Entity.MyPlayer = NULL
+	
 	self.Entity:SetModel( "models/BMCha/MiniTanks/ProtoTank/ProtoTank_Tracks.mdl" )
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )

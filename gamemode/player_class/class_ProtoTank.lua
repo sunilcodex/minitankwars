@@ -27,10 +27,6 @@ CLASS.Selectable			= true // When false, this disables all the team checking
 CLASS.FullRotation			= false // Allow the player's model to rotate upwards, etc etc
  
 function CLASS:Loadout( pl )
- 
-	pl:Give( "weapon_pistol" )
-	pl:GiveAmmo( 255,	"Pistol", 		true )
- 
 end
  
 function CLASS:OnSpawn( pl )
@@ -47,6 +43,11 @@ function CLASS:OnSpawn( pl )
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,100) )
 	pl.TankEnt = TankEnt
+	/*---------------------------------------------
+			Tank Differentiating Variables
+	---------------------------------------------*/
+		pl.TopSpeed=40  //-un/sec
+		pl.TurnSpeed= 45  //-Degrees/sec
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
@@ -63,6 +64,27 @@ end
  
 function CLASS:OnKeyRelease( pl, key )
 end
+
+
+function CLASS:CalcView( ply, origin, angles, fov )
+	
+	if ( !ply:Alive() ) then return end
+	
+	local DistanceAngle = angles:Forward() * - 0.8 + angles:Up() * 0.2
+	
+	local ret = {}
+	ret.origin = origin + DistanceAngle * 350
+	
+	/*if ( ply:KeyDown( IN_JUMP ) ) then
+		local factor = 1
+		ret.angles = angles + Angle( math.random( factor * -1, factor ), math.random( factor * -1, factor ), math.random( factor * -1, factor ) ) 
+	end*/
+	//ret.angles 		= angles
+	//ret.fov 		= fov
+	return ret
+
+end
+
 
 /*
 function CLASS:ShouldDrawLocalPlayer(ply)  //don't show the player themselves, not that it really matters, as they're invisible anyway, and the visuals are done by an attached SENT
