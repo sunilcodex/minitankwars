@@ -2,6 +2,9 @@
 MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
+------------------------
+ProtoTank_Turret init.lua
+	-ProtoTank Turret Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
@@ -19,6 +22,8 @@ function ENT:Initialize()
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
 	
+	self.Entity:SetNWString("PlayerModel", "models/player/kleiner.mdl")
+	
 	/*self.PlayerEnt= ents.Create( "prop_dynamic" )
 	self.PlayerEnt:SetParent(self.Entity)
 	self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
@@ -26,22 +31,7 @@ function ENT:Initialize()
 	self.PlayerEnt:Spawn()*/
 end
 
-/*---------------------------------------------------------
-   Name: SetPlayerModel
----------------------------------------------------------*/
+
 function ENT:SetPlayerModel( playersmodel )
-	self.Entity.PlayersModel=playersmodel
-	/*self.PlayerEnt:SetModel( playersmodel )
-	local index = self.PlayerEnt:LookupBone("ValveBiped.Bip01_Head1")
-	local matrix = self.PlayerEnt:GetBoneMatrix(index) 
-    matrix:Scale(Vector(0,0,0))
-    self.PlayerEnt:SetBoneMatrix(index, matrix)
-	index = self.PlayerEnt:LookupBone("ValveBiped.Bip01_Spine")
-	matrix = self.PlayerEnt:GetBoneMatrix(index) 
-    matrix:Rotate(Angle(0,45,0))
-    self.PlayerEnt:SetBoneMatrix(index, matrix)*/
-	//local BonePos , BoneAng = self.PlayerEnt:GetBonePosition( self.PlayerEnt:LookupBone("ValveBiped.Bip01_R_UpperArm") )
-	//self.PlayerEnt:SetBonePosition(BonePos, BoneAng + Angle(-45,0,0))
-	//local BonePos , BoneAng = self.PlayerEnt:GetBonePosition( self.PlayerEnt:LookupBone("ValveBiped.Bip01_L_UpperArm") )
-	//self.PlayerEnt:SetBonePosition(BonePos, BoneAng + Angle(0,45,0))
+	self.Entity:SetNWString("PlayerModel", playersmodel)
 end

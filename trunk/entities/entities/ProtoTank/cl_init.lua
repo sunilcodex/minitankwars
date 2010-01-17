@@ -2,6 +2,9 @@
 MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
+------------------------
+ProtoTank cl_init.lua
+	-ProtoTank Entity clientside init
 */
 
 include('shared.lua');

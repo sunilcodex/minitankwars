@@ -2,6 +2,9 @@
 MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in shared.lua
+------------------------
+class_ProtoTank.lua
+	-ProtoTank Class setup
 */
 
 
@@ -30,7 +33,6 @@ function CLASS:Loadout( pl )
 end
  
 function CLASS:OnSpawn( pl )
-	//pl:SetScale(0,0,0)
 	local TankEnt = ents.Create( "ProtoTank" )
 	TankEnt:SetPos(pl:GetPos())
 	TankEnt:SetAngles(pl:GetAngles())	
@@ -48,17 +50,26 @@ function CLASS:OnSpawn( pl )
 	---------------------------------------------*/
 		pl.TopSpeed=40  //-un/sec
 		pl.TurnSpeed= 45  //-Degrees/sec
+		pl.TurnAngle = pl:GetAngles().y
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
+	pl.TankEnt:Remove()
+	pl.TankEnt=nil
+	/*local Wreck = ents.Create( "DeadProtoTank" )
+	Wreck.SetPos(pl:GetPos())
+	Wreck.SetAngles(pl:GetAngles())*/
 end
  
 function CLASS:Think( pl )
 end
- 
+/*
 function CLASS:Move( pl, mv )
+	if pl:KeyDown( IN_FORWARD ) then
+		GO
+	end
 end
- 
+*/
 function CLASS:OnKeyPress( pl, key )
 end
  
@@ -75,20 +86,9 @@ function CLASS:CalcView( ply, origin, angles, fov )
 	local ret = {}
 	ret.origin = origin + DistanceAngle * 350
 	
-	/*if ( ply:KeyDown( IN_JUMP ) ) then
-		local factor = 1
-		ret.angles = angles + Angle( math.random( factor * -1, factor ), math.random( factor * -1, factor ), math.random( factor * -1, factor ) ) 
-	end*/
 	//ret.angles 		= angles
 	//ret.fov 		= fov
 	return ret
-
 end
-
-
-/*
-function CLASS:ShouldDrawLocalPlayer(ply)  //don't show the player themselves, not that it really matters, as they're invisible anyway, and the visuals are done by an attached SENT
-    return true
-end  */
  
 player_class.Register( "ProtoTank", CLASS )  
