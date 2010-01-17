@@ -21,6 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+------------------------
+shared.lua
+	-Gamemode Shared init.
+	-Analogous to "main.cpp"
 */
 
 GM.Name 	= "MiniTank Wars"
@@ -50,7 +54,7 @@ GM.NoPlayerPlayerDamage = false 	// Allow players to hurt each other?
 GM.NoNonPlayerPlayerDamage = true 	// Allow damage from non players (physics, fire etc)
 GM.NoPlayerFootsteps = true		// When true, all players have silent footsteps
 GM.PlayerCanNoClip = true		// When true, players can use noclip without sv_cheats
-GM.TakeFragOnSuicide = false		// -1 frag on suicide
+GM.TakeFragOnSuicide = true		// -1 frag on suicide
  
 GM.MaximumDeathLength = 10			// Player will respawn if death length > this (can be 0 to disable)
 GM.MinimumDeathLength = 5			// Player has to be dead for at least this long
@@ -87,11 +91,11 @@ function GM:CreateTeams()
  
 	if ( !GAMEMODE.TeamBased ) then return end
  
-	team.SetUp( TEAM_USA, "USA", Color( 41, 41, 222 ), true )
+	team.SetUp( TEAM_USA, "US Army", Color( 41, 41, 222 ), true )
 	team.SetSpawnPoint( TEAM_USA, { "info_player_start", "info_player_counterterrorist" } )
 	team.SetClass( TEAM_USA, { "ProtoTank"} ) //, "M4_Sherman", "M1A2_Abrams", "M60_Patton", "M551_Sheridan" } )
 	
-	team.SetUp( TEAM_USSR, "USSR", Color( 189, 0, 0 ), true )
+	team.SetUp( TEAM_USSR, "Soviet Army", Color( 189, 0, 0 ), true )
 	team.SetSpawnPoint( TEAM_USSR, { "info_player_start", "info_player_terrorist" } )
 	team.SetClass( TEAM_USSR, { "ProtoTank"} ) //, "T34", "T72" } )
  

@@ -1,6 +1,6 @@
 "Gamemode"
 {
-	"name"		"MiniTank Deathmatch"
+	"name"		"MiniTank Wars"
 	"version"	"0.1 Alpha"
 
 	"author_name"	"BMCha"

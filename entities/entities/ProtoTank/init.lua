@@ -2,14 +2,17 @@
 MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
+------------------------
+ProtoTank init.lua
+	-ProtoTank Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
-/*---------------------------------------------------------
-   Name: Initialize
----------------------------------------------------------*/
+
+
+
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
@@ -30,12 +33,16 @@ function ENT:Initialize()
 	
 end
 
-/*---------------------------------------------------------
-   Name: SetPlayerModel
----------------------------------------------------------*/
+function ENT:OnRemove() 
+	self.TurretEnt:Remove()
+	self.TracksEnt:Remove()
+end
+
+
 function ENT:SetPlayerModel( playersmodel )
 	self.TurretEnt:SetPlayerModel( playersmodel)
 end
+
 
 function ENT:SetMyPlayer( pl )
 	MyPlayer=pl

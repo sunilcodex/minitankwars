@@ -1,25 +1,23 @@
-/*
+  /*
 MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-cl_init.lua
-	-Gamemode clientside init
+cl_hud.lua
+	-Clientside(duh) HUD setup
 */
 
-include( 'shared.lua' )
-
- 
-function GM:PaintSplashScreen(w, h) 
+GM:HUDPaint()
 	SF = h/768  //scalefactor
 	SF2 = SF/2
+	SF3 = SF2/2
 	surface.SetDrawColor( 255, 255, 255, 255 ) 
 	
 	surface.SetMaterial( Material( "MiniTankWars/US_Flag" ) )
-	surface.DrawTexturedRect( 48*SF, 48*SF, 512*SF2, 128*SF2 )
+	surface.DrawTexturedRect( 48*SF, 48*SF, 512*SF3, 128*SF3 )
 	
 	surface.SetMaterial( Material( "MiniTankWars/USSR_Flag" ) )
-	surface.DrawTexturedRect( 720*SF, 48*SF, 512*SF2, 128*SF2 )
+	surface.DrawTexturedRect( 720*SF, 48*SF, 512*SF3, 128*SF3 )
 	
 	surface.SetDrawColor(Color(150,150,150,200))
 	surface.SetMaterial( Material( "MiniTankWars/MiniTankWarsLogo" ) )
