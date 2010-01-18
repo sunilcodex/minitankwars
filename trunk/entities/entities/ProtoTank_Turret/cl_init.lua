@@ -31,49 +31,33 @@ include('shared.lua');
 		matrix = entity:GetBoneMatrix(index)  
 		matrix:Rotate(Angle(-35,0,0))
 		entity:SetBoneMatrix(index, matrix)
-		local HideBones= {
-			/*"ValveBiped.Bip01_R_Forearm",
-			"ValveBiped.Bip01_R_Hand",
-			"ValveBiped.Anim_Attachment_RH",
+		local HideBonesL= {
 			"ValveBiped.Bip01_L_Forearm",
 			"ValveBiped.Bip01_L_Hand",
 			"ValveBiped.Anim_Attachment_LH",
-			"ValveBiped.Bip01_R_Wrist",
 			"ValveBiped.Bip01_L_Wrist",
 			"ValveBiped.Bip01_L_Ulna",
-			"ValveBiped.Bip01_R_Ulna",
-			"ValveBiped.Bip01_R_Elbow",
-			"ValveBiped.Bip01_L_Elbow",
-			*/
-			"ValveBiped.Bip01_Pelvis",  
-			"ValveBiped.Bip01_Spine",  
-			"ValveBiped.Bip01_Spine1",  
-			"ValveBiped.Bip01_Spine2",   
-			"ValveBiped.forward",  
-			"ValveBiped.Bip01_R_Clavicle",  
-			"ValveBiped.Bip01_R_UpperArm",  
-			"ValveBiped.Bip01_R_Forearm",  
-			"ValveBiped.Bip01_R_Hand",  
-			"ValveBiped.Anim_Attachment_RH",  
-			"ValveBiped.Bip01_L_Clavicle",  
-			"ValveBiped.Bip01_L_UpperArm",  
-			"ValveBiped.Bip01_L_Forearm",  
-			"ValveBiped.Bip01_L_Hand",  
-			"ValveBiped.Anim_Attachment_LH",  
-			"ValveBiped.Bip01_R_Thigh",  
-			"ValveBiped.Bip01_R_Calf",  
-			"ValveBiped.Bip01_R_Foot",  
-			"ValveBiped.Bip01_L_Thigh",  
-			"ValveBiped.Bip01_L_Calf",  
-			"ValveBiped.Bip01_L_Foot",  
-			"ValveBiped.Bip01_R_Wrist",  
-			"ValveBiped.Bip01_L_Wrist",  
-			"ValveBiped.Bip01_L_Ulna",  
-			"ValveBiped.Bip01_R_Ulna", 
 		}
-		for k,v in pairs(HideBones) do
+		local HideBonesR= {
+			"ValveBiped.Bip01_R_Forearm",
+			"ValveBiped.Bip01_R_Hand",
+			"ValveBiped.Anim_Attachment_RH",
+			"ValveBiped.Bip01_R_Wrist",
+			"ValveBiped.Bip01_R_Ulna",
+		}
+		local LB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_L_UpperArm"))
+		local RB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_R_UpperArm"))
+		for k,v in pairs(HideBonesL) do
 			index = entity:LookupBone(v)    
 			matrix = entity:GetBoneMatrix(index)  
+			matrix = LB
+			matrix:Scale(Vector(0))
+			entity:SetBoneMatrix(index, matrix)
+		end
+		for k,v in pairs(HideBonesR) do
+			index = entity:LookupBone(v)    
+
+			matrix = RB
 			matrix:Scale(Vector(0))
 			entity:SetBoneMatrix(index, matrix)
 		end
@@ -108,42 +92,39 @@ function ENT:Think()
 			matrix = entity:GetBoneMatrix(index)  
 			matrix:Rotate(Angle(-35,0,0))
 			entity:SetBoneMatrix(index, matrix)
-			local HideBones= {
-				"ValveBiped.Bip01_Pelvis",  
-				"ValveBiped.Bip01_Spine",  
-				"ValveBiped.Bip01_Spine1",  
-				"ValveBiped.Bip01_Spine2",    
-				"ValveBiped.forward",  
-				"ValveBiped.Bip01_R_Clavicle",  
-				"ValveBiped.Bip01_R_UpperArm",  
-				"ValveBiped.Bip01_R_Forearm",  
-				"ValveBiped.Bip01_R_Hand",  
-				"ValveBiped.Anim_Attachment_RH",  
-				"ValveBiped.Bip01_L_Clavicle",  
-				"ValveBiped.Bip01_L_UpperArm",  
-				"ValveBiped.Bip01_L_Forearm",  
-				"ValveBiped.Bip01_L_Hand",  
-				"ValveBiped.Anim_Attachment_LH",  
-				"ValveBiped.Bip01_R_Thigh",  
-				"ValveBiped.Bip01_R_Calf",  
-				"ValveBiped.Bip01_R_Foot",  
-				"ValveBiped.Bip01_L_Thigh",  
-				"ValveBiped.Bip01_L_Calf",  
-				"ValveBiped.Bip01_L_Foot",  
-				"ValveBiped.Bip01_R_Wrist",  
-				"ValveBiped.Bip01_L_Wrist",  
-				"ValveBiped.Bip01_L_Ulna",  
-				"ValveBiped.Bip01_R_Ulna", 
+			local HideBonesL= {
+				"ValveBiped.Bip01_L_Forearm",
+				"ValveBiped.Bip01_L_Hand",
+				"ValveBiped.Anim_Attachment_LH",
+				"ValveBiped.Bip01_L_Wrist",
+				"ValveBiped.Bip01_L_Ulna",
 			}
-			for k,v in pairs(HideBones) do
+			local HideBonesR= {
+				"ValveBiped.Bip01_R_Forearm",
+				"ValveBiped.Bip01_R_Hand",
+				"ValveBiped.Anim_Attachment_RH",
+				"ValveBiped.Bip01_R_Wrist",
+				"ValveBiped.Bip01_R_Ulna",
+			}
+			local LB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_L_UpperArm"))
+			local RB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_R_UpperArm"))
+			for k,v in pairs(HideBonesL) do
 				index = entity:LookupBone(v)    
 				matrix = entity:GetBoneMatrix(index)  
+				matrix = LB
+				matrix:Scale(Vector(0))
+				entity:SetBoneMatrix(index, matrix)
+			end
+			for k,v in pairs(HideBonesR) do
+				index = entity:LookupBone(v)    
+				matrix = entity:GetBoneMatrix(index)  
+				matrix = RB
 				matrix:Scale(Vector(0))
 				entity:SetBoneMatrix(index, matrix)
 			end
 			end
 		end
-		////////////////		
+		////////////////
 	end
 end
 

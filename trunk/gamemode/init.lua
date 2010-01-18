@@ -8,6 +8,7 @@ init.lua
 */
 
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
@@ -17,15 +18,12 @@ function GM:CheckRoundEnd()
  /*
 	if ( !GAMEMODE:InRound() ) then return end 
  
-	for k,v in pairs( team.GetPlayers( TEAM_HUMAN ) ) do
- 
-		if v:Frags() >= 10 then
- 
-		      GAMEMODE:RoundEndWithResult( v )
- 
-                end
- 
-        end
+		if team.GetScore(TEAM_USA) >= 50 then
+			GAMEMODE:RoundEndWithResult( TEAM_USA )
+		elseif team.GetScore(TEAM_USSR) >= 50 then
+			GAMEMODE:RoundEndWithResult(TEAM_USSR)
+		end
+    end
  */
 end
  

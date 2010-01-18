@@ -14,6 +14,7 @@ include( 'shared.lua' )
 
 
 function ENT:Initialize()
+	self.Entity:SetColor(53, 60, 31, 255)
 	self.Entity.MyPlayer = NULL
 	
 	self.Entity:SetModel( "models/BMCha/MiniTanks/ProtoTank/ProtoTank_Body.mdl" )
@@ -24,11 +25,13 @@ function ENT:Initialize()
 	self.TurretEnt= ents.Create( "ProtoTank_Turret" )
 	self.TurretEnt:SetParent(self.Entity)
 	self.TurretEnt:SetPos(self.Entity:GetPos())
+	self.TurretEnt:SetAngles(self.Entity:GetAngles())
 	self.TurretEnt:Spawn()
 	
 	self.TracksEnt= ents.Create( "ProtoTank_Tracks" )
 	self.TracksEnt:SetParent(self.Entity)
 	self.TracksEnt:SetPos(self.Entity:GetPos())
+	self.TracksEnt:SetAngles(self.Entity:GetAngles())
 	self.TracksEnt:Spawn()
 	
 end
