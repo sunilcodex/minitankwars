@@ -54,7 +54,7 @@ GM.NoPlayerPlayerDamage = false 	// Allow players to hurt each other?
 GM.NoNonPlayerPlayerDamage = true 	// Allow damage from non players (physics, fire etc)
 GM.NoPlayerFootsteps = true		// When true, all players have silent footsteps
 GM.PlayerCanNoClip = true		// When true, players can use noclip without sv_cheats
-GM.TakeFragOnSuicide = true		// -1 frag on suicide
+GM.TakeFragOnSuicide = false		// -1 frag on suicide
  
 GM.MaximumDeathLength = 10			// Player will respawn if death length > this (can be 0 to disable)
 GM.MinimumDeathLength = 5			// Player has to be dead for at least this long
@@ -79,9 +79,9 @@ GM.SelectColor = false			// Can players modify the colour of their name? (ie.. n
 GM.PlayerRingSize = 48              // How big are the colored rings under the player's feet (if they are enabled) ?
 GM.HudSkin = "SimpleSkin"
  
-GM.ValidSpectatorModes = { OBS_MODE_CHASE, OBS_MODE_IN_EYE, OBS_MODE_ROAMING }
+GM.ValidSpectatorModes = { OBS_MODE_CHASE, OBS_MODE_IN_EYE }
 GM.ValidSpectatorEntities = { "player" }	// Entities we can spectate
-GM.CanOnlySpectateOwnTeam = false // you can only spectate players on your own team
+GM.CanOnlySpectateOwnTeam = true // you can only spectate players on your own team
 
  
 TEAM_USA = 1

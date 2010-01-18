@@ -38,12 +38,12 @@ function CLASS:OnSpawn( pl )
 	TankEnt:SetAngles(pl:GetAngles())	
 	TankEnt:Spawn()
 	TankEnt:SetParent(pl)	
-	TankEnt:SetAngles(TankEnt:GetAngles()+Angle(0,180,0))
+	TankEnt:SetAngles(TankEnt:GetAngles())
 	TankEnt:SetPlayerModel(pl:GetModel())
 	TankEnt:SetMyPlayer(pl)
 	pl:SetPos(pl:GetPos()+Vector(0,0,200))
 	pl:DrawShadow(false)
-	pl:SetColor( Color(0,0,0,100) )
+	pl:SetColor( Color(0,0,0,0) )
 	pl.TankEnt = TankEnt
 	/*---------------------------------------------
 			Tank Differentiating Variables

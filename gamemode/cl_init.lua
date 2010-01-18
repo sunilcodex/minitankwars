@@ -8,20 +8,24 @@ cl_init.lua
 */
 
 include( 'shared.lua' )
+include('cl_hud.lua');
 
+local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
+local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
+local MTW_Logo = surface.GetTextureID( "MiniTankWars/MiniTankWarsLogo" )
  
 function GM:PaintSplashScreen(w, h) 
 	SF = h/768  //scalefactor
 	SF2 = SF/2
 	surface.SetDrawColor( 255, 255, 255, 255 ) 
 	
-	surface.SetMaterial( Material( "MiniTankWars/US_Flag" ) )
+	surface.SetTexture( US_Flag )
 	surface.DrawTexturedRect( 48*SF, 48*SF, 512*SF2, 128*SF2 )
 	
-	surface.SetMaterial( Material( "MiniTankWars/USSR_Flag" ) )
+	surface.SetTexture( USSR_Flag )
 	surface.DrawTexturedRect( 720*SF, 48*SF, 512*SF2, 128*SF2 )
 	
 	surface.SetDrawColor(Color(150,150,150,200))
-	surface.SetMaterial( Material( "MiniTankWars/MiniTankWarsLogo" ) )
+	surface.SetTexture( MTW_Logo )
 	surface.DrawTexturedRect( 262*SF, 255*SF, 512*SF, 256*SF )
 end
