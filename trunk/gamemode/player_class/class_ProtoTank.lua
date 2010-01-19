@@ -30,6 +30,8 @@ CLASS.Selectable			= true // When false, this disables all the team checking
 CLASS.FullRotation			= false // Allow the player's model to rotate upwards, etc etc
  
 function CLASS:Loadout( pl )
+	pl:Give( "weapon_rpg" )
+	pl:GiveAmmo( 255, "RPG_Round")
 end
  
 function CLASS:OnSpawn( pl )
@@ -48,9 +50,13 @@ function CLASS:OnSpawn( pl )
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-		pl.TopSpeed=40  //-un/sec
-		pl.TurnSpeed= 45  //-Degrees/sec
-		pl.TurnAngle = pl:GetAngles().y
+		pl:SetNWFloat("TopSpeed", 40)  //-un/sec
+		pl:SetNWFloat("Acceleration", 20) 
+		pl:SetNWFloat("Speed", 0)
+		
+		pl:SetNWFloat("TurnSpeed", 45)  //-Degrees/sec
+		pl:SetNWFloat("TurnAngle", pl:GetAngles().y)
+	//-----------------------------------------------
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
@@ -63,13 +69,42 @@ end
  
 function CLASS:Think( pl )
 end
-/*
+
 function CLASS:Move( pl, mv )
+	if ( !pl:Alive() ) then return end
+	local FT=FrameTime()
+	
+	local plSpeed = pl:GetNWFloat("Speed")
+	local plTopSpeed = pl:GetNWFloat("TopSpeed")
+	local plAcceleration = pl:GetNWFloat("Acceleration")
+	local plTurnSpeed = pl:GetNWFloat("TurnSpeed")
+	local plTurnAngle = pl:GetNWFloat("TurnAngle")
+	
 	if pl:KeyDown( IN_FORWARD ) then
-		GO
+		plSpeed = math.Clamp(plSpeed+(plAcceleration*FT), -plTopSpeed/2, plTopSpeed)
 	end
+	if pl:KeyDown( IN_BACK ) then
+		plSpeed = math.Clamp(plSpeed-(plAcceleration*FT), -plTopSpeed/2, plTopSpeed)
+	end
+	if not (pl:KeyDown( IN_FORWARD ) or pl:KeyDown( IN_BACK )) then
+		if (plSpeed > 0) then
+			plSpeed = math.Clamp(plSpeed-(30*FT), -plTopSpeed/2, plTopSpeed)
+		elseif (plSpeed < 0) then
+			plSpeed = math.Clamp(plSpeed+(30*FT), -plTopSpeed/2, plTopSpeed)
+		end
+	end
+	if pl:KeyDown( IN_LEFT ) then
+		plTurnAngle=math.NormalizeAngle(plTurnAngle-(plTurnSpeed*FT))
+	end
+	if pl:KeyDown( IN_RIGHT ) then
+		plTurnAngle=math.NormalizeAngle(plTurnAngle+(plTurnSpeed*FT))
+	end
+	mv:SetVelocity(Angle(0, plTurnAngle, 0):Up()*plSpeed)
+	pl:SetNWFloat("Speed", plSpeed)
+	pl:SetNWFloat("TurnAngle", plTurnAngle)
+	return true
 end
-*/
+
 function CLASS:OnKeyPress( pl, key )
 end
  
