@@ -31,7 +31,7 @@ GM.Name 	= "MiniTank Wars"
 GM.Author 	= "BMCha"
 GM.Email 	= ""
 GM.Website 	= ""
-GM.Help		= "Rack up the most kills"
+GM.Help		= " "
  
 GM.Data = {}
  
