@@ -49,6 +49,7 @@ end
 
 function ENT:SetMyPlayer( pl )
 	MyPlayer=pl
+	self.Entity:SetNWEntity("MyPlayer", pl)
 	self.TurretEnt.MyPlayer=pl
 	self.TracksEnt.MyPlayer=pl
 end
