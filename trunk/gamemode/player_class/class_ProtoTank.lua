@@ -35,6 +35,7 @@ function CLASS:Loadout( pl )
 end
  
 function CLASS:OnSpawn( pl )
+	//pl:SetHull( Vector( -16, -16, -16 ), Vector( 16, 16, 16 ) )
 	local TankEnt = ents.Create( "ProtoTank" )
 	TankEnt:SetPos(pl:GetPos())
 	TankEnt:SetAngles(pl:GetAngles())	
@@ -43,18 +44,18 @@ function CLASS:OnSpawn( pl )
 	TankEnt:SetAngles(TankEnt:GetAngles())
 	TankEnt:SetPlayerModel(pl:GetModel())
 	TankEnt:SetMyPlayer(pl)
-	pl:SetPos(pl:GetPos()+Vector(0,0,200))
+	//pl:SetPos(pl:GetPos()+Vector(0,0,200))
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,0) )
 	pl.TankEnt = TankEnt
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-		pl:SetNWFloat("TopSpeed", 40)  //-un/sec
-		pl:SetNWFloat("Acceleration", 20) 
+		pl:SetNWFloat("TopSpeed", 400)
+		pl:SetNWFloat("Acceleration", 400) 
 		pl:SetNWFloat("Speed", 0)
 		
-		pl:SetNWFloat("TurnSpeed", 45)  //-Degrees/sec
+		pl:SetNWFloat("TurnSpeed", 65)  //  deg/sec?
 		pl:SetNWFloat("TurnAngle", pl:GetAngles().y)
 	//-----------------------------------------------
 end
@@ -88,20 +89,25 @@ function CLASS:Move( pl, mv )
 	end
 	if not (pl:KeyDown( IN_FORWARD ) or pl:KeyDown( IN_BACK )) then
 		if (plSpeed > 0) then
-			plSpeed = math.Clamp(plSpeed-(30*FT), -plTopSpeed/2, plTopSpeed)
+			plSpeed = math.Clamp(plSpeed-(600*FT), -plTopSpeed/2, plTopSpeed)
 		elseif (plSpeed < 0) then
-			plSpeed = math.Clamp(plSpeed+(30*FT), -plTopSpeed/2, plTopSpeed)
+			plSpeed = math.Clamp(plSpeed+(600*FT), -plTopSpeed/2, plTopSpeed)
 		end
 	end
-	if pl:KeyDown( IN_LEFT ) then
-		plTurnAngle=math.NormalizeAngle(plTurnAngle-(plTurnSpeed*FT))
-	end
-	if pl:KeyDown( IN_RIGHT ) then
+	if pl:KeyDown( IN_MOVELEFT ) then
 		plTurnAngle=math.NormalizeAngle(plTurnAngle+(plTurnSpeed*FT))
 	end
-	mv:SetVelocity(Angle(0, plTurnAngle, 0):Up()*plSpeed)
+	if pl:KeyDown( IN_MOVERIGHT ) then
+		plTurnAngle=math.NormalizeAngle(plTurnAngle-(plTurnSpeed*FT))
+	end
+	
 	pl:SetNWFloat("Speed", plSpeed)
 	pl:SetNWFloat("TurnAngle", plTurnAngle)
+	
+	local MoveVec = Angle(0, plTurnAngle, 0):Forward()*plSpeed
+	mv:SetVelocity(MoveVec)
+	mv:SetOrigin(pl:GetPos() + MoveVec * FT)
+	
 	return true
 end
 
