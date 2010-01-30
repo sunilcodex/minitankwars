@@ -51,8 +51,8 @@ function CLASS:OnSpawn( pl )
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-		pl:SetNWFloat("TopSpeed", 400)
-		pl:SetNWFloat("Acceleration", 400) 
+		pl:SetNWFloat("TopSpeed", 40)
+		pl:SetNWFloat("Acceleration", 40) 
 		pl:SetNWFloat("Speed", 0)
 		
 		pl:SetNWFloat("TurnSpeed", 65)  //  deg/sec?
@@ -70,7 +70,7 @@ end
  
 function CLASS:Think( pl )
 end
-
+/*
 function CLASS:Move( pl, mv )
 	if ( !pl:Alive() ) then return end
 	local FT=FrameTime()
@@ -89,9 +89,9 @@ function CLASS:Move( pl, mv )
 	end
 	if not (pl:KeyDown( IN_FORWARD ) or pl:KeyDown( IN_BACK )) then
 		if (plSpeed > 0) then
-			plSpeed = math.Clamp(plSpeed-(600*FT), -plTopSpeed/2, plTopSpeed)
+			plSpeed = math.Clamp(plSpeed-(60*FT), -plTopSpeed/2, plTopSpeed)
 		elseif (plSpeed < 0) then
-			plSpeed = math.Clamp(plSpeed+(600*FT), -plTopSpeed/2, plTopSpeed)
+			plSpeed = math.Clamp(plSpeed+(60*FT), -plTopSpeed/2, plTopSpeed)
 		end
 	end
 	if pl:KeyDown( IN_MOVELEFT ) then
@@ -109,7 +109,7 @@ function CLASS:Move( pl, mv )
 	mv:SetOrigin(pl:GetPos() + MoveVec * FT)
 	
 	return true
-end
+end*/
 
 function CLASS:OnKeyPress( pl, key )
 end
