@@ -12,6 +12,10 @@ local SHL = SH
 local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
+local TankHealthThumbs = {}
+TankHealthThumbs["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb" )
+local TankHealthThumbsBlur = {}
+TankHealthThumbsBlur["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb_Blur" )
 //colors
 local Color_USABlue = Color(41,41,222)
 local Color_USSRRed = Color(189,0,0)
@@ -40,6 +44,16 @@ ScaleFactors()
 //misc
 local fadenum=0
 local fadenumchange=2
+local TankHealthThumb = TankHealthThumbs["ProtoTank"]
+local TankHealthThumbBlur = TankHealthThumbsBlur["ProtoTank"]
+local PlayerTank=LocalPlayer():GetNWString("TankName")
+
+function CheckTankChange()
+	if LocalPlayer():GetNWString("TankName") !=PlayerTank then
+		TankHealthThumb = TankHealthThumbs[LocalPlayer():GetNWString("TankName")]
+		TankHealthThumbBlur = TankHealthThumbsBlur[LocalPlayer():GetNWString("TankName")]
+	end
+end
 
 function GM:OnHUDPaint()
 	if SH!=SHL then
@@ -87,6 +101,14 @@ function GM:OnHUDPaint()
 		draw.RoundedBox(8, 11*SF, 665*SF, 174*SF, 84*SF, Color_Gray)
 		draw.RoundedBox(8, 163*SF, 707*SF, 55*SF, 49*SF, Color_Gray)
 		local HealthColor = HSVToColor((LocalPlayer():Health()/100)*120, 1, 1)
+		
+		surface.SetDrawColor(HealthColor)
+		surface.SetTexture( TankHealthThumbBlur )
+		surface.DrawTexturedRect( 20*SF, 672*SF, 148*SF, 69*SF )
+		surface.SetDrawColor(Color_White)
+		surface.SetTexture( TankHealthThumb )
+		surface.DrawTexturedRect( 20*SF, 672*SF, 148*SF, 69*SF )
+
 		draw.DrawText(LocalPlayer():Health(), "CV27", 191*SF, 712*SF, HealthColor, 1)
 		draw.DrawText("Armor", "CV18", 192*SF, 738*SF, Color_HUDYellow, 1)
 		//--------------End Armor Display------------------------------------
