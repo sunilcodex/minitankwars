@@ -15,7 +15,6 @@ include( 'shared.lua' )
    Name: Initialize
 ---------------------------------------------------------*/
 function ENT:Initialize()
-	self.Entity:SetColor(53, 60, 31, 255)
 	self.Entity.MyPlayer = NULL
 	
 	self.Entity:SetModel( "models/BMCha/MiniTanks/ProtoTank/ProtoTank_Turret.mdl" )

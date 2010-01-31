@@ -35,6 +35,7 @@ function CLASS:Loadout( pl )
 end
  
 function CLASS:OnSpawn( pl )
+	pl:SetNWString("TankName", pl:GetPlayerClassName())
 	//pl:SetHull( Vector( -16, -16, -16 ), Vector( 16, 16, 16 ) )
 	local TankEnt = ents.Create( "ProtoTank" )
 	TankEnt:SetPos(pl:GetPos())
@@ -125,7 +126,7 @@ function CLASS:CalcView( ply, origin, angles, fov )
 	local DistanceAngle = angles:Forward() * - 0.8 + angles:Up() * 0.2
 	
 	local ret = {}
-	ret.origin = origin + DistanceAngle * 350
+	ret.origin = origin + Vector(100,100,0) + DistanceAngle * 350
 	
 	//ret.angles 		= angles
 	//ret.fov 		= fov
