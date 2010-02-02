@@ -9,7 +9,9 @@ init.lua
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile('cl_gmchanger.lua')
 AddCSLuaFile( "shared.lua" )
+
 
 include( "shared.lua" )
 

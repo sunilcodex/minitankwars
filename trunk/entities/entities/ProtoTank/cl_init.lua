@@ -13,15 +13,6 @@ local Laser = Material( "cable/redlaser" )
  
 function ENT:Draw()
 	self.Entity:DrawModel();
- 
-	local Vector1 = self.Entity:GetPos()
-	local plTurnAngle = self.Entity:GetNWEntity("MyPlayer"):GetNWFloat("TurnAngle")
-	local plSpeed = self.Entity:GetNWEntity("MyPlayer"):GetNWFloat("Speed")
-	local DaVec = Angle(0, plTurnAngle, 0):Forward()*-plSpeed
-	local Vector2 = self.Entity:GetPos()-DaVec
- 
-	render.SetMaterial( Laser )
-	render.DrawBeam( Vector1, Vector2, 5, 0, 0, Color( 255, 255, 255, 255 ) ) 
 end
 
 function ENT:Initialize()
@@ -35,7 +26,8 @@ function ENT:Think()
 	if (self.Entity.RightWheelsRot > 360) then self.Entity.RightWheelsRot = self.Entity.RightWheelsRot-360 end
 	if (self.Entity.LeftWheelsRot < 0) then self.Entity.LeftWheelsRot = self.Entity.LeftWheelsRot+360 end
 	if (self.Entity.RightWheelsRot < 0) then self.Entity.RightWheelsRot = self.Entity.RightWheelsRot+360 end
-	local Vel = (self.Entity:GetPos()-self.Entity.LastPos):Length()
+	local MovVec = self.Entity:GetPos()-self.Entity.LastPos
+	local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
 	self.Entity.LeftWheelsRot=self.Entity.LeftWheelsRot+(Vel*6.818)  //360/52.8=6.81818181
 	self.Entity.RightWheelsRot=self.Entity.RightWheelsRot+(Vel*6.818)
 	self.Entity:SetPoseParameter("LeftWheels_Rot", self.Entity.LeftWheelsRot)
