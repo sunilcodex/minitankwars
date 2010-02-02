@@ -8,7 +8,8 @@ cl_init.lua
 */
 
 include( 'shared.lua' )
-include('cl_hud.lua');
+include('cl_hud.lua')
+include('cl_gmchanger.lua')
 
 local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )

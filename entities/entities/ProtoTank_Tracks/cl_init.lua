@@ -9,14 +9,27 @@ ProtoTank_Tracks cl_init.lua
 
 include('shared.lua');
  
+//Tracks Materials
+local TrackMats = {
+[-256]="models/BMCha/MiniTanks/ProtoTank/RTracks256",
+[-192]="models/BMCha/MiniTanks/ProtoTank/RTracks192",
+[-128]="models/BMCha/MiniTanks/ProtoTank/RTracks128",
+[-64]="models/BMCha/MiniTanks/ProtoTank/RTracks64",
+[0]="models/BMCha/MiniTanks/ProtoTank/Tracks0",
+[64]="models/BMCha/MiniTanks/ProtoTank/Tracks128",
+[128]="models/BMCha/MiniTanks/ProtoTank/Tracks128",
+[192]="models/BMCha/MiniTanks/ProtoTank/Tracks256",
+[256]="models/BMCha/MiniTanks/ProtoTank/Tracks256",
+[320]="models/BMCha/MiniTanks/ProtoTank/Tracks384",
+[384]="models/BMCha/MiniTanks/ProtoTank/Tracks384",
+[448]="models/BMCha/MiniTanks/ProtoTank/Tracks512",
+[512]="models/BMCha/MiniTanks/ProtoTank/Tracks512"
+}
+
 function ENT:Initialize()
-	self.Entity.MyTrackMat=Material("models/BMCha/MiniTanks/ProtoTank/Tracks")
-	self.Entity.MyTrackMat:SetMaterialVector("$color", Vector(1.0,0,0) )
-	self.Entity:SetMaterial(self.Entity.MyTrackMat)
-	
-	self.Entity.LeftWheelsRot=0
-	self.Entity.RightWheelsRot=0
 	self.Entity.LastPos=self.Entity:GetPos()
+	self.Entity.OldMat = self.Entity:GetMaterial()
+	self.Entity.LastTime = CurTime()
 end
  
 function ENT:Draw()
@@ -24,7 +37,15 @@ function ENT:Draw()
 end
 
 function ENT:Think()
-	local Vel = (self.Entity:GetPos()-self.Entity.LastPos):Length()
-	self.Entity.MyTrackMat:SetMaterialFloat("texturescrollrate", Vel/64)
+	local FT=CurTime()-self.Entity.LastTime
+	if FT==0 then FT=0.1 end
+	self.Entity.LastTime = CurTime()
+	local MovVec = self.Entity:GetPos()-self.Entity.LastPos
+	local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
+	local NewMat=TrackMats[math.Clamp(math.Round((Vel/FT)/64),-4,8)*64]
+	if self.Entity.OldMat!=NewMat then
+		self.Entity:SetMaterial(NewMat)
+		self.Entity.OldMat = NewMat
+	end
 	self.Entity.LastPos=self.Entity:GetPos()
 end

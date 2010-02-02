@@ -2,13 +2,12 @@
 {
 	"$baseTexture" "models/BMCha/MiniTanks/ProtoTank/Tracks"
 	"$model" 1
-	"$color" "[1 1 1]"
 	"Proxies"
 	{
 		"TextureScroll"
 		{
 			"texturescrollvar" "$baseTextureTransform"
-			"texturescrollrate" 1.0
+			"texturescrollrate" 2.0
 			"texturescrollangle" 270.00
 		}
 	}

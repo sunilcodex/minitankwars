@@ -32,6 +32,17 @@ function ENT:Initialize()
 	self.TracksEnt:SetPos(self.Entity:GetPos())
 	self.TracksEnt:SetAngles(self.Entity:GetAngles())
 	self.TracksEnt:Spawn()	
+	
+	/*---------------------------------------------
+			Tank Differentiating Variables
+	---------------------------------------------*/
+	self.Entity:SetNWFloat("TopSpeed", 512)
+	self.Entity:SetNWFloat("Acceleration", 256) 
+	self.Entity:SetNWFloat("Speed", 0)
+	
+	self.Entity:SetNWFloat("TurnSpeed", 65)  //  deg/sec?
+	self.Entity:SetNWFloat("TurnAngle", self.Entity:GetAngles().y)
+	//-----------------------------------------------
 end
 
 function ENT:OnRemove() 

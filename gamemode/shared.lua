@@ -38,7 +38,7 @@ GM.Data = {}
 DeriveGamemode( "fretta" )
 IncludePlayerClasses()
  
-GM.TeamBased = true					// Team based game or a Free For All game?
+GM.TeamBased = true				// Team based game or a Free For All game?
 GM.AllowAutoTeam = true
 GM.AllowSpectating = true
 GM.SecondsBetweenTeamSwitches = 10
@@ -53,7 +53,7 @@ GM.NoPlayerTeamDamage = true		// Allow team-members to hurt each other?
 GM.NoPlayerPlayerDamage = false 	// Allow players to hurt each other?
 GM.NoNonPlayerPlayerDamage = true 	// Allow damage from non players (physics, fire etc)
 GM.NoPlayerFootsteps = true		// When true, all players have silent footsteps
-GM.PlayerCanNoClip = true		// When true, players can use noclip without sv_cheats
+GM.PlayerCanNoClip = true		    // When true, players can use noclip without sv_cheats
 GM.TakeFragOnSuicide = false		// -1 frag on suicide
  
 GM.MaximumDeathLength = 10			// Player will respawn if death length > this (can be 0 to disable)
@@ -64,8 +64,8 @@ GM.RealisticFallDamage = false
 GM.AddFragsToTeamScore = true		// Adds player's individual kills to team score (must be team based)
  
 GM.NoAutomaticSpawning = false		// Players don't spawn automatically when they die, some other system spawns them
-GM.RoundBased = false				// Round based, like CS
-GM.RoundLength = 60 * 5					// Round length, in seconds
+GM.RoundBased = true   			// Round based, like CS
+GM.RoundLength = 60 * 50					// Round length, in seconds
 GM.RoundPreStartTime = 5			// Preperation time before a round starts
 GM.RoundPostLength = 5				// Seconds to show the 'x team won!' screen at the end of a round
 GM.RoundEndsWhenOneTeamAlive = false	// CS Style rules
@@ -74,7 +74,7 @@ GM.EnableFreezeCam = true			// TF2 Style Freezecam
 GM.DeathLingerTime = 3				// The time between you dying and it going into spectator mode, 0 disables
  
 GM.SelectModel = true               // Can players use the playermodel picker in the F1 menu?
-GM.SelectColor = false			// Can players modify the colour of their name? (ie.. no teams)
+GM.SelectColor = false				// Can players modify the colour of their name? (ie.. no teams)
  
 GM.PlayerRingSize = 48              // How big are the colored rings under the player's feet (if they are enabled) ?
 GM.HudSkin = "SimpleSkin"
@@ -93,11 +93,11 @@ function GM:CreateTeams()
  
 	team.SetUp( TEAM_USA, "US Army", Color( 41, 41, 222 ), true )
 	team.SetSpawnPoint( TEAM_USA, { "info_player_start", "info_player_counterterrorist" } )
-	team.SetClass( TEAM_USA, { "ProtoTank"} ) //, "M4_Sherman", "M1A2_Abrams", "M60_Patton", "M551_Sheridan" } )
+	team.SetClass( TEAM_USA, { "ProtoTank"} ) //, "M1A2_Abrams", "M60_Patton", "M4_Sherman", "M551_Sheridan" } )
 	
 	team.SetUp( TEAM_USSR, "Soviet Army", Color( 189, 0, 0 ), true )
 	team.SetSpawnPoint( TEAM_USSR, { "info_player_start", "info_player_terrorist" } )
-	team.SetClass( TEAM_USSR, { "ProtoTank"} ) //, "T34", "T72" } )
+	team.SetClass( TEAM_USSR, { "ProtoTank"} ) //, "T-90", "T-72", "T-34", "BMP-3" } )
  
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 200, 200, 200 ), true )
 	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_combine", "info_player_rebel" } ) 

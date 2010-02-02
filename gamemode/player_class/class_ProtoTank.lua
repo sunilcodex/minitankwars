@@ -11,10 +11,10 @@ class_ProtoTank.lua
 local CLASS = {}
  
 CLASS.DisplayName			= "ProtoTank"
-CLASS.WalkSpeed 			= 400
-CLASS.CrouchedWalkSpeed 	= 0.2
-CLASS.RunSpeed				= 600
-CLASS.DuckSpeed				= 0.2
+CLASS.WalkSpeed 			= 256
+CLASS.CrouchedWalkSpeed 	= 0.3
+CLASS.RunSpeed				= 512
+CLASS.DuckSpeed				= 0.3
 CLASS.JumpPower				= 0
 CLASS.DrawTeamRing			= false
 CLASS.DrawViewModel		= false
@@ -36,7 +36,7 @@ end
  
 function CLASS:OnSpawn( pl )
 	pl:SetNWString("TankName", pl:GetPlayerClassName())
-	//pl:SetHull( Vector( -16, -16, -16 ), Vector( 16, 16, 16 ) )
+	pl:SetHull( Vector( -33, -65, 0 ), Vector( 33, 52, 80 ) )
 	local TankEnt = ents.Create( "ProtoTank" )
 	TankEnt:SetPos(pl:GetPos())
 	TankEnt:SetAngles(pl:GetAngles())	
@@ -49,16 +49,6 @@ function CLASS:OnSpawn( pl )
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,0) )
 	pl.TankEnt = TankEnt
-	/*---------------------------------------------
-			Tank Differentiating Variables
-	---------------------------------------------*/
-		pl:SetNWFloat("TopSpeed", 40)
-		pl:SetNWFloat("Acceleration", 40) 
-		pl:SetNWFloat("Speed", 0)
-		
-		pl:SetNWFloat("TurnSpeed", 65)  //  deg/sec?
-		pl:SetNWFloat("TurnAngle", pl:GetAngles().y)
-	//-----------------------------------------------
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
