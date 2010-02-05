@@ -28,6 +28,8 @@ function ENT:Think()
 	if (self.Entity.RightWheelsRot < 0) then self.Entity.RightWheelsRot = self.Entity.RightWheelsRot+360 end
 	local MovVec = self.Entity:GetPos()-self.Entity.LastPos
 	local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
+	Vel = Vel*MovVec:Normalize():Dot(self.Entity:GetForward())
+	self.Entity.Vel=Vel
 	self.Entity.LeftWheelsRot=self.Entity.LeftWheelsRot+(Vel*6.818)  //360/52.8=6.81818181
 	self.Entity.RightWheelsRot=self.Entity.RightWheelsRot+(Vel*6.818)
 	self.Entity:SetPoseParameter("LeftWheels_Rot", self.Entity.LeftWheelsRot)
