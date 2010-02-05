@@ -32,6 +32,7 @@ function ENT:Initialize()
 	self.TracksEnt:SetPos(self.Entity:GetPos())
 	self.TracksEnt:SetAngles(self.Entity:GetAngles())
 	self.TracksEnt:Spawn()	
+	self.TracksEnt:SetNWEntity("TankBody", self.Entity )
 	
 	/*---------------------------------------------
 			Tank Differentiating Variables

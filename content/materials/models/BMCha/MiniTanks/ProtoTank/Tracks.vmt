@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/BMCha/MiniTanks/ProtoTank/Tracks"
+	"$model" 1
+}
