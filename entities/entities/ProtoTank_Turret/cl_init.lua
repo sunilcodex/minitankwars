@@ -126,6 +126,9 @@ function ENT:Think()
 		end
 		////////////////
 	end
+	//fix any PVS issues
+	//self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
+	//self.PlayerEnt:SetAngles(self.Entity:GetAngles())
 end
 
 function ENT:OnRemove() 

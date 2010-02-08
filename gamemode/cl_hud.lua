@@ -126,7 +126,14 @@ function GM:OnHUDPaint()
 		//Crosshair
 		surface.SetDrawColor(Color_White)
 		surface.SetTexture( ReticleTex )
-		surface.DrawTexturedRect( (HC-32)*SF, (VC-32)*SF, 64*SF, 64*SF )
+		surface.DrawTexturedRect( HC-(32*SF), VC-(32*SF), 64*SF, 64*SF )
+		
+		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
+			//Flip Prompt
+			draw.RoundedBox(8, HC-(250*SF), VC-(15*SF), 450*SF, 50*SF, Color_Gray_75A)
+			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-fadenum), 0 )
+		end
+		
 	end
 	
 	

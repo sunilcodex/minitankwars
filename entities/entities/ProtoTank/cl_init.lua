@@ -8,8 +8,6 @@ ProtoTank cl_init.lua
 */
 
 include('shared.lua');
-
-local Laser = Material( "cable/redlaser" )
  
 function ENT:Draw()
 	self.Entity:DrawModel();
