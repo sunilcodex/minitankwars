@@ -104,6 +104,6 @@ function GM:CreateTeams()
  
 end
 
-function GM:ShouldCollide(ent1, ent2)
+/*function GM:ShouldCollide(ent1, ent2)
 	if ((ent1 == ent2.MyPlayer) or (ent1.MyPlayer == ent2)) then return false end
-end
+end*/

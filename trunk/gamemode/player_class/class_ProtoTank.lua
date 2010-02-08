@@ -27,7 +27,7 @@ CLASS.DropWeaponOnDie		= false
 CLASS.TeammateNoCollide 	= false
 CLASS.AvoidPlayers			= false // Automatically avoid players that we're no colliding
 CLASS.Selectable			= true // When false, this disables all the team checking
-CLASS.FullRotation			= false // Allow the player's model to rotate upwards, etc etc
+CLASS.FullRotation			= true // Allow the player's model to rotate upwards, etc etc
  
 function CLASS:Loadout( pl )
 	pl:Give( "weapon_rpg" )
@@ -36,24 +36,29 @@ end
  
 function CLASS:OnSpawn( pl )
 	pl:SetNWString("TankName", pl:GetPlayerClassName())
-	pl:SetHull( Vector( -33, -65, 0 ), Vector( 33, 52, 80 ) )
-	local TankEnt = ents.Create( "ProtoTank" )
-	TankEnt:SetPos(pl:GetPos())
-	TankEnt:SetAngles(pl:GetAngles())	
-	TankEnt:Spawn()
-	TankEnt:SetParent(pl)	
-	TankEnt:SetAngles(TankEnt:GetAngles())
-	TankEnt:SetPlayerModel(pl:GetModel())
-	TankEnt:SetMyPlayer(pl)
+	//pl:SetHull( Vector( -33, -65, 0 ), Vector( 33, 52, 80 ) )
+//	local TankEnt = ents.Create( "ProtoTank" )
+//	TankEnt:SetPos(pl:GetPos())
+//	TankEnt:SetAngles(pl:GetAngles())	
+//	TankEnt:Spawn()
+	//TankEnt:SetParent(pl)	
+	//pl:SetMoveType(MOVETYPE_NONE)
+//	pl:Spectate( OBS_MODE_CHASE )
+//	pl:SpectateEntity(TankEnt)
+//	pl:SetCollisionGroup(COLLISION_GROUP_WORLD)
+//	pl:SetParent(TankEnt)
+//	TankEnt:SetPos(TankEnt:GetPos()+Vector(0,0,500))
+//	TankEnt:SetPlayerModel(pl:GetModel())
+//	TankEnt:SetMyPlayer(pl)
 	//pl:SetPos(pl:GetPos()+Vector(0,0,200))
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,0) )
-	pl.TankEnt = TankEnt
+//	pl.TankEnt = TankEnt
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
-	pl.TankEnt:Remove()
-	pl.TankEnt=nil
+//	pl.TankEnt:Remove()
+//	pl.TankEnt=nil
 	/*local Wreck = ents.Create( "DeadProtoTank" )
 	Wreck.SetPos(pl:GetPos())
 	Wreck.SetAngles(pl:GetAngles())*/
@@ -109,18 +114,18 @@ function CLASS:OnKeyRelease( pl, key )
 end
 
 
-function CLASS:CalcView( ply, origin, angles, fov )
+/*function CLASS:CalcView( ply, origin, angles, fov )
 	
 	if ( !ply:Alive() ) then return end
 	
 	local DistanceAngle = angles:Forward() * - 0.8 + angles:Up() * 0.2
 	
 	local ret = {}
-	ret.origin = origin + Vector(100,100,0) + DistanceAngle * 350
+	ret.origin = origin + DistanceAngle * 350
 	
 	//ret.angles 		= angles
 	//ret.fov 		= fov
 	return ret
-end
+end*/
  
 player_class.Register( "ProtoTank", CLASS )  
