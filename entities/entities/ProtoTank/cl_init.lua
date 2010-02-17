@@ -14,23 +14,18 @@ function ENT:Draw()
 end
 
 function ENT:Initialize()
-	self.Entity.LeftWheelsRot=0
-	self.Entity.RightWheelsRot=0
+	self.Entity.WheelsRot=0
 	self.Entity.LastPos=self.Entity:GetPos()
 end
 
 function ENT:Think()
-	if (self.Entity.LeftWheelsRot > 360) then self.Entity.LeftWheelsRot = self.Entity.LeftWheelsRot-360 end
-	if (self.Entity.RightWheelsRot > 360) then self.Entity.RightWheelsRot = self.Entity.RightWheelsRot-360 end
-	if (self.Entity.LeftWheelsRot < 0) then self.Entity.LeftWheelsRot = self.Entity.LeftWheelsRot+360 end
-	if (self.Entity.RightWheelsRot < 0) then self.Entity.RightWheelsRot = self.Entity.RightWheelsRot+360 end
+	if (self.Entity.WheelsRot > 360) then self.Entity.WheelsRot = self.Entity.WheelsRot-360 end
+	if (self.Entity.WheelsRot < 0) then self.Entity.WheelsRot = self.Entity.WheelsRot+360 end
 	local MovVec = self.Entity:GetPos()-self.Entity.LastPos
 	local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
 	Vel = Vel*MovVec:Normalize():Dot(self.Entity:GetForward())
 	self.Entity.Vel=Vel
-	self.Entity.LeftWheelsRot=self.Entity.LeftWheelsRot+(Vel*6.818)  //360/52.8=6.81818181
-	self.Entity.RightWheelsRot=self.Entity.RightWheelsRot+(Vel*6.818)
-	self.Entity:SetPoseParameter("LeftWheels_Rot", self.Entity.LeftWheelsRot)
-	self.Entity:SetPoseParameter("RightWheels_Rot", self.Entity.RightWheelsRot)
+	self.Entity.WheelsRot=self.Entity.WheelsRot+(Vel*6.295)  //360/57.18=6.295
+	self.Entity:SetPoseParameter("Wheels_Rot", self.Entity.WheelsRot)
 	self.Entity.LastPos=self.Entity:GetPos()
 end
