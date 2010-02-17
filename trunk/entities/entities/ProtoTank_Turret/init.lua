@@ -17,7 +17,7 @@ include( 'shared.lua' )
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/ProtoTank/ProtoTank_Turret.mdl" )
+	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Turret.mdl")//ProtoTank/ProtoTank_Turret.mdl" )
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )

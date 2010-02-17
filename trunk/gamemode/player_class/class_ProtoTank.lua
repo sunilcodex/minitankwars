@@ -30,41 +30,42 @@ CLASS.Selectable			= true // When false, this disables all the team checking
 CLASS.FullRotation			= true // Allow the player's model to rotate upwards, etc etc
  
 function CLASS:Loadout( pl )
-	pl:Give( "weapon_rpg" )
-	pl:GiveAmmo( 255, "RPG_Round")
+	pl:Give( "weapon_cannon" )
 end
  
 function CLASS:OnSpawn( pl )
 	pl:SetNWString("TankName", pl:GetPlayerClassName())
-	//pl:SetHull( Vector( -33, -65, 0 ), Vector( 33, 52, 80 ) )
-//	local TankEnt = ents.Create( "ProtoTank" )
-//	TankEnt:SetPos(pl:GetPos())
-//	TankEnt:SetAngles(pl:GetAngles())	
-//	TankEnt:Spawn()
+	pl.TankEnt = ents.Create( "ProtoTank" )
+	pl.TankEnt:SetPos(pl:GetPos())
+	pl.TankEnt:SetAngles(pl:GetAngles())	
+	pl.TankEnt:Spawn()
 	//TankEnt:SetParent(pl)	
-	//pl:SetMoveType(MOVETYPE_NONE)
-//	pl:Spectate( OBS_MODE_CHASE )
-//	pl:SpectateEntity(TankEnt)
-//	pl:SetCollisionGroup(COLLISION_GROUP_WORLD)
-//	pl:SetParent(TankEnt)
-//	TankEnt:SetPos(TankEnt:GetPos()+Vector(0,0,500))
-//	TankEnt:SetPlayerModel(pl:GetModel())
-//	TankEnt:SetMyPlayer(pl)
+	pl:SetMoveType(MOVETYPE_NONE)
+	pl:SetCollisionGroup(COLLISION_GROUP_NONE)
+	pl:SetParent(pl.TankEnt)
+//	pl.TankEnt:SetPos(pl.TankEnt:GetPos()+Vector(0,0,500))
+	pl.TankEnt:SetPlayerModel(pl:GetModel())
+	pl.TankEnt:SetMyPlayer(pl)
 	//pl:SetPos(pl:GetPos()+Vector(0,0,200))
 	pl:DrawShadow(false)
 	pl:SetColor( Color(0,0,0,0) )
-//	pl.TankEnt = TankEnt
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
-//	pl.TankEnt:Remove()
-//	pl.TankEnt=nil
+	if (pl.TankEnt) then
+		pl.TankEnt:Remove()
+		pl.TankEnt=NULL
+	end
 	/*local Wreck = ents.Create( "DeadProtoTank" )
 	Wreck.SetPos(pl:GetPos())
 	Wreck.SetAngles(pl:GetAngles())*/
 end
  
 function CLASS:Think( pl )
+	if (pl.TankEnt and pl:Alive()) then
+		pl:SetPos(pl.TankEnt:GetPos())
+		pl:SetAngles(pl.TankEnt:GetAngles())
+	end
 end
 /*
 function CLASS:Move( pl, mv )
@@ -108,15 +109,21 @@ function CLASS:Move( pl, mv )
 end*/
 
 function CLASS:OnKeyPress( pl, key )
+	if (pl:GetNWBool("FlipPrompt", false)==true) then
+		if (pl:KeyDown( IN_USE )) then
+			pl:SetNWBool("FlipPrompt", false)
+			if (SERVER) then pl.TankEnt:FlipTank() end
+		end
+	end
 end
  
 function CLASS:OnKeyRelease( pl, key )
 end
 
 
-/*function CLASS:CalcView( ply, origin, angles, fov )
+function CLASS:CalcView( pl, origin, angles, fov )
 	
-	if ( !ply:Alive() ) then return end
+	if ( !pl:Alive() ) then return end
 	
 	local DistanceAngle = angles:Forward() * - 0.8 + angles:Up() * 0.2
 	
@@ -126,6 +133,6 @@ end
 	//ret.angles 		= angles
 	//ret.fov 		= fov
 	return ret
-end*/
+end
  
 player_class.Register( "ProtoTank", CLASS )  

@@ -14,8 +14,12 @@ local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
 local TankHealthThumbs = {}
 TankHealthThumbs["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb" )
+TankHealthThumbs["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb" )
+TankHealthThumbs["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb" )
 local TankHealthThumbsBlur = {}
 TankHealthThumbsBlur["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb_Blur" )
+TankHealthThumbsBlur["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb_Blur" )
+TankHealthThumbsBlur["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb_Blur" )
 //colors
 local Color_USABlue = Color(41,41,222)
 local Color_USSRRed = Color(189,0,0)
@@ -44,8 +48,8 @@ ScaleFactors()
 //misc
 local fadenum=0
 local fadenumchange=2
-local TankHealthThumb = TankHealthThumbs["ProtoTank"]
-local TankHealthThumbBlur = TankHealthThumbsBlur["ProtoTank"]
+local TankHealthThumb = TankHealthThumbs["T-90"]
+local TankHealthThumbBlur = TankHealthThumbsBlur["T-90"]
 local PlayerTank=LocalPlayer():GetNWString("TankName")
 
 function CheckTankChange()
@@ -100,7 +104,7 @@ function GM:OnHUDPaint()
 		//----------------Armor Display--------------------------------------
 		draw.RoundedBox(8, 11*SF, 665*SF, 174*SF, 84*SF, Color_Gray)
 		draw.RoundedBox(8, 163*SF, 707*SF, 55*SF, 49*SF, Color_Gray)
-		local HealthColor = HSVToColor((LocalPlayer():Health()/100)*120, 1, 1)
+		local HealthColor = HSVToColor(   math.Clamp((((LocalPlayer():Health()*1.1)-10)/100)*130, 0,120), 1, 1)
 		
 		surface.SetDrawColor(HealthColor)
 		surface.SetTexture( TankHealthThumbBlur )
@@ -130,8 +134,8 @@ function GM:OnHUDPaint()
 		
 		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
 			//Flip Prompt
-			draw.RoundedBox(8, HC-(250*SF), VC-(15*SF), 450*SF, 50*SF, Color_Gray_75A)
-			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-fadenum), 0 )
+			draw.RoundedBox(8, HC-(125*SF), VC-(5*SF), 250*SF, 40*SF, Color_Gray_75A)
+			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-fadenum), 1 )
 		end
 		
 	end
@@ -259,8 +263,6 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 		RespawnText:SizeToContents()
 		RespawnText:SetText( txt )
 	GAMEMODE:AddHUDItem( RespawnText, 8 )
-	local x, y = RespawnText:GetPos()
-	RespawnText:SetPos(x, y+50*SF)
 
 end
 
@@ -302,8 +304,6 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 			RespawnText:SizeToContents()
 			RespawnText:SetText( "Waiting for round start" )
 		GAMEMODE:AddHUDItem( RespawnText, 8 )
-		local x, y = RespawnText:GetPos()
-		RespawnText:SetPos(x,y+500*SF)
 		return
 		
 	end
@@ -315,8 +315,6 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 			RespawnTimer:SetValueFunction( function() return LocalPlayer():GetNWFloat( "RespawnTime", 0 ) end )
 			RespawnTimer:SetLabel( "SPAWN IN" )
 		GAMEMODE:AddHUDItem( RespawnTimer, 8 )
-		local x, y = RespawnTimer:GetPos()
-		RespawnTimer:SetPos(x,y+500*SF)
 		return
 
 	end
@@ -330,8 +328,6 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 											return GetGlobalFloat( "RoundEndTime" ) end )
 			RoundTimer:SetLabel( "TIME" )
 		GAMEMODE:AddHUDItem( RoundTimer, 8 )
-		local x, y = RoundTimer:GetPos()
-		RoundTimer:SetPos(x,y+500*SF)
 		return
 	
 	end
@@ -342,8 +338,6 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 			RespawnText:SizeToContents()
 			RespawnText:SetText( "Press Fire to Spawn" )
 		GAMEMODE:AddHUDItem( RespawnText, 8 )
-		local x, y =RespawnText:GetPos()
-		RespawnText:SetPos(x,y+500*SF)
 		
 	end
 

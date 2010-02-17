@@ -12,15 +12,13 @@ AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
 
-
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/ProtoTank/ProtoTank_Body.mdl" )
+	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Body.mdl") //ProtoTank/ProtoTank_Body.mdl" )
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
-	//self.Entity:StartMotionController()  //Use a custom Physics Simulation
 	
 	self.TurretEnt= ents.Create( "ProtoTank_Turret" )
 	self.TurretEnt:SetParent(self.Entity)
@@ -38,15 +36,16 @@ function ENT:Initialize()
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-	self.Entity:SetNWFloat("TopSpeed", 512)
-	self.Entity:SetNWFloat("Acceleration", 512) 
+	self.Entity:SetNWFloat("TopSpeed", 448)
+	self.Entity:SetNWFloat("Acceleration", 448) 
 	self.Entity:SetNWFloat("Speed", 0)
 	
-	self.Entity:SetNWFloat("TurnSpeed", 65)  //  deg/sec?
-	self.Entity:SetNWFloat("TurnAngle", self.Entity:GetAngles().y) 
+	self.Entity:SetNWFloat("TurnTopSpeed", 85)
+	self.Entity:SetNWFloat("TurnSpeed", 0)
 	//-----------------------------------------------
-	//self.Entity:GetPhysicsObject():SetMaterial("ice")
 	
+	self.Entity.LastSpeed=0
+	self.Entity.LastTime=CurTime()
 end
 
 function ENT:OnRemove() 
@@ -72,87 +71,101 @@ end
 
 function ENT:Think()
 	self.Entity:GetPhysicsObject():Wake()
-	local ply = self.Entity.MyPlayer
-	if (ply:GetNWBool("FlipPrompt", false)==true) then
-		if (ply:KeyDown( IN_USE )) then
-			ply:SetNWBool("FlipPrompt", false)
-			self.Entity:FlipTank()
-		end
-	end
 end
 
 function ENT:FlipTank()
 	self.Entity:SetAngles(Angle(0, self.Entity:GetAngles().y, 0))
 	self.Entity:SetPos(self.Entity:GetPos()+Vector(0,0,100))
+	self.Entity:SetNWFloat("Speed", 0)
+	local phys=self.Entity:GetPhysicsObject()
+	phys:SetVelocity(Vector(0,0,100))
+	phys:AddAngleVelocity(phys:GetAngleVelocity()*-1)
 end
 
 //------------------TAnk Movement-------------------------------------
-
-function ENT:PhysicsSimulate( phys, dt)
-	local ply = self.Entity.MyPlayer
-	if !ply:IsValid() then return SIM_NOTHING end
-	if ply:Alive() then
+function ENT:PhysicsUpdate( phys )
+	local dt=CurTime()-self.Entity.LastTime
+	self.Entity.LastTime=CurTime()
+	
+	phys:Wake()
+	local pl = self.Entity.MyPlayer
+	if !pl:IsValid() then return end
+	if pl:Alive() then
 		local up = phys:GetAngle():Up()
-		if ( up.z < 0.5 ) then
+		if ( up.z < 0.6 ) then
 			phys:Wake()
-			if (ply:GetNWBool("FlipPrompt", false)==false) then
-				ply:SetNWBool("FlipPrompt", true)
+			if (pl:GetNWBool("FlipPrompt", false)==false) then
+				pl:SetNWBool("FlipPrompt", true)
 			end
-			return SIM_NOTHING
+			return
 		else
-			if (ply:GetNWBool("FlipPrompt", true)==true) then
-				ply:SetNWBool("FlipPrompt", false)
+			if (pl:GetNWBool("FlipPrompt", true)==true) then
+				pl:SetNWBool("FlipPrompt", false)
 			end
 		end
 		
+		//if self.Entity:IsOnGround() then
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		local tankSpeed = self.Entity:GetNWFloat("Speed")
 		local tankTopSpeed = self.Entity:GetNWFloat("TopSpeed")
 		local tankAcceleration = self.Entity:GetNWFloat("Acceleration")
+		local tankTurnTopSpeed = self.Entity:GetNWFloat("TurnTopSpeed")
 		local tankTurnSpeed = self.Entity:GetNWFloat("TurnSpeed")
-		local tankTurnAngle = self.Entity:GetNWFloat("TurnAngle")
 		
-		if ply:KeyDown( IN_FORWARD ) then
+		if pl:KeyDown( IN_FORWARD ) then
 			tankSpeed = math.Clamp(tankSpeed+(tankAcceleration*dt), -tankTopSpeed/2, tankTopSpeed)
 		end
-		if ply:KeyDown( IN_BACK ) then
+		if pl:KeyDown( IN_BACK ) then
 			tankSpeed = math.Clamp(tankSpeed-(tankAcceleration*dt), -tankTopSpeed/2, tankTopSpeed)
 		end
-		if not (ply:KeyDown( IN_FORWARD ) or ply:KeyDown( IN_BACK )) then
+		if not (pl:KeyDown( IN_FORWARD ) or pl:KeyDown( IN_BACK )) then
 			if (tankSpeed > 0) then
 				tankSpeed = math.Clamp(tankSpeed-(tankAcceleration*dt), 0, tankTopSpeed)
 			elseif (tankSpeed < 0) then
 				tankSpeed = math.Clamp(tankSpeed+(tankAcceleration*dt), -tankTopSpeed/2, 0)
 			end
 		end
-		if ply:KeyDown( IN_MOVELEFT ) then
-			tankTurnAngle=math.NormalizeAngle(tankTurnAngle+(tankTurnSpeed*dt))
-		end
-		if ply:KeyDown( IN_MOVERIGHT ) then
-			tankTurnAngle=math.NormalizeAngle(tankTurnAngle-(tankTurnSpeed*dt))
-		end
-		
 		self.Entity:SetNWFloat("Speed", tankSpeed)
-		self.Entity:SetNWFloat("TurnAngle", tankTurnAngle)
-		//ply:ChatPrint("Speed: "..tankSpeed)
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		if pl:KeyDown( IN_MOVELEFT ) then
+			tankTurnSpeed=math.Clamp(tankTurnSpeed+(tankTurnTopSpeed*dt), -tankTurnTopSpeed, tankTurnTopSpeed)
+			tankSpeed=tankSpeed*(1-((math.abs(tankTurnSpeed)/tankTurnTopSpeed)*0.5))
+		elseif pl:KeyDown( IN_MOVERIGHT ) then
+			tankTurnSpeed=math.Clamp(tankTurnSpeed-(tankTurnTopSpeed*dt), -tankTurnTopSpeed, tankTurnTopSpeed)
+			tankSpeed=tankSpeed*(1-((math.abs(tankTurnSpeed)/tankTurnTopSpeed)*0.5))
+		else
+			if (tankTurnSpeed > 0) then
+				tankTurnSpeed = math.Clamp(tankTurnSpeed-(tankTurnTopSpeed*dt*2), 0, tankTurnTopSpeed)
+			elseif (tankTurnSpeed < 0) then
+				tankTurnSpeed = math.Clamp(tankTurnSpeed+(tankTurnTopSpeed*dt*2), -tankTurnTopSpeed, 0)
+			end
+		end
+		self.Entity:SetNWFloat("TurnSpeed", tankTurnSpeed)
+		
 		local Vel = phys:GetVelocity()
 		local RightVel = phys:GetAngle():Right():Dot( Vel )
-		local AngleVel = phys:GetAngleVelocity()
 		
 		//****************LINEAR TEIM************************
 		//stop skidding(tracks (well, wheels too) don't go sideways)
-		RightVel = RightVel * 0.5
+		RightVel = RightVel * -0.5
 		
-		//local Linear = Vector( tankSpeed, RightVel, 0 ) * dt * 1000
-		local Linear = Vector(0, tankSpeed, 0) * dt * 1000
+		if tankSpeed>0 then
+			Linear=tankSpeed-math.Clamp(self.Entity:GetForward():Dot(Vel), 0, tankSpeed)
+		else
+			Linear=tankSpeed+math.Clamp(-self.Entity:GetForward():Dot(Vel), 0, -tankSpeed)
+		end
+		Linear=Linear*(  0.6  -  math.Clamp(self.Entity:GetForward():Dot(Vector(0,0,1)), -0.6,0.6)  )*1.67
+		Linear=Vector(Linear,-RightVel,0)  //rightvel
+		Linear=(self.Entity:LocalToWorld(Linear)-self.Entity:GetPos())
+		phys:AddVelocity(Linear)
+		//**************ANGULAR TIEM************************
+		local AngVel=Vector( 0, 0, ((-1*phys:GetAngleVelocity().z)+tankTurnSpeed) )
+		if not (math.abs(tankSpeed) < 5 and math.abs(tankTurnSpeed) < 1) then
+			phys:AddAngleVelocity(AngVel)
+		end
 		
-		//print("Linear: "..Linear.x.." ---"..Linear.y.." ---"..Linear.z)
-		AngleVel=Vector(AngleVel.x, AngleVel.y,0)
-
-		return AngleVel, Linear, SIM_LOCAL_FORCE
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//end
 	end
-	return SIM_NOTHING
+	return
 end

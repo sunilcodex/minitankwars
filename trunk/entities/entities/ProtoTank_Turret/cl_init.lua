@@ -21,10 +21,26 @@ include('shared.lua');
 	self.PlayerEnt:SetAngles(self.Entity:GetAngles())
 	self.PlayerEnt:Spawn()
 	////////////////
-	function self.PlayerEnt.BuildBonePositions(entity)  
+	function self.PlayerEnt.BuildBonePositions(entity)
+		local index, matrix
+		local HideBonesLegs= {
+			"ValveBiped.Bip01_L_Calf",
+			"ValveBiped.Bip01_L_Foot",
+			"ValveBiped.Bip01_L_Toe",
+			"ValveBiped.Bip01_R_Calf",
+			"ValveBiped.Bip01_R_Foot",
+			"ValveBiped.Bip01_R_Toe",
+		}
+		local PB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_Pelvis"))
+		for k,v in pairs(HideBonesLegs) do
+			index = entity:LookupBone(v)    
+			matrix = PB
+			matrix:Scale(Vector(0))
+			entity:SetBoneMatrix(index, matrix)
+		end
 		if entity:GetModel()!="models/player/gman_high.mdl" then
-		local index = entity:LookupBone("ValveBiped.Bip01_L_UpperArm")    
-		local matrix = entity:GetBoneMatrix(index)  
+		index = entity:LookupBone("ValveBiped.Bip01_L_UpperArm")    
+		matrix = entity:GetBoneMatrix(index)  
 		matrix:Rotate(Angle(35,0,0))
 		entity:SetBoneMatrix(index, matrix) 
 		index = entity:LookupBone("ValveBiped.Bip01_R_UpperArm")    
@@ -56,7 +72,6 @@ include('shared.lua');
 		end
 		for k,v in pairs(HideBonesR) do
 			index = entity:LookupBone(v)    
-
 			matrix = RB
 			matrix:Scale(Vector(0))
 			entity:SetBoneMatrix(index, matrix)
@@ -82,10 +97,26 @@ function ENT:Think()
 		self.PlayerEnt:SetAngles(self.Entity:GetAngles())
 		self.PlayerEnt:Spawn()		
 		////////////////
-		function self.PlayerEnt.BuildBonePositions(entity)  
+		function self.PlayerEnt.BuildBonePositions(entity)
+			local index, matrix
+			local HideBonesLegs= {
+				"ValveBiped.Bip01_L_Calf",
+				"ValveBiped.Bip01_L_Foot",
+				"ValveBiped.Bip01_L_Toe",
+				"ValveBiped.Bip01_R_Calf",
+				"ValveBiped.Bip01_R_Foot",
+				"ValveBiped.Bip01_R_Toe",
+			}
+			local PB = entity:GetBoneMatrix(entity:LookupBone("ValveBiped.Bip01_Pelvis"))
+			for k,v in pairs(HideBonesLegs) do
+				index = entity:LookupBone(v)    
+				matrix = PB
+				matrix:Scale(Vector(0))
+				entity:SetBoneMatrix(index, matrix)
+			end
 			if entity:GetModel()!="models/player/gman_high.mdl" then
-			local index = entity:LookupBone("ValveBiped.Bip01_L_UpperArm")    
-			local matrix = entity:GetBoneMatrix(index)  
+			index = entity:LookupBone("ValveBiped.Bip01_L_UpperArm")    
+			matrix = entity:GetBoneMatrix(index)  
 			matrix:Rotate(Angle(35,0,0))
 			entity:SetBoneMatrix(index, matrix) 
 			index = entity:LookupBone("ValveBiped.Bip01_R_UpperArm")    
@@ -117,7 +148,6 @@ function ENT:Think()
 			end
 			for k,v in pairs(HideBonesR) do
 				index = entity:LookupBone(v)    
-				matrix = entity:GetBoneMatrix(index)  
 				matrix = RB
 				matrix:Scale(Vector(0))
 				entity:SetBoneMatrix(index, matrix)
@@ -127,8 +157,8 @@ function ENT:Think()
 		////////////////
 	end
 	//fix any PVS issues
-	//self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
-	//self.PlayerEnt:SetAngles(self.Entity:GetAngles())
+	self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
+	self.PlayerEnt:SetAngles(self.Entity:GetAngles())
 end
 
 function ENT:OnRemove() 
