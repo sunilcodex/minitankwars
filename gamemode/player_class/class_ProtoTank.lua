@@ -62,7 +62,7 @@ function CLASS:OnDeath( pl, attacker, dmginfo )
 end
  
 function CLASS:Think( pl )
-	if (pl.TankEnt and pl:Alive()) then
+	if (pl.TankEnt and pl.TankEnt:IsValid() and pl:Alive()) then
 		pl:SetPos(pl.TankEnt:GetPos())
 		pl:SetAngles(pl.TankEnt:GetAngles())
 	end

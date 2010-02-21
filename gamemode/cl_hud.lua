@@ -48,8 +48,8 @@ ScaleFactors()
 //misc
 local fadenum=0
 local fadenumchange=2
-local TankHealthThumb = TankHealthThumbs["T-90"]
-local TankHealthThumbBlur = TankHealthThumbsBlur["T-90"]
+local TankHealthThumb = TankHealthThumbs["M1A2_Abrams"]
+local TankHealthThumbBlur = TankHealthThumbsBlur["M1A2_Abrams"]
 local PlayerTank=LocalPlayer():GetNWString("TankName")
 
 function CheckTankChange()
@@ -130,7 +130,8 @@ function GM:OnHUDPaint()
 		//Crosshair
 		surface.SetDrawColor(Color_White)
 		surface.SetTexture( ReticleTex )
-		surface.DrawTexturedRect( HC-(32*SF), VC-(32*SF), 64*SF, 64*SF )
+		local CPos = LocalPlayer():GetEyeTraceNoCursor().HitPos:ToScreen()
+		surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
 		
 		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
 			//Flip Prompt

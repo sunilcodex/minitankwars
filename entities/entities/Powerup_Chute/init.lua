@@ -3,8 +3,8 @@ MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-ProtoTank_Tracks init.lua
-	-ProtoTank Tracks Entity serverside init
+PowerUp_SpeedBoost init.lua
+	-Powerup Chute Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
@@ -14,11 +14,9 @@ include( 'shared.lua' )
    Name: Initialize
 ---------------------------------------------------------*/
 function ENT:Initialize()
-	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/M1A2_Abrams/M1A2_Abrams_Tracks.mdl")//ProtoTank/ProtoTank_Tracks.mdl" )
+	self.Entity:SetModel( "models/BMCha/MiniTanks/Powerups/Powerup_Chute.mdl" )
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
-	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
+	self.Entity:SetMoveType( MOVETYPE_NONE )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
-	
 end

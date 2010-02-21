@@ -15,7 +15,7 @@ include( 'shared.lua' )
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Body.mdl") //ProtoTank/ProtoTank_Body.mdl" )
+	self.Entity:SetModel( "models/BMCha/MiniTanks/M1A2_Abrams/M1A2_Abrams_Body.mdl") //ProtoTank/ProtoTank_Body.mdl" )   T-90/T-90_
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
@@ -42,6 +42,7 @@ function ENT:Initialize()
 	
 	self.Entity:SetNWFloat("TurnTopSpeed", 85)
 	self.Entity:SetNWFloat("TurnSpeed", 0)
+	self.Entity:SetNWFloat("SpeedMul", 1)
 	//-----------------------------------------------
 	
 	self.Entity.LastSpeed=0
@@ -82,6 +83,21 @@ function ENT:FlipTank()
 	phys:AddAngleVelocity(phys:GetAngleVelocity()*-1)
 end
 
+function ENT:Recoil(force, vec)
+	self.Entity:GetPhysicsObject():AddVelocity(vec*-force)
+end
+
+//**************************************Powerups**********************************
+function ENT:PU_SpeedBoost_Start()
+	self.Entity:SetNWFloat("SpeedMul", 1.5)
+	//self.Entity:SetNWInt("Powerup", PowerupTable["SpeedBoost"])
+	timer.Simple(10, self.Entity:PU_SpeedBoost_Stop())
+end
+function ENT:PU_SpeedBoost_Stop()
+	self.Entity:SetNWFloat("SpeedMul", 1)
+	self.Entity:SetNWInt("Powerup", 0)
+end
+//*********************************************************************************
 //------------------TAnk Movement-------------------------------------
 function ENT:PhysicsUpdate( phys )
 	local dt=CurTime()-self.Entity.LastTime
@@ -106,12 +122,14 @@ function ENT:PhysicsUpdate( phys )
 		
 		//if self.Entity:IsOnGround() then
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+		self.TurretEnt:Update(dt)
 		local tankSpeed = self.Entity:GetNWFloat("Speed")
 		local tankTopSpeed = self.Entity:GetNWFloat("TopSpeed")
 		local tankAcceleration = self.Entity:GetNWFloat("Acceleration")
 		local tankTurnTopSpeed = self.Entity:GetNWFloat("TurnTopSpeed")
 		local tankTurnSpeed = self.Entity:GetNWFloat("TurnSpeed")
+		local tankSpeedMul = self.Entity:GetNWFloat("SpeedMul")
+		tankTopSpeed=tankTopSpeed*tankSpeedMul
 		
 		if pl:KeyDown( IN_FORWARD ) then
 			tankSpeed = math.Clamp(tankSpeed+(tankAcceleration*dt), -tankTopSpeed/2, tankTopSpeed)
@@ -152,10 +170,11 @@ function ENT:PhysicsUpdate( phys )
 		
 		if tankSpeed>0 then
 			Linear=tankSpeed-math.Clamp(self.Entity:GetForward():Dot(Vel), 0, tankSpeed)
+			Linear=Linear*(  0.6  -  math.Clamp(self.Entity:GetForward():Dot(Vector(0,0,1)), -0.6,0.6)  )*1.67
 		else
 			Linear=tankSpeed+math.Clamp(-self.Entity:GetForward():Dot(Vel), 0, -tankSpeed)
+			Linear=Linear*(  0.6  -  math.Clamp((self.Entity:GetForward()*-1):Dot(Vector(0,0,1)), -0.6,0.6)  )*1.67
 		end
-		Linear=Linear*(  0.6  -  math.Clamp(self.Entity:GetForward():Dot(Vector(0,0,1)), -0.6,0.6)  )*1.67
 		Linear=Vector(Linear,-RightVel,0)  //rightvel
 		Linear=(self.Entity:LocalToWorld(Linear)-self.Entity:GetPos())
 		phys:AddVelocity(Linear)

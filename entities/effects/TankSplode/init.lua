@@ -26,7 +26,7 @@ function EFFECT:Init( data )
 		for i=0, NumParticles do
 		
 			local vPos = Vector( math.Rand(Low.x,High.x), math.Rand(Low.y,High.y), math.Rand(Low.z,High.z) )
-			local particle = emitter:Add( "effects/spark", vPos )
+			local particle = emitter:Add( "particle/particle_smokegrenade", vPos )
 			if (particle) then
 			
 				particle:SetVelocity( (vPos - vOffset) * 5 )
