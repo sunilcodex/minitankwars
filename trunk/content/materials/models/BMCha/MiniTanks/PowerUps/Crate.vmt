@@ -1,0 +1,5 @@
+VertexLitGeneric
+{
+	"$basetexture"		"models\BMCha\MiniTanks\Powerups\Crate"
+	"$bumpmap"		"models\BMCha\MiniTanks\Powerups\CrateNormal"
+}

@@ -12,8 +12,23 @@ AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile('cl_gmchanger.lua')
 AddCSLuaFile( "shared.lua" )
 
-
 include( "shared.lua" )
+
+function GM:Initialize()
+	timer.Simple(PowerupSpawn(), 10)
+end
+
+
+PowerupEnts = {
+"Powerup_SpeedBoost",
+}
+function PowerupSpawn()
+	local PU = ents.Create(table.Random(PowerupEnts)) 
+	PU:SetPos(Vector(0,0,1000))
+	PU:SetAngles(Angle(math.random(60)-30, math.random(60)-30, math.random(359)))
+	PU:Spawn()
+	timer.Simple(PowerupSpawn(), 10)
+end
 
 // This is called every second to see if we can end the round
 function GM:CheckRoundEnd()
