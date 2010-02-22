@@ -14,20 +14,30 @@ AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
 
-function GM:Initialize()
-	timer.Simple(PowerupSpawn(), 10)
+
+function GM:ChatBroadcast(text)
+	for k,v in pairs(player.GetAll()) do
+		v:ChatPrint(text)
+	end
 end
 
+//PowerupEnts = {}
+//PowerupEnts[0]="Powerup_SpeedBoost"
+ActivePowerups = 0
+function GM:PowerupSpawn()
+	if ActivePowerups < 10 then
+		local PU = ents.Create("Powerup_SpeedBoost") 
+		PU:SetPos(Vector(500,500,3000))
+		PU:SetAngles(Angle(0, math.random(359), 0))
+		PU:SetVelocity(Vector(math.random(1000)-500, math.random(1000)-500, -5))
+		PU:Spawn()
+		ActivePowerups=ActivePowerups+1
+	end
+end
 
-PowerupEnts = {
-"Powerup_SpeedBoost",
-}
-function PowerupSpawn()
-	local PU = ents.Create(table.Random(PowerupEnts)) 
-	PU:SetPos(Vector(0,0,1000))
-	PU:SetAngles(Angle(math.random(60)-30, math.random(60)-30, math.random(359)))
-	PU:Spawn()
-	timer.Simple(PowerupSpawn(), 10)
+function GM:InitPostEntity()
+	GAMEMODE:PowerupSpawn()
+	timer.Create("PowerupSpawnTimer", 10, 0, function() GAMEMODE:PowerupSpawn() end)
 end
 
 // This is called every second to see if we can end the round

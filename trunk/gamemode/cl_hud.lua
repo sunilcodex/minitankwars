@@ -13,10 +13,12 @@ local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
 local TankHealthThumbs = {}
+TankHealthThumbs["--"] = surface.GetTextureID( "VGUI/black" )
 TankHealthThumbs["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb" )
 TankHealthThumbs["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb" )
 TankHealthThumbs["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb" )
 local TankHealthThumbsBlur = {}
+TankHealthThumbsBlur["--"] = surface.GetTextureID( "VGUI/black" )
 TankHealthThumbsBlur["ProtoTank"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/ProtoTankThumb_Blur" )
 TankHealthThumbsBlur["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb_Blur" )
 TankHealthThumbsBlur["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb_Blur" )
@@ -48,9 +50,9 @@ ScaleFactors()
 //misc
 local fadenum=0
 local fadenumchange=2
-local TankHealthThumb = TankHealthThumbs["M1A2_Abrams"]
-local TankHealthThumbBlur = TankHealthThumbsBlur["M1A2_Abrams"]
-local PlayerTank=LocalPlayer():GetNWString("TankName")
+local PlayerTank=LocalPlayer():GetNWString("TankName", "--")
+local TankHealthThumb = TankHealthThumbs[PlayerTank]
+local TankHealthThumbBlur = TankHealthThumbsBlur[PlayerTank]
 
 function CheckTankChange()
 	if LocalPlayer():GetNWString("TankName") !=PlayerTank then
@@ -58,6 +60,7 @@ function CheckTankChange()
 		TankHealthThumbBlur = TankHealthThumbsBlur[LocalPlayer():GetNWString("TankName")]
 	end
 end
+timer.Create("TankChangeHUDTimer", 1, 0, CheckTankChange)
 
 function GM:OnHUDPaint()
 	if SH!=SHL then

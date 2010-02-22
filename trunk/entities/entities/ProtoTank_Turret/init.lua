@@ -22,7 +22,7 @@ include( 'shared.lua' )
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/M1A2_Abrams/M1A2_Abrams_Turret.mdl")//ProtoTank/ProtoTank_Turret.mdl" )
+	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Turret.mdl")
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
@@ -33,46 +33,31 @@ function ENT:Initialize()
 	self.Entity.TurretElev = 0
 	
 	self.Entity.TraversePatch  = CreateSound(self.Entity, TraverseSound)
-	self.Entity.TraversePatch:ChangePitch(10)
 	self.Entity.SoundPlaying = false
 end
 
 function ENT:Update(dt)
 	if (self.Entity.MyPlayer!=NULL) then
 		local tankEnt = self.Entity.MyPlayer.TankEnt
-		/*print("---")
-		print(self.Entity.MyPlayer:EyeAngles().y)
-		local EyeVec = Angle(0, self.Entity.MyPlayer:EyeAngles().y, 0):Forward()
-		print(EyeVec)
-		EyeVec:Rotate(tankEnt:GetAngles())
-		print(EyeVec:Angle())
-		print(tankEnt:GetAngles())
-		self.Entity:SetAngles(EyeVec:Angle()+Angle(0,0,tankEnt:GetAngles().r))*/
-		self.MyPlayer:ChatPrint("----")
+		
 		local TAng=tankEnt:GetAngles()
 		local DesiredRot=math.NormalizeAngle(self.Entity.MyPlayer:EyeAngles().y-TAng.y)
-		local AngDiff = self.Entity.TurretYaw - DesiredRot
-		self.Entity.MyPlayer:ChatPrint(self.Entity.TurretYaw)// 43  -43
-		self.Entity.MyPlayer:ChatPrint(DesiredRot)// -169    169
-		self.Entity.MyPlayer:ChatPrint(AngDiff)// 212   -212
-		/*
+		local AngDiff = math.NormalizeAngle(self.Entity.TurretYaw) - DesiredRot
 		local DeltaRot = math.Clamp((90*dt), -math.abs(AngDiff), math.abs(AngDiff))
-		if ((AngDiff > 0 or AngDiff < -180) and (AngDiff < 180)) then   //first
-			self.Entity.TurretYaw=self.Entity.TurretYaw-DeltaRot//math.Approach(math.NormalizeAngle(self.Entity.TurretYaw), math.NormalizeAngle(DesiredRot), -90*dt)
-			self.Entity.MyPlayer:ChatPrint("first")
+		if ((AngDiff > 0 or AngDiff < -180) and (AngDiff < 180)) then
+			self.Entity.TurretYaw=self.Entity.TurretYaw-DeltaRot
 		elseif AngDiff < 0 or AngDiff > 180 then
-			self.Entity.TurretYaw=self.Entity.TurretYaw+DeltaRot//math.Approach(math.NormalizeAngle(self.Entity.TurretYaw), math.NormalizeAngle(DesiredRot), 90*dt)
-			self.Entity.MyPlayer:ChatPrint("second")
-		end*/
+			self.Entity.TurretYaw=self.Entity.TurretYaw+DeltaRot
+		end
 		
-		/*if self.Entity.TurretYaw > 360 then
+		if self.Entity.TurretYaw > 360 then
 			self.Entity.TurretYaw = self.Entity.TurretYaw-360
 		end
 		if self.Entity.TurretYaw < 0 then
 			self.Entity.TurretYaw = self.Entity.TurretYaw+360
-		end*/
+		end
 		
-		if (math.Round(self.Entity.TurretYaw)==math.Round(DesiredRot)) then
+		if (math.Round(math.NormalizeAngle(self.Entity.TurretYaw))==math.Round(DesiredRot)) then
 			if self.Entity.SoundPlaying==true then
 				self.Entity.TraversePatch:Stop()
 				self.Entity.SoundPlaying = false
@@ -80,16 +65,18 @@ function ENT:Update(dt)
 		else	
 			if self.Entity.SoundPlaying==false then
 				self.Entity.TraversePatch:Play()
+				self.Entity.TraversePatch:ChangePitch(50)
 				self.Entity.SoundPlaying = true
 			end
 		end
 		
-		//TAng:RotateAroundAxis(tankEnt:GetUp(), math.NormalizeAngle(self.Entity.TurretYaw))
+		TAng:RotateAroundAxis(tankEnt:GetUp(), math.NormalizeAngle(self.Entity.TurretYaw))
 		self.Entity:SetAngles(TAng)
-		local DesiredElev=math.Round(math.Rad2Deg(math.acos(self.Entity.MyPlayer:EyeAngles():Forward():Dot(TAng:Forward()))))
-		//self.Entity.TurretElev=math.Approach(self.Entity.TurretElev, DesiredElev, 1)
-		//self.Entity.MyPlayer:ChatPrint(math.Clamp(DesiredElev, -24, 24))
-		self.Entity:SetPoseParameter("Turret_Elevate", math.Clamp(DesiredElev, -24, 24))
+		local DesiredElev = self.Entity.MyPlayer:EyeAngles()
+		self.Entity:WorldToLocalAngles(DesiredElev)
+		DesiredElev = (math.Clamp(-DesiredElev.p, -24.096442681172403, 24.096442681172403))/24.096442681172403  
+		self.Entity:SetPoseParameter("Turret_Elevate", math.asin(math.sin(DesiredElev))*24.096442681172403)
+		
 	end
 end
 

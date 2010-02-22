@@ -42,8 +42,6 @@ function ENT:Think()
 	local FT=CurTime()-self.Entity.LastTime
 	if FT==0 then FT=0.1 end
 	self.Entity.LastTime = CurTime()
-	//local MovVec = self.Entity:GetPos()-self.Entity.LastPos
-	//local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
 	if self.Entity.BodyEnt == self.Entity then
 		self.Entity.BodyEnt = self.Entity:GetNWEntity("TankBody", self.Entity)
 	end
@@ -53,5 +51,4 @@ function ENT:Think()
 		self.Entity:SetMaterial(NewMat)
 		self.Entity.OldMat = NewMat
 	end
-	//self.Entity.LastPos=self.Entity:GetPos()
 end

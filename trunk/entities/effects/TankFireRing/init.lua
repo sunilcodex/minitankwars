@@ -3,46 +3,43 @@ MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-EngineSmoke init.lua
-	-Engine Smoke Effect init
+TankFireRing init.lua
+	-Tank Fire Dust Ring Effect init
 */
-
 
 function EFFECT:Init( data )
 	
 	local TargetEntity = data:GetEntity()
 	if ( !TargetEntity || !TargetEntity:IsValid() ) then return end
 	
-	local vOffset = TargetEntity:GetPos()
-	local Low, High = TargetEntity:WorldSpaceAABB()
+	local vOrigin = TargetEntity:GetPos() - TargetEntity:GetUp()*5
+	local vOffsetR = TargetEntity:GetRight()*10
+	local vOffsetF = TargetEntity:GetForward()*10
 
-	local NumParticles = TargetEntity:BoundingRadius()
-	NumParticles = NumParticles * 4
+	NumParticles = 40
 	
-	NumParticles = math.Clamp( NumParticles, 32, 256 )
-		
-	local emitter = ParticleEmitter( vOffset )
+	local emitter = ParticleEmitter( vOrigin )
 	
 		for i=0, NumParticles do
 		
-			local vPos = Vector( math.Rand(Low.x,High.x), math.Rand(Low.y,High.y), math.Rand(Low.z,High.z) )
-			local particle = emitter:Add( "particle/particle_smokegrenade", vPos )
+			local vPos = (math.Rand(-20,20)/10*vOffsetR) + (math.Rand(-20,20)/10*vOffsetF) + vOrigin
+			local particle = emitter:Add( "particle/particle_smokegrenade", vPos-TargetEntity:GetUp()*5 )
 			if (particle) then
 			
-				particle:SetVelocity( (vPos - vOffset) * 5 )
+				particle:SetVelocity( (vPos - vOrigin) * 25 )
 				particle:SetLifeTime( 0 )
-				particle:SetDieTime( math.Rand( 0.5, 1.0 ) )
-				particle:SetStartAlpha( math.Rand( 200, 255 ) )
+				particle:SetDieTime( math.Rand( 0.7, 1.2 ) )
+				particle:SetStartAlpha( math.Rand( 200, 250 ) )
 				particle:SetEndAlpha( 0 )
-				particle:SetStartSize( 2 )
-				particle:SetEndSize( 0 )
+				particle:SetColor(128, 108, 78, 255)
+				particle:SetStartSize( 50 )
+				particle:SetEndSize( 20 )
 				particle:SetRoll( math.Rand(0, 360) )
-				particle:SetRollDelta( 0 )
+				particle:SetRollDelta( 1.5 )
 				
 				particle:SetAirResistance( 100 )
-				particle:SetGravity( Vector( 0, 0, -700 ) )
-				particle:SetCollide( true )
-				particle:SetBounce( 0.3 )
+				particle:SetGravity( Vector( 0, 0, 0 ) )
+				particle:SetCollide( false )
 				
 			end
 			
@@ -57,7 +54,7 @@ end
    THINK
 ---------------------------------------------------------*/
 function EFFECT:Think( )
-	return true
+	return false
 end
 
 /*---------------------------------------------------------
