@@ -7,45 +7,57 @@ TankSplode init.lua
 	-Tank Explode Effect init
 */
 
-
 function EFFECT:Init( data )
 	
 	local TargetEntity = data:GetEntity()
 	if ( !TargetEntity || !TargetEntity:IsValid() ) then return end
 	
 	local vOffset = TargetEntity:GetPos()
-	local Low, High = TargetEntity:WorldSpaceAABB()
-
-	local NumParticles = TargetEntity:BoundingRadius()
-	NumParticles = NumParticles * 4
 	
-	NumParticles = math.Clamp( NumParticles, 32, 256 )
-		
 	local emitter = ParticleEmitter( vOffset )
 	
-		for i=0, NumParticles do
-		
-			local vPos = Vector( math.Rand(Low.x,High.x), math.Rand(Low.y,High.y), math.Rand(Low.z,High.z) )
+		//smoke
+		for i=0, 75 do
+			local vPos = Vector( math.Rand(-60,60)+vOffset.x, math.Rand(-60,60)+vOffset.y, math.random(60)+vOffset.z )
 			local particle = emitter:Add( "particle/particle_smokegrenade", vPos )
 			if (particle) then
 			
-				particle:SetVelocity( (vPos - vOffset) * 5 )
+				particle:SetVelocity( (vPos - vOffset) * 3.5 )
 				particle:SetLifeTime( 0 )
-				particle:SetDieTime( math.Rand( 0.5, 1.0 ) )
-				particle:SetStartAlpha( math.Rand( 200, 255 ) )
+				particle:SetDieTime( math.Rand( 2, 3 ) )
+				particle:SetStartAlpha( 255 )
 				particle:SetEndAlpha( 0 )
-				particle:SetStartSize( 2 )
-				particle:SetEndSize( 0 )
+				particle:SetColor(25,25,25,255)
+				particle:SetStartSize( 50 )
+				particle:SetEndSize( 50 )
 				particle:SetRoll( math.Rand(0, 360) )
-				particle:SetRollDelta( 0 )
+				particle:SetRollDelta( 2 )
 				
-				particle:SetAirResistance( 100 )
-				particle:SetGravity( Vector( 0, 0, -700 ) )
-				particle:SetCollide( true )
-				particle:SetBounce( 0.3 )
-				
-			end
+				particle:SetAirResistance( 250 )
+				particle:SetGravity( Vector( 0, 0, 0 ) )
+				particle:SetCollide( false )			
+			end			
+		end
+		//fire
+		for i=0, 16 do
+			local vPos = Vector( math.Rand(-30,30)+vOffset.x, math.Rand(-30,30)+vOffset.y, math.random(30)+vOffset.z )
+			local particle = emitter:Add( "effects/fire_cloud2", vPos )
+			if (particle) then
 			
+				particle:SetVelocity( (vPos - vOffset) * 20 )
+				particle:SetLifeTime( 0 )
+				particle:SetDieTime( math.Rand( 0.1, 0.2 ) )
+				particle:SetStartAlpha( math.Rand( 75, 100 ) )
+				particle:SetEndAlpha( 0 )
+				particle:SetStartSize( 50 )
+				particle:SetEndSize( 30 )
+				particle:SetRoll( math.Rand(0, 360) )
+				particle:SetRollDelta( 6 )
+				
+				particle:SetAirResistance( 275 )
+				particle:SetGravity( Vector( 0, 0, 200 ) )
+				particle:SetCollide( false )			
+			end			
 		end
 		
 	emitter:Finish()
