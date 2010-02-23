@@ -18,8 +18,8 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
-	self.Entity:GetPhysicsObject():EnableGravity(false)
-	self.Entity:GetPhysicsObject():SetDamping(0,1000)
+	self.Entity:SetGravity(0)
+	//self.Entity:GetPhysicsObject():SetDamping(0,1000)
 	util.SpriteTrail(self.Entity, 0, Color(255,255,200), false, 5, 1, 4, 1/(15+1)*0.5, "trails/smoke.vmt")
 	self.Entity:SetVelocity(self.Entity:GetAngles():Forward()*600)
 end
@@ -36,4 +36,5 @@ end
 
 function ENT:Think()
 	self.Entity:GetPhysicsObject():Wake()
+	self.Entity:SetVelocity(self.Entity:GetAngles():Forward()*600)
 end
