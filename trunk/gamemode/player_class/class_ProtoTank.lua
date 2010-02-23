@@ -48,7 +48,7 @@ function CLASS:OnSpawn( pl )
 	pl:SetColor( Color(0,0,0,0) )
 end
  
-function CLASS:OnDeath( pl, attacker, dmginfo )	
+function CLASS:OnDeath( pl, attacker, dmginfo )
 	local Wreck = ents.Create( "TankWreck" )
 	Wreck:SetTank(pl:GetNWString("TankName", "T-90"))
 	Wreck:SetPos(pl.TankEnt:GetPos())

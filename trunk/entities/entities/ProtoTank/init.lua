@@ -71,7 +71,7 @@ function ENT:SetMyPlayer( pl )
 end
 
 function ENT:Think()
-	self.Entity:GetPhysicsObject():Wake()
+	//self.Entity:GetPhysicsObject():Wake()
 end
 
 function ENT:FlipTank()
@@ -103,7 +103,7 @@ function ENT:PhysicsUpdate( phys )
 	local dt=CurTime()-self.Entity.LastTime
 	self.Entity.LastTime=CurTime()
 	
-	phys:Wake()
+	//phys:Wake()
 	local pl = self.Entity.MyPlayer
 	if !pl:IsValid() then return end
 	if pl:Alive() then

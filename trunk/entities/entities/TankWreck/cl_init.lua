@@ -12,3 +12,17 @@ include('shared.lua');
 function ENT:Draw()
 	self.Entity:DrawModel();
 end
+/*
+function ENT:Initialize()
+	self.Entity.emitter = ParticleEmitter(self.Entity:GetPos())
+end
+
+function ENT:Think()
+	//smoke tiem
+	self.Entity.emitter=ParticleEmitter(self.Entity:GetPos())
+	local particle = self.Entity.emitter:Add(
+end*/
+
+function ENT:OnRemove()
+	self.Entity.emitter:Finish()
+end
