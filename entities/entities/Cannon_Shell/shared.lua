@@ -1,9 +1,9 @@
 ENT.Type = "anim"
-ENT.PrintName		= "SpeedBoost Powerup"
+ENT.PrintName		= "Tank Shell"
 ENT.Author			= "BMCha"
 ENT.Contact			= ""
-ENT.Purpose			= "ZOOM!"
+ENT.Purpose			= "Fwwwww->BOOM!"
 ENT.Instructions	= "Not sold separately, buy with MiniTank Wars"
 
 ENT.Spawnable			= false
-ENT.AdminSpawnable		= false
+ENT.AdminSpawnable		= false 

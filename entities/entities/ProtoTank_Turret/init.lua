@@ -74,8 +74,8 @@ function ENT:Update(dt)
 		self.Entity:SetAngles(TAng)
 		local DesiredElev = self.Entity.MyPlayer:EyeAngles()
 		self.Entity:WorldToLocalAngles(DesiredElev)
-		DesiredElev = (math.Clamp(-DesiredElev.p, -24.096442681172403, 24.096442681172403))/24.096442681172403  
-		self.Entity:SetPoseParameter("Turret_Elevate", math.asin(math.sin(DesiredElev))*24.096442681172403)
+		DesiredElev = math.Clamp(-DesiredElev.p, -25, 25) 
+		self.Entity:SetPoseParameter("Turret_Elevate", math.Round(math.sin(CurTime())))
 		
 	end
 end
