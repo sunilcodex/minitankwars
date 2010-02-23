@@ -39,7 +39,7 @@ function ENT:Think()
 		self.Entity.emitter = ParticleEmitter(self.Entity.LastPos)
 		local AttachmentData = self.Entity:GetAttachment(self.Entity.EngineAttachment)
 		for i=1,2 do
-			local particle = self.Entity.emitter:Add("particle/particle_smokegrenade", AttachmentData.Pos+Vector(math.random(40)-20, math.random(40)-20, math.random(10))
+			local particle = self.Entity.emitter:Add("particle/particle_smokegrenade", AttachmentData.Pos+Vector(math.random(40)-20, math.random(40)-20, math.random(10)))
 			if (particle) then
 				particle:SetVelocity( Vector(math.random(30)/10,math.random(30)/10,30) )
 				particle:SetLifeTime( 0 )
