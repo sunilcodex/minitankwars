@@ -10,6 +10,8 @@ PowerUp_SpeedBoost init.lua
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
+
+util.PrecacheSound("MiniTankWars/turbo.wav")
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -30,7 +32,7 @@ end
 
 function ENT:Think()
 	if (self.Entity.Dropping==true) then
-		local TD = util.QuickTrace(self.Entity:GetPos(), Vector(0,0,-64), {self.Entity})
+		local TD = util.QuickTrace(self.Entity:GetPos(), Vector(0,0,-64), {self.Entity, self.Entity.Chute})
 		if (TD.HitWorld == true and self.Entity:GetVelocity().z < 10) then
 			self.Entity.Chute:Remove()
 			self.Entity.Dropping=false
@@ -40,14 +42,11 @@ function ENT:Think()
 	end
 end
 
-local PowerupTable = {}
-PowerupTable[NULL]=0
-PowerupTable["SpeedBoost"]=1
-PowerupTable["ArmorBoost"]=2
-
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
+			ent:PowerUp("SpeedBoost", 10)	
+			ent:EmitSound("MiniTankWars/turbo.wav", 150, 100)
 			ent.MyPlayer:ChatPrint("Speed Increased for 10 seconds!")
 			ent.MyPlayer.TankEnt:SetNWFloat("SpeedMul", 1.5)
 			ActivePowerups=ActivePowerups-1

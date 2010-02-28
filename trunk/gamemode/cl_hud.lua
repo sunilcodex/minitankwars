@@ -13,13 +13,17 @@ local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
 local TankHealthThumbs = {}
-TankHealthThumbs["--"] = surface.GetTextureID( "VGUI/black" )
+TankHealthThumbs[""] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/alpha" )
 TankHealthThumbs["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb" )
 TankHealthThumbs["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb" )
+TankHealthThumbs["M551_Sheridan"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M551_SheridanThumb" )
+TankHealthThumbs["BMP-3"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/BMP-3Thumb" )
 local TankHealthThumbsBlur = {}
-TankHealthThumbsBlur["--"] = surface.GetTextureID( "VGUI/black" )
+TankHealthThumbsBlur[""] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/alpha" )
 TankHealthThumbsBlur["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb_Blur" )
 TankHealthThumbsBlur["T-90"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/T-90Thumb_Blur" )
+TankHealthThumbsBlur["M551_Sheridan"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M551_SheridanThumb_Blur" )
+TankHealthThumbsBlur["BMP-3"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/BMP-3Thumb_Blur" )
 //colors
 local Color_USABlue = Color(41,41,222)
 local Color_USSRRed = Color(189,0,0)
@@ -42,13 +46,14 @@ local function ScaleFactors()
 	SF3 = SF/3
 	SF4 = SF/4
 	VC = ScrH()/2
-	HC = ScrW()/2
+	HC = 512*SF
+	XMV=(ScrW()/2)-HC
 end
 ScaleFactors()
 //misc
 local fadenum=0
 local fadenumchange=2
-local PlayerTank=LocalPlayer():GetNWString("TankName", "--")
+local PlayerTank=LocalPlayer():GetNWString("TankName", "")
 local TankHealthThumb = TankHealthThumbs[PlayerTank]
 local TankHealthThumbBlur = TankHealthThumbsBlur[PlayerTank]
 
@@ -128,11 +133,29 @@ function GM:OnHUDPaint()
 		draw.DrawText("reloading...", "CV18", 897*SF, 735*SF, fadecolor, 1)
 		//---------------End Ammo Display------------------------------------
 		
+		//---------------Powerup Bar----------------------------------------
+		if LocalPlayer():GetNWBool("PowerupActive", true)==true then
+			//container
+			draw.RoundedBox(6, HC-(101*SF), 54*SF, 200*SF, 24*SF, Color_Black)
+			draw.RoundedBox(6, HC-(100*SF), 55*SF, 198*SF, 22*SF, Color_Gray)
+			//bar
+			local Percentage=LocalPlayer():GetNWFloat("PowerupTime")/LocalPlayer():GetNWFloat("PowerupTotTime")
+			draw.RoundedBox(6, HC-(((Percentage*94)+6)*SF), 55*SF, ((Percentage*182)+18)*SF, 22*SF, Color_HUDYellow)
+			//name
+			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC+(0.5*SF), 53.5*SF, Color_Black, 1)
+			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC, 53*SF, Color_White, 1)
+		end
+		//-------------End Powerup Bar----------------------------------------
+		
 		//Crosshair
 		surface.SetDrawColor(Color_White)
 		surface.SetTexture( ReticleTex )
-		local CPos = LocalPlayer():GetEyeTraceNoCursor().HitPos:ToScreen()
-		surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
+		local TurretEnt = LocalPlayer():GetNWEntity("TurretEnt")
+		if TurretEnt:IsValid() then
+			local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
+			local CPos=util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
+			surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
+		end
 		
 		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
 			//Flip Prompt

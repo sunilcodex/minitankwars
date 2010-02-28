@@ -13,16 +13,18 @@ include( 'shared.lua' )
 
 local ModelsList = {}
 ModelsList["T-90"] = "models/BMCha/MiniTanks/T-90/T-90_Body.mdl"
-ModelsList["M1A2_Abrams"] = "models/BMCha/MiniTanks/M1A2_Abrams/M1A2_Abrams.mdl"
+ModelsList["M1A2_Abrams"] = "models/BMCha/MiniTanks/M1A2_Abrams/M1A2_Abrams_Body.mdl"
+ModelsList["M551_Sheridan"] = "models/BMCha/MiniTanks/M551_Sheridan/M551_Sheridan_Body.mdl"
+ModelsList["BMP-3"] = "models/BMCha/MiniTanks/BMP-3/BMP-3_Body.mdl"
 
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
-	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Body.mdl") //ProtoTank/ProtoTank_   T-90/T-90_ M1A2_Abrams_
+	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Body.mdl") //will be overridden
 	self.Entity:SetMaterial( "models/props_pipes/GutterMetal01a.vmt" )
 	self.Entity:SetColor(50,50,50,255)
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
-	self.Entity:SetMoveType( MOVETYPE_NONE )
+	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )
 	
 	self.Entity.Alpha=255

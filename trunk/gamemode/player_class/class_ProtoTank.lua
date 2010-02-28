@@ -44,8 +44,10 @@ function CLASS:OnSpawn( pl )
 	pl:SetParent(pl.TankEnt)
 	pl.TankEnt:SetPlayerModel(pl:GetModel())
 	pl.TankEnt:SetMyPlayer(pl)
-	pl:DrawShadow(false)
-	pl:SetColor( Color(0,0,0,0) )
+	
+	pl:SetNoDraw(true)
+	pl:DrawShadow(false)  //just to be safe
+	pl:SetColor( Color(0,0,0,0) )   //see above
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
@@ -57,6 +59,7 @@ function CLASS:OnDeath( pl, attacker, dmginfo )
 	
 	local ed = EffectData()
 	ed:SetEntity(Wreck)
+	ed:SetOrigin(Wreck:GetPos())
 	util.Effect("TankSplode", ed, true, true)
 	
 	if (pl.TankEnt) then
@@ -64,8 +67,8 @@ function CLASS:OnDeath( pl, attacker, dmginfo )
 		pl.TankEnt=NULL
 	end
 	
-	//local head=pl:GetRagdollEntity():GetPhysicsObjectNum(10)
-	//head:ApplyForceCenter(Vector(0,0,500))
+	local head=pl:GetRagdollEntity():GetPhysicsObjectNum(10)
+	head:ApplyForceCenter(Vector(0,0,500))
 end
  
 function CLASS:Think( pl )

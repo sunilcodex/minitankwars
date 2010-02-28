@@ -11,6 +11,7 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
+local EngineSound = Sound("ambient/machines/diesel_engine_idle1.wav")
 
 function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
@@ -36,22 +37,27 @@ function ENT:Initialize()
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-	self.Entity:SetNWFloat("TopSpeed", 448)
-	self.Entity:SetNWFloat("Acceleration", 448) 
-	self.Entity:SetNWFloat("Speed", 0)
+	self.Entity.TopSpeed = 448
+	self.Entity.Acceleration = 448
+	self.Entity.Speed = 0
 	
-	self.Entity:SetNWFloat("TurnTopSpeed", 85)
-	self.Entity:SetNWFloat("TurnSpeed", 0)
-	self.Entity:SetNWFloat("SpeedMul", 1)
+	self.Entity.TurnTopSpeed = 85
+	self.Entity.TurnSpeed = 0
+	self.Entity.SpeedMul = 1
 	//-----------------------------------------------
 	
 	self.Entity.LastSpeed=0
 	self.Entity.LastTime=CurTime()
+	self.Entity.LastThink=CurTime()
+	
+	self.Entity.EngineSound=CreateSound(self.Entity, EngineSound)
+	self.Entity.EngineSound:Play()
 end
 
 function ENT:OnRemove() 
 	self.TurretEnt:Remove()
 	self.TracksEnt:Remove()
+	self.Entity.EngineSound:Stop()
 end
 
 
@@ -68,16 +74,65 @@ function ENT:SetMyPlayer( pl )
 	self.TurretEnt:SetOwner(pl)
 	self.TracksEnt.MyPlayer=pl
 	self.TracksEnt:SetOwner(pl)
+	
+	pl:SetNWBool("PowerupActive", false)
+	pl:SetNWString("PowerupName", "None")
+	pl:SetNWFloat("PowerupTime", 0)
+	pl:SetNWFloat("PowerupTotTime", 1)
+	pl:SetNWEntity("TurretEnt", self.TurretEnt)
 end
 
+//////////////////////////////////////////////////////////////////
 function ENT:Think()
 	self.Entity:GetPhysicsObject():Wake()
+	//powerup management
+	if (self.Entity.MyPlayer and self.Entity.MyPlayer:IsValid() and self.Entity.MyPlayer:Alive()) then
+		if self.Entity.MyPlayer:GetNWBool("PowerupActive")==true then
+			local time = self.Entity.MyPlayer:GetNWFloat("PowerupTime", 0)
+			time = time-(CurTime()-self.Entity.LastThink)
+			if time < 0 then
+				self.Entity:EndPowerUp()
+			else
+				self.Entity.MyPlayer:SetNWFloat("PowerupTime", time)
+			end
+		end
+	end
+	self.Entity.LastThink=CurTime()
+	self.Entity.EngineSound:ChangePitch(math.Clamp(   ((math.abs(self.Entity.Speed)/self.Entity.TopSpeed)*50+100)   , 100, 255))
 end
+
+function ENT:PowerUp( PUName, PUTime )
+	if self.Entity.MyPlayer:GetNWBool("PowerupActive")==true then
+		self.Entity:EndPowerUp()
+	end
+	self.Entity.MyPlayer:SetNWBool("PowerupActive", true)
+	self.Entity.MyPlayer:SetNWString("PowerupName", PUName)
+	self.Entity.MyPlayer:SetNWFloat("PowerupTime", PUTime)
+	self.Entity.MyPlayer:SetNWFloat("PowerupTotTime", PUTime)
+	//effects of powerup
+	if (PUName=="SpeedBoost") then
+		self.Entity.SpeedMul = 1.5
+	end
+end
+
+function ENT:EndPowerUp()
+	local PUName=self.Entity.MyPlayer:GetNWString("PowerupName")
+	//disable effects of powerup
+	if (PUName=="SpeedBoost") then
+		self.Entity.SpeedMul=1.0
+	end
+	//reset
+	self.Entity.MyPlayer:SetNWBool("PowerupActive", false)
+	self.Entity.MyPlayer:SetNWString("PowerupName", "None")
+	self.Entity.MyPlayer:SetNWFloat("PowerupTime", 0)
+	self.Entity.MyPlayer:SetNWFloat("PowerupTotTime", 1)
+end
+//////////////////////////////////////////////////////////////////
 
 function ENT:FlipTank()
 	self.Entity:SetAngles(Angle(0, self.Entity:GetAngles().y, 0))
 	self.Entity:SetPos(self.Entity:GetPos()+Vector(0,0,100))
-	self.Entity:SetNWFloat("Speed", 0)
+	self.Entity.Speed=0
 	local phys=self.Entity:GetPhysicsObject()
 	phys:SetVelocity(Vector(0,0,100))
 	phys:AddAngleVelocity(phys:GetAngleVelocity()*-1)
@@ -86,18 +141,6 @@ end
 function ENT:Recoil(force, vec)
 	self.Entity:GetPhysicsObject():AddVelocity(vec*-force)
 end
-
-//**************************************Powerups**********************************
-function ENT:PU_SpeedBoost_Start()
-	self.Entity:SetNWFloat("SpeedMul", 1.5)
-	//self.Entity:SetNWInt("Powerup", PowerupTable["SpeedBoost"])
-	timer.Simple(10, self.Entity:PU_SpeedBoost_Stop())
-end
-function ENT:PU_SpeedBoost_Stop()
-	self.Entity:SetNWFloat("SpeedMul", 1)
-	self.Entity:SetNWInt("Powerup", 0)
-end
-//*********************************************************************************
 //------------------TAnk Movement-------------------------------------
 function ENT:PhysicsUpdate( phys )
 	local dt=CurTime()-self.Entity.LastTime
@@ -122,12 +165,12 @@ function ENT:PhysicsUpdate( phys )
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 		self.TurretEnt:Update(dt)
-		local tankSpeed = self.Entity:GetNWFloat("Speed")
-		local tankTopSpeed = self.Entity:GetNWFloat("TopSpeed")
-		local tankAcceleration = self.Entity:GetNWFloat("Acceleration")
-		local tankTurnTopSpeed = self.Entity:GetNWFloat("TurnTopSpeed")
-		local tankTurnSpeed = self.Entity:GetNWFloat("TurnSpeed")
-		local tankSpeedMul = self.Entity:GetNWFloat("SpeedMul")
+		local tankSpeed = self.Entity.Speed
+		local tankTopSpeed = self.Entity.TopSpeed
+		local tankAcceleration = self.Entity.Acceleration
+		local tankTurnTopSpeed = self.Entity.TurnTopSpeed
+		local tankTurnSpeed = self.Entity.TurnSpeed
+		local tankSpeedMul = self.Entity.SpeedMul
 		tankTopSpeed=tankTopSpeed*tankSpeedMul
 		
 		if pl:KeyDown( IN_FORWARD ) then
@@ -143,7 +186,7 @@ function ENT:PhysicsUpdate( phys )
 				tankSpeed = math.Clamp(tankSpeed+(tankAcceleration*dt), -tankTopSpeed/2, 0)
 			end
 		end
-		self.Entity:SetNWFloat("Speed", tankSpeed)
+		self.Entity.Speed = tankSpeed
 		
 		if pl:KeyDown( IN_MOVELEFT ) then
 			tankTurnSpeed=math.Clamp(tankTurnSpeed+(tankTurnTopSpeed*dt), -tankTurnTopSpeed, tankTurnTopSpeed)
@@ -158,7 +201,7 @@ function ENT:PhysicsUpdate( phys )
 				tankTurnSpeed = math.Clamp(tankTurnSpeed+(tankTurnTopSpeed*dt*2), -tankTurnTopSpeed, 0)
 			end
 		end
-		self.Entity:SetNWFloat("TurnSpeed", tankTurnSpeed)
+		self.Entity.TurnSpeed = tankTurnSpeed
 		
 		local Vel = phys:GetVelocity()
 		local RightVel = phys:GetAngle():Right():Dot( Vel )

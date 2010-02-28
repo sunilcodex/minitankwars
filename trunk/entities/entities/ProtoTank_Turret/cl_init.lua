@@ -8,7 +8,6 @@ ProtoTank_Turret cl_init.lua
 */
 
 include('shared.lua');
- 
 	
  function ENT:Initialize()
 	self.PlayerEntModel="NULLMODEL"
@@ -79,12 +78,16 @@ include('shared.lua');
 		end
 	end
 	////////////////
+	self.Entity.LastNum=0
  end
  
 function ENT:Draw()
 	self.Entity:DrawModel();
+	if self.Entity.LastNum!=self.Entity:GetNWInt("Turret_Elevate", 0) then
+		self.Entity.LastNum=self.Entity:GetNWInt("Turret_Elevate", 0)
+		self.Entity:SetPoseParameter("Turret_Elevate", self.Entity.LastNum)
+	end
 end
-
 
 function ENT:Think()
 	if (self.PlayerEntModel!=self.Entity:GetNWString("PlayerModel")) then
