@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/BMCha/MiniTanks/BMP-3/Tracks"
+	"$model" 1
+	"Proxies"
+	{
+		"TextureScroll"
+		{
+			"texturescrollvar" "$baseTextureTransform"
+			"texturescrollrate" 0.0
+			"texturescrollangle" 270.00
+		}
+	}
+}

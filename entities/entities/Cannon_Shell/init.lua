@@ -32,7 +32,7 @@ function ENT:Think()
 		return true
 	end
 	//drop off and move forward
-	local NewAng = (self.Entity:GetForward()+Vector(0,0,-0.001)):Angle()
+	local NewAng = (self.Entity:GetForward()+Vector(0,0,-0.002)):Angle()
 	self.Entity:SetAngles(NewAng)
 	self.Entity:SetPos(self.Entity:GetPos()+(NewAng:Forward()*300))
 	
@@ -46,7 +46,9 @@ function ENT:KABLOOEY(ent)
 	util.BlastDamage(self.Entity, self.Entity:GetOwner(), self.Entity:GetPos(), 500, 20)
 	if ent:IsValid() then
 		if ent.MyPlayer then
-			ent.MyPlayer:SetHealth(ent.MyPlayer:Health()-25)
+			if ent.MyPlayer:IsValid() then
+				ent.MyPlayer:SetHealth(ent.MyPlayer:Health()-25)
+			end
 		end
 	end
 	//boom

@@ -22,6 +22,7 @@ function ENT:Think()
 	if (CurTime()-self.Entity.SmokeTime > 0.1) then
 		local vOffset=self.Entity:GetPos()
 		self.Entity.emitter = ParticleEmitter(vOffset)
+		for i=1,2,3 do
 			local particle = self.Entity.emitter:Add("particle/particle_smokegrenade", vOffset+Vector(math.random(80)-40, math.random(150)-75, math.random(80)))
 			if (particle) then
 				particle:SetVelocity( Vector(math.random(50),math.random(50),150) )
@@ -38,6 +39,7 @@ function ENT:Think()
 				particle:SetGravity( Vector( 0, 0, 100 ) )
 				particle:SetCollide( false )
 			end
+		end
 		self.Entity.SmokeTime=CurTime()
 	end
 end

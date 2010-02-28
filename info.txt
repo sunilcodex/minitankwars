@@ -1,9 +1,9 @@
 "Gamemode"
 {
 	"name"		"MiniTank Wars"
-	"version"	"0.5 Alpha"
+	"version"	"1.0"
 
-	"author_name"	"BMCha"
+	"author_name"	"BMCha and Echo 199"
 	"author_email"	""
 	"author_url"	""
 	

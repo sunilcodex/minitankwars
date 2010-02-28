@@ -22,7 +22,7 @@ function ENT:Initialize()
 	
 	self.Entity:SetModel( "models/BMCha/MiniTanks/T-90/T-90_Body.mdl") //will be overridden
 	self.Entity:SetMaterial( "models/props_pipes/GutterMetal01a.vmt" )
-	self.Entity:SetColor(50,50,50,255)
+	self.Entity:SetColor(100,100,100,255)
 	self.Entity:PhysicsInit( SOLID_VPHYSICS )
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
 	self.Entity:SetSolid( SOLID_VPHYSICS )

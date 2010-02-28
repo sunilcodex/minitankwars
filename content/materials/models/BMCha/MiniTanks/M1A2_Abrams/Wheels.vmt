@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/BMCha/MiniTanks/M1A2_Abrams/Wheels"
+	"$model" 1
+}

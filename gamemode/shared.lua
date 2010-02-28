@@ -92,14 +92,14 @@ function GM:CreateTeams()
 	if ( !GAMEMODE.TeamBased ) then return end
  
 	team.SetUp( TEAM_USA, "US Army", Color( 41, 41, 222 ), true )
-	team.SetSpawnPoint( TEAM_USA, { "info_player_start", "info_player_counterterrorist" } )
-	team.SetClass( TEAM_USA, { "T-90"} ) //, "M1A2_Abrams", "M551_Sheridan" } )
+	team.SetSpawnPoint( TEAM_USA, { "info_player_counterterrorist" } )
+	team.SetClass( TEAM_USA, { "M1A2_Abrams", "M551_Sheridan" } )
 	
 	team.SetUp( TEAM_USSR, "Soviet Army", Color( 189, 0, 0 ), true )
-	team.SetSpawnPoint( TEAM_USSR, { "info_player_start", "info_player_terrorist" } )
-	team.SetClass( TEAM_USSR, { "T-90"} ) //, "T-90", "BMP-3" } )
+	team.SetSpawnPoint( TEAM_USSR, { "info_player_terrorist" } )
+	team.SetClass( TEAM_USSR, { "T-90", "BMP-3" } )
  
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 200, 200, 200 ), true )
-	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_combine", "info_player_rebel" } ) 
+	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start" } ) 
  
 end

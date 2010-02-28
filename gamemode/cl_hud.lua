@@ -134,7 +134,7 @@ function GM:OnHUDPaint()
 		draw.RoundedBox(8, 823*SF+XMV, 700*SF, 180*SF, 54*SF, Color_Gray_75A)
 		if (LocalPlayer():GetActiveWeapon():IsWeapon()) then
 			draw.DrawText(LocalPlayer():GetActiveWeapon():GetPrintName(), "CV27", 832*SF+XMV, 700*SF, Color_HUDYellow, 0)
-			draw.DrawText(LocalPlayer():GetAmmoCount(LocalPlayer():GetActiveWeapon():GetPrimaryAmmoType()), "CV27", 969*SF+XMV, 715*SF, Color_HUDYellow, 1)
+			draw.DrawText(LocalPlayer():GetActiveWeapon():Clip1(), "CV27", 969*SF+XMV, 715*SF, Color_HUDYellow, 1)
 		end
 		local fadecolor = Color(228,185,9, fadenum)
 		if LocalPlayer():GetNWBool("Reloading", false)==true then
@@ -160,12 +160,12 @@ function GM:OnHUDPaint()
 		surface.SetDrawColor(Color_White)
 		surface.SetTexture( ReticleTex )
 		local TurretEnt = LocalPlayer():GetNWEntity("TurretEnt")
-		if TurretEnt:IsValid() then
+		if TurretEnt:IsValid() then			
+			//TurretEnt:SetPoseParameter("Turret_Elevate", TurretEnt:GetNWFloat("Turret_Elevate", 0))
 			//local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
-			//local CPos=util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
-			local BarrelAng = TurretEnt:GetAngles()
-			BarrelAng:RotateAroundAxis(TurretEnt:GetRight(), math.Round(TurretEnt:GetNWInt("Turret_Elevate")*50)/50)
-			local CPos=util.QuickTrace(TurretEnt:GetPos()+BarrelAng:Forward()*100,BarrelAng:Forward()*10000, {TurretEnt}).HitPos:ToScreen()
+			local BarPos, BarAng = TurretEnt:GetBonePosition(TurretEnt:LookupBone("Barrel"))
+			BarAng:RotateAroundAxis(TurretEnt:GetRight(), TurretEnt:GetNWFloat("Turret_Elevate", 0) )
+			local CPos=util.QuickTrace(BarPos+BarAng:Forward()*150,BarAng:Forward()*10000, TurretEnt).HitPos:ToScreen()//util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
 			surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
 		end
 		
