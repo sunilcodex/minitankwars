@@ -27,6 +27,8 @@ function ENT:Initialize()
 	chute:SetParent(self.Entity)
 	self.Entity.Chute=chute
 	self.Entity.Dropping=true
+	
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
 end
 
 function ENT:Think()
@@ -43,23 +45,26 @@ function ENT:Think()
 			self.Entity.Dropping=false
 		end
 		local phys = self.Entity:GetPhysicsObject()
-		phys:ApplyForceCenter(Vector(0,0, 10000)) //math.random(100)/200,math.random(100)/200
+		phys:ApplyForceCenter(Vector(0,0, 10000))
 	end
 end
 
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
-			ent.MyPlayer:GiveAmmo(25, "RPG_Round", false)
+			ent.MyPlayer:GetActiveWeapon():SetClip1(ent.MyPlayer:GetActiveWeapon():Clip1()+25)
 			ent.MyPlayer:ChatPrint("+25 Shells")
-			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
-			if (self.Entity.Chute:IsValid()) then
-				self.Entity.Chute:Remove()
-			end
-			if (self.Entity.Card:IsValid()) then
-				self.Entity.Card:Remove()
-			end
 		end
+	end
+end
+
+function ENT:Remove()
+	ActivePowerups=ActivePowerups-1
+	if (self.Entity.Chute:IsValid()) then
+		self.Entity.Chute:Remove()
+	end
+	if (self.Entity.Card:IsValid()) then
+		self.Entity.Card:Remove()
 	end
 end

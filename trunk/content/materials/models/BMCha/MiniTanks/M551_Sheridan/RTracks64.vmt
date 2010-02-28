@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/BMCha/MiniTanks/M551_Sheridan/Tracks"
+	"$model" 1
+	"Proxies"
+	{
+		"TextureScroll"
+		{
+			"texturescrollvar" "$baseTextureTransform"
+			"texturescrollrate" 1.0
+			"texturescrollangle" 90.00
+		}
+	}
+}

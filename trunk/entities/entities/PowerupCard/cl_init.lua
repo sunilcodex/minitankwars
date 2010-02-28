@@ -18,3 +18,7 @@ function ENT:Think()
 	self.Entity:NextThink(CurTime())
 	return true
 end
+
+function ENT:Initialize()
+	self.Entity:DestroyShadow()
+end

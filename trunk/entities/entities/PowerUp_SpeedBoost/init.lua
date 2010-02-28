@@ -28,6 +28,8 @@ function ENT:Initialize()
 	chute:SetParent(self.Entity)
 	self.Entity.Chute=chute
 	self.Entity.Dropping=true
+	
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
 end
 
 function ENT:Think()
@@ -44,26 +46,28 @@ function ENT:Think()
 			self.Entity.Dropping=false
 		end
 		local phys = self.Entity:GetPhysicsObject()
-		phys:ApplyForceCenter(Vector(0,0, 10000)) //math.random(100)/200,math.random(100)/200
+		phys:ApplyForceCenter(Vector(0,0, 10000))
 	end
 end
 
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
-			ent:PowerUp("SpeedBoost", 10)	
+			ent:PowerUp("SpeedBoost", 12)	
 			ent:EmitSound("MiniTankWars/turbo.wav", 150, 100)
 			ent:EmitSound("MiniTankWars/turbo.wav", 150, 100)
-			ent.MyPlayer:ChatPrint("Speed Increased for 10 seconds!")
-			ent.MyPlayer.TankEnt:SetNWFloat("SpeedMul", 1.5)
-			ActivePowerups=ActivePowerups-1
+			ent.MyPlayer:ChatPrint("Speed Increased for 12 seconds!")
 			self.Entity:Remove()
-			if (self.Entity.Chute:IsValid()) then
-				self.Entity.Chute:Remove()
-			end
-			if (self.Entity.Card:IsValid()) then
-				self.Entity.Card:Remove()
-			end
 		end
+	end
+end
+
+function ENT:Remove()
+	ActivePowerups=ActivePowerups-1
+	if (self.Entity.Chute:IsValid()) then
+		self.Entity.Chute:Remove()
+	end
+	if (self.Entity.Card:IsValid()) then
+		self.Entity.Card:Remove()
 	end
 end

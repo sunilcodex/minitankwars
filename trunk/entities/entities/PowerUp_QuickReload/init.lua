@@ -28,6 +28,9 @@ function ENT:Initialize()
 	chute:SetParent(self.Entity)
 	self.Entity.Chute=chute
 	self.Entity.Dropping=true
+	
+
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
 end
 
 function ENT:Think()
@@ -53,14 +56,17 @@ function ENT:StartTouch( ent )
 		if ent:IsValid() and ent.MyPlayer then
 			ent:PowerUp("QuickReload", 10)	
 			ent.MyPlayer:ChatPrint("Rate of Fire Increased for 10 seconds!")
-			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
-			if (self.Entity.Chute:IsValid()) then
-				self.Entity.Chute:Remove()
-			end
-			if (self.Entity.Card:IsValid()) then
-				self.Entity.Card:Remove()
-			end
 		end
+	end
+end
+
+function ENT:Remove()
+	ActivePowerups=ActivePowerups-1
+	if (self.Entity.Chute:IsValid()) then
+		self.Entity.Chute:Remove()
+	end
+	if (self.Entity.Card:IsValid()) then
+		self.Entity.Card:Remove()
 	end
 end
