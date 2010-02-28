@@ -1,0 +1,6 @@
+"UnlitGeneric" 
+{ 
+	"$basetexture" "MiniTankWars/Powerups/AP"
+	"$model"		"1"
+	"$translucent" "1"
+}

@@ -52,7 +52,9 @@ end
 ScaleFactors()
 //misc
 local fadenum=0
-local fadenumchange=2
+local slowfadenum=0
+local fadenumchange=10
+local slowfadenumchange=2
 local PlayerTank=LocalPlayer():GetNWString("TankName", "")
 local TankHealthThumb = TankHealthThumbs[PlayerTank]
 local TankHealthThumbBlur = TankHealthThumbsBlur[PlayerTank]
@@ -75,72 +77,79 @@ function GM:OnHUDPaint()
 		fadenum = math.Clamp(fadenum, 0, 255)
 		fadenumchange = fadenumchange*-1
 	end
+	slowfadenum=slowfadenum+slowfadenumchange
+	if (slowfadenum >=255 or slowfadenum <=0) then
+		slowfadenum = math.Clamp(slowfadenum, 0, 255)
+		slowfadenumchange = slowfadenumchange*-1
+	end
 	
 	surface.SetDrawColor( Color_White ) 
 	
 	//-----------------Score Indicator-----------------------------------
-	draw.RoundedBox(6, 229*SF, 27*SF, 572*SF, 26*SF, Color_Black)
-	draw.RoundedBox(6, 231*SF, 29*SF, 568*SF, 22*SF, Color_Gray)
+	draw.RoundedBox(6, 229*SF+XMV, 27*SF, 572*SF, 26*SF, Color_Black)
+	draw.RoundedBox(6, 231*SF+XMV, 29*SF, 568*SF, 22*SF, Color_Gray)
 	
 	//USA
-	draw.RoundedBox(6, 12*SF, 12*SF, 536*SF3, 152*SF3, Color_Gray)
+	draw.RoundedBox(6, 12*SF+XMV, 12*SF, 536*SF3, 152*SF3, Color_Gray)
 	surface.SetDrawColor(Color_White)
 	surface.SetTexture( US_Flag )
-	surface.DrawTexturedRect( 16*SF, 16*SF, 512*SF3, 128*SF3 )
+	surface.DrawTexturedRect( 16*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
-	draw.RoundedBox(6, 231*SF, 29*SF, ((math.Clamp(team.GetScore(TEAM_USA), 4, 50)/50)*280)*SF, 22*SF, Color_USABlue)
-	draw.DrawText(team.GetScore(TEAM_USA), "CV22", (((math.Clamp(team.GetScore(TEAM_USA), 4, 50)*.01)*280)+231)*SF, 29*SF, Color_White, 1)
+	draw.RoundedBox(6, 231*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USA), 4, 50)/50)*280)*SF, 22*SF, Color_USABlue)
+	draw.DrawText(team.GetScore(TEAM_USA), "CV22", (((math.Clamp(team.GetScore(TEAM_USA), 4, 50)*.01)*280)+231)*SF+XMV, 29*SF, Color_White, 1)
 	
 	//USSR
-	draw.RoundedBox(4, 834*SF, 12*SF, 536*SF3, 152*SF3, Color_Gray)
+	draw.RoundedBox(4, 834*SF+XMV, 12*SF, 536*SF3, 152*SF3, Color_Gray)
 	surface.SetDrawColor(Color_White)
 	surface.SetTexture( USSR_Flag)
-	surface.DrawTexturedRect( 838*SF, 16*SF, 512*SF3, 128*SF3 )
+	surface.DrawTexturedRect( 838*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
-	draw.RoundedBox(6, (799-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280))*SF, 29*SF, ((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280)*SF, 22*SF, Color_USSRRed)
-	draw.DrawText(team.GetScore(TEAM_USSR), "CV22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)*.01)*280))*SF, 29*SF, Color_White, 1)
+	draw.RoundedBox(6, (799-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280))*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280)*SF, 22*SF, Color_USSRRed)
+	draw.DrawText(team.GetScore(TEAM_USSR), "CV22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)*.01)*280))*SF+XMV, 29*SF, Color_White, 1)
 	
 	//---
 	surface.SetDrawColor(Color_Gray2)
-	surface.DrawRect(HC-(2*SF), 29*SF, 4*SF, 22*SF)
-	draw.DrawText("-50-", "CV22", HC, 29*SF, Color_White, 1)
+	surface.DrawRect(HC-(2*SF)+XMV, 29*SF, 4*SF, 22*SF)
+	draw.DrawText("-50-", "CV22", HC+XMV, 29*SF, Color_White, 1)
 	//---------------End Score Indicator---------------------------------
 
 	if LocalPlayer():Alive() then
 		//----------------Armor Display--------------------------------------
-		draw.RoundedBox(8, 11*SF, 665*SF, 174*SF, 84*SF, Color_Gray)
-		draw.RoundedBox(8, 163*SF, 707*SF, 55*SF, 49*SF, Color_Gray)
+		draw.RoundedBox(8, 11*SF+XMV, 665*SF, 174*SF, 84*SF, Color_Gray)
+		draw.RoundedBox(8, 163*SF+XMV, 707*SF, 55*SF, 49*SF, Color_Gray)
 		local HealthColor = HSVToColor(   math.Clamp((((LocalPlayer():Health()*1.1)-10)/100)*130, 0,120), 1, 1)
 		
 		surface.SetDrawColor(HealthColor)
 		surface.SetTexture( TankHealthThumbBlur )
-		surface.DrawTexturedRect( 20*SF, 672*SF, 148*SF, 69*SF )
+		surface.DrawTexturedRect( 20*SF+XMV, 672*SF, 148*SF, 69*SF )
 		surface.SetDrawColor(Color_White)
 		surface.SetTexture( TankHealthThumb )
-		surface.DrawTexturedRect( 20*SF, 672*SF, 148*SF, 69*SF )
+		surface.DrawTexturedRect( 20*SF+XMV, 672*SF, 148*SF, 69*SF )
 
-		draw.DrawText(LocalPlayer():Health(), "CV27", 191*SF, 712*SF, HealthColor, 1)
-		draw.DrawText("Armor", "CV18", 192*SF, 738*SF, Color_HUDYellow, 1)
+		draw.DrawText(LocalPlayer():Health(), "CV27", 191*SF+XMV, 712*SF, HealthColor, 1)
+		draw.DrawText("Armor", "CV18", 192*SF+XMV, 738*SF, Color_HUDYellow, 1)
 		//--------------End Armor Display------------------------------------
 		
 		//---------------Ammo Display----------------------------------------
-		draw.RoundedBox(8, 823*SF, 700*SF, 180*SF, 54*SF, Color_Gray_75A)
+		draw.RoundedBox(8, 823*SF+XMV, 700*SF, 180*SF, 54*SF, Color_Gray_75A)
 		if (LocalPlayer():GetActiveWeapon():IsWeapon()) then
-			draw.DrawText(LocalPlayer():GetActiveWeapon():GetPrintName(), "CV27", 832*SF, 700*SF, Color_HUDYellow, 0)
-			draw.DrawText(LocalPlayer():GetAmmoCount(LocalPlayer():GetActiveWeapon():GetPrimaryAmmoType()), "CV27", 969*SF, 715*SF, Color_HUDYellow, 1)
+			draw.DrawText(LocalPlayer():GetActiveWeapon():GetPrintName(), "CV27", 832*SF+XMV, 700*SF, Color_HUDYellow, 0)
+			draw.DrawText(LocalPlayer():GetAmmoCount(LocalPlayer():GetActiveWeapon():GetPrimaryAmmoType()), "CV27", 969*SF+XMV, 715*SF, Color_HUDYellow, 1)
 		end
 		local fadecolor = Color(228,185,9, fadenum)
-		draw.DrawText("reloading...", "CV18", 897*SF, 735*SF, fadecolor, 1)
+		if LocalPlayer():GetNWBool("Reloading", false)==true then
+			draw.DrawText("reloading...", "CV18", 897*SF+XMV, 735*SF, fadecolor, 1)
+		end
 		//---------------End Ammo Display------------------------------------
 		
 		//---------------Powerup Bar----------------------------------------
 		if LocalPlayer():GetNWBool("PowerupActive", true)==true then
 			//container
-			draw.RoundedBox(6, HC-(101*SF), 54*SF, 200*SF, 24*SF, Color_Black)
-			draw.RoundedBox(6, HC-(100*SF), 55*SF, 198*SF, 22*SF, Color_Gray)
+			draw.RoundedBox(6, HC-(101*SF)+XMV, 54*SF, 200*SF, 24*SF, Color_Black)
+			draw.RoundedBox(6, HC-(100*SF)+XMV, 55*SF, 198*SF, 22*SF, Color_Gray)
 			//bar
 			local Percentage=LocalPlayer():GetNWFloat("PowerupTime")/LocalPlayer():GetNWFloat("PowerupTotTime")
-			draw.RoundedBox(6, HC-(((Percentage*94)+6)*SF), 55*SF, ((Percentage*182)+18)*SF, 22*SF, Color_HUDYellow)
+			draw.RoundedBox(6, HC-(((Percentage*94)+6)*SF)+XMV, 55*SF, ((Percentage*182)+18)*SF, 22*SF, Color_HUDYellow)
 			//name
 			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC+(0.5*SF), 53.5*SF, Color_Black, 1)
 			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC, 53*SF, Color_White, 1)
@@ -152,15 +161,18 @@ function GM:OnHUDPaint()
 		surface.SetTexture( ReticleTex )
 		local TurretEnt = LocalPlayer():GetNWEntity("TurretEnt")
 		if TurretEnt:IsValid() then
-			local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
-			local CPos=util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
+			//local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
+			//local CPos=util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
+			local BarrelAng = TurretEnt:GetAngles()
+			BarrelAng:RotateAroundAxis(TurretEnt:GetRight(), math.Round(TurretEnt:GetNWInt("Turret_Elevate")*50)/50)
+			local CPos=util.QuickTrace(TurretEnt:GetPos()+BarrelAng:Forward()*100,BarrelAng:Forward()*10000, {TurretEnt}).HitPos:ToScreen()
 			surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
 		end
 		
 		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
 			//Flip Prompt
-			draw.RoundedBox(8, HC-(125*SF), VC-(5*SF), 250*SF, 40*SF, Color_Gray_75A)
-			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-fadenum), 1 )
+			draw.RoundedBox(8, HC-(125*SF)+XMV, VC-(5*SF), 250*SF, 40*SF, Color_Gray_75A)
+			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-slowfadenum), 1 )
 		end
 		
 	end

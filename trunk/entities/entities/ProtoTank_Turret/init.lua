@@ -84,14 +84,19 @@ function ENT:Update(dt)
 		local Pos = self.Entity.MyPlayer:GetPos()+DistanceAngle*350
 		EyeTrace=util.QuickTrace(Pos, EyeAng:Forward()*10000, {self.Entity, self.Entity:GetParent()})
 		local TargetPos=EyeTrace.HitPos
-		local Ang = (TargetPos-self.Entity:GetPos()):Angle()
-		self.Entity.MyPlayer:ChatPrint("-----")
-		self.Entity.MyPlayer:ChatPrint(Ang.p.."    "..Ang.y.."    "..Ang.r)
-		self.Entity:WorldToLocalAngles(Ang)
-		//Ang=math.Clamp(-Ang.p, -25, 25)
-		self.Entity.MyPlayer:ChatPrint(Ang.p.."    "..Ang.y.."    "..Ang.r)
-		//self.Entity:SetNWInt("Turret_Elevate", Ang)
-		//self.Entity:SetPoseParameter("Turret_Elevate", self.Entity:GetNWInt("Turret_Elevate", 0))
+		local off = TargetPos - (self.Entity:GetPos())
+		local sAng = self.Entity:GetAngles()
+		local sFw = sAng:Forward()
+		local sRt = sAng:Right()
+		local sUp = sAng:Up()
+		local rOff = off:Dot(sRt)
+		local fOff = off:Dot(sFw)
+		local uOff = off:Dot(sUp)
+		local DesiredElev=math.Clamp((math.atan2(uOff,(off - uOff * sUp):Length()) * 180 / math.pi), -25, 25)
+		self.Entity:SetNWInt("Turret_Elevate", DesiredElev)
+		self.Entity:SetPoseParameter("Turret_Elevate", self.Entity:GetNWInt("Turret_Elevate", 0))	
+		
+		
 	end
 end
 

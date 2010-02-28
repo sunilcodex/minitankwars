@@ -24,6 +24,9 @@ end
 PowerupEnts = {}
 PowerupEnts[0]="Powerup_SpeedBoost"
 PowerupEnts[1]="Powerup_Repair"
+PowerupEnts[2]="Powerup_Ammo"
+PowerupEnts[3]="Powerup_AP"
+PowerupEnts[4]="Powerup_QuickReload"
 ActivePowerups = 0
 function GM:PowerupSpawn()
 	if ActivePowerups < 10 then
@@ -40,7 +43,7 @@ end
 
 function GM:InitPostEntity()
 	GAMEMODE:PowerupSpawn()
-	timer.Create("PowerupSpawnTimer", 10, 0, function() GAMEMODE:PowerupSpawn() end)
+	timer.Create("PowerupSpawnTimer", 11.25, 0, function() GAMEMODE:PowerupSpawn() end)
 end
 
 // This is called every second to see if we can end the round
