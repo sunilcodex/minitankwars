@@ -31,7 +31,7 @@ function ENT:Think()
 	local Vel = (MovVec-Vector(0,0,MovVec.z)):Length()
 	Vel = Vel*MovVec:Normalize():Dot(self.Entity:GetForward())
 	self.Entity.Vel=Vel
-	self.Entity.WheelsRot=self.Entity.WheelsRot+(Vel*6.295)  //360/57.18=6.295
+	self.Entity.WheelsRot=self.Entity.WheelsRot+(Vel*8.15) 
 	self.Entity:SetPoseParameter("Wheels_Rot", self.Entity.WheelsRot)
 	self.Entity.LastPos=self.Entity:GetPos()
 	//engine smooke

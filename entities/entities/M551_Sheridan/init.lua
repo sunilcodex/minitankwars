@@ -37,11 +37,11 @@ function ENT:Initialize()
 	/*---------------------------------------------
 			Tank Differentiating Variables
 	---------------------------------------------*/
-	self.Entity.TopSpeed = 448
-	self.Entity.Acceleration = 448
+	self.Entity.TopSpeed = 548
+	self.Entity.Acceleration = 548
 	self.Entity.Speed = 0
 	
-	self.Entity.TurnTopSpeed = 85
+	self.Entity.TurnTopSpeed = 115
 	self.Entity.TurnSpeed = 0
 	self.Entity.SpeedMul = 1
 	//-----------------------------------------------

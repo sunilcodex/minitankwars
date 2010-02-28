@@ -30,7 +30,7 @@ CLASS.Selectable			= true // When false, this disables all the team checking
 CLASS.FullRotation			= true // Allow the player's model to rotate upwards, etc etc
  
 function CLASS:Loadout( pl )
-	pl:Give( "weapon_cannon" )
+	pl:Give( "weapon_lightcannon" )
 end
  
 function CLASS:OnSpawn( pl )
