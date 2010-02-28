@@ -72,11 +72,26 @@ function ENT:Update(dt)
 		
 		TAng:RotateAroundAxis(tankEnt:GetUp(), math.NormalizeAngle(self.Entity.TurretYaw))
 		self.Entity:SetAngles(TAng)
-		local DesiredElev = self.Entity.MyPlayer:EyeAngles()
-		self.Entity:WorldToLocalAngles(DesiredElev)
-		DesiredElev = math.Clamp(-DesiredElev.p, -25, 25) 
-		self.Entity:SetPoseParameter("Turret_Elevate", math.Round(math.sin(CurTime())))
 		
+		/*local DesiredElev = self.Entity.MyPlayer:EyeAngles()
+		DesiredElev:RotateAroundAxis(DesiredElev:Right(), 5)//offset
+		self.Entity:WorldToLocalAngles(DesiredElev)
+		DesiredElev = math.Clamp(-DesiredElev.p, -25, 25)
+		self.Entity:SetNWInt("Turret_Elevate", DesiredElev)
+		self.Entity:SetPoseParameter("Turret_Elevate", self.Entity:GetNWInt("Turret_Elevate", 0))*/
+		local EyeAng = self.Entity.MyPlayer:EyeAngles()
+		local DistanceAngle = EyeAng:Forward() * - 0.8 + EyeAng:Up() * 0.2
+		local Pos = self.Entity.MyPlayer:GetPos()+DistanceAngle*350
+		EyeTrace=util.QuickTrace(Pos, EyeAng:Forward()*10000, {self.Entity, self.Entity:GetParent()})
+		local TargetPos=EyeTrace.HitPos
+		local Ang = (TargetPos-self.Entity:GetPos()):Angle()
+		self.Entity.MyPlayer:ChatPrint("-----")
+		self.Entity.MyPlayer:ChatPrint(Ang.p.."    "..Ang.y.."    "..Ang.r)
+		self.Entity:WorldToLocalAngles(Ang)
+		//Ang=math.Clamp(-Ang.p, -25, 25)
+		self.Entity.MyPlayer:ChatPrint(Ang.p.."    "..Ang.y.."    "..Ang.r)
+		//self.Entity:SetNWInt("Turret_Elevate", Ang)
+		//self.Entity:SetPoseParameter("Turret_Elevate", self.Entity:GetNWInt("Turret_Elevate", 0))
 	end
 end
 

@@ -21,13 +21,16 @@ function GM:ChatBroadcast(text)
 	end
 end
 
-//PowerupEnts = {}
-//PowerupEnts[0]="Powerup_SpeedBoost"
+PowerupEnts = {}
+PowerupEnts[0]="Powerup_SpeedBoost"
+PowerupEnts[1]="Powerup_Repair"
 ActivePowerups = 0
 function GM:PowerupSpawn()
 	if ActivePowerups < 10 then
-		local PU = ents.Create("Powerup_SpeedBoost") 
-		PU:SetPos(Vector(500,500,3000))
+		local PU = ents.Create(table.Random(PowerupEnts)) 
+		//local SpawnLoc=table.Random(ents.FindByClass("Powerup_Spawn")):GetPos()
+		local SpawnLoc=Vector(500,500,3000)
+		PU:SetPos(SpawnLoc)
 		PU:SetAngles(Angle(0, math.random(359), 0))
 		PU:SetVelocity(Vector(math.random(1000)-500, math.random(1000)-500, -5))
 		PU:Spawn()
