@@ -3,15 +3,14 @@ MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-PowerUp_Repair init.lua
-	-Repair Powerup Entity serverside init
+PowerUp_Ammo init.lua
+	-Ammo Powerup Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-util.PrecacheSound("MiniTankWars/repair.wav")
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -39,22 +38,20 @@ function ENT:Think()
 			card:SetPos(self.Entity:GetPos())
 			card:Spawn()
 			card:SetParent(self.Entity)
-			card:SetMaterial("MiniTankWars/Powerups/Repair")
+			card:SetMaterial("MiniTankWars/Powerups/Ammo")
 			self.Entity.Card=card
 			self.Entity.Dropping=false
 		end
 		local phys = self.Entity:GetPhysicsObject()
-		phys:ApplyForceCenter(Vector(0,0, 10000))
+		phys:ApplyForceCenter(Vector(0,0, 10000)) //math.random(100)/200,math.random(100)/200
 	end
 end
 
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, 100))
-			ent.MyPlayer:ChatPrint("+25 Armor")
+			ent.MyPlayer:GiveAmmo(25, "RPG_Round", false)
+			ent.MyPlayer:ChatPrint("+25 Shells")
 			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
 			if (self.Entity.Chute:IsValid()) then

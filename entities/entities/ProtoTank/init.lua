@@ -98,7 +98,7 @@ function ENT:Think()
 		end
 	end
 	self.Entity.LastThink=CurTime()
-	self.Entity.EngineSound:ChangePitch(math.Clamp(   ((math.abs(self.Entity.Speed)/self.Entity.TopSpeed)*50+100)   , 100, 255))
+	self.Entity.EngineSound:ChangePitch(math.Clamp(   ((math.abs(self.Entity.Speed)/self.Entity.TopSpeed)*57+100)   , 100, 255))
 end
 
 function ENT:PowerUp( PUName, PUTime )
@@ -113,6 +113,12 @@ function ENT:PowerUp( PUName, PUTime )
 	if (PUName=="SpeedBoost") then
 		self.Entity.SpeedMul = 1.5
 	end
+	if (PUName=="AP") then
+		self.Entity.MyPlayer:SetNWBool("AP", true)
+	end
+	if (PUName=="QuickReload") then
+		self.Entity.MyPlayer:SetNWFloat("Delay", 1)
+	end
 end
 
 function ENT:EndPowerUp()
@@ -120,6 +126,12 @@ function ENT:EndPowerUp()
 	//disable effects of powerup
 	if (PUName=="SpeedBoost") then
 		self.Entity.SpeedMul=1.0
+	end
+	if (PUName=="AP") then
+		self.Entity.MyPlayer:SetNWBool("AP", false)
+	end
+	if (PUName=="QuickReload") then
+		self.Entity.MyPlayer:SetNWFloat("Delay", 2)
 	end
 	//reset
 	self.Entity.MyPlayer:SetNWBool("PowerupActive", false)

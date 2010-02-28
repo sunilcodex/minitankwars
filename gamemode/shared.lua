@@ -103,7 +103,3 @@ function GM:CreateTeams()
 	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_combine", "info_player_rebel" } ) 
  
 end
-
-/*function GM:ShouldCollide(ent1, ent2)
-	if ((ent1 == ent2.MyPlayer) or (ent1.MyPlayer == ent2)) then return false end
-end*/

@@ -3,15 +3,15 @@ MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-PowerUp_Repair init.lua
-	-Repair Powerup Entity serverside init
+PowerUp_QuickReload init.lua
+	-QuickReload Powerup Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-util.PrecacheSound("MiniTankWars/repair.wav")
+
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -39,7 +39,7 @@ function ENT:Think()
 			card:SetPos(self.Entity:GetPos())
 			card:Spawn()
 			card:SetParent(self.Entity)
-			card:SetMaterial("MiniTankWars/Powerups/Repair")
+			card:SetMaterial("MiniTankWars/Powerups/QuickReload")
 			self.Entity.Card=card
 			self.Entity.Dropping=false
 		end
@@ -51,10 +51,8 @@ end
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, 100))
-			ent.MyPlayer:ChatPrint("+25 Armor")
+			ent:PowerUp("QuickReload", 10)	
+			ent.MyPlayer:ChatPrint("Rate of Fire Increased for 10 seconds!")
 			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
 			if (self.Entity.Chute:IsValid()) then

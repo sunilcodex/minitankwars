@@ -3,15 +3,15 @@ MiniTank Wars
 Copyright (c) 2010 BMCha
 This gamemode is licenced under the MIT License, reproduced in /shared.lua
 ------------------------
-PowerUp_Repair init.lua
-	-Repair Powerup Entity serverside init
+PowerUp_SpeedBoost init.lua
+	-SpeedBoost Powerup Entity serverside init
 */
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-util.PrecacheSound("MiniTankWars/repair.wav")
+util.PrecacheSound("MiniTankWars/reload.wav")
 /*---------------------------------------------------------
    Name: Initialize
 ---------------------------------------------------------*/
@@ -39,7 +39,7 @@ function ENT:Think()
 			card:SetPos(self.Entity:GetPos())
 			card:Spawn()
 			card:SetParent(self.Entity)
-			card:SetMaterial("MiniTankWars/Powerups/Repair")
+			card:SetMaterial("MiniTankWars/Powerups/AP")
 			self.Entity.Card=card
 			self.Entity.Dropping=false
 		end
@@ -51,10 +51,9 @@ end
 function ENT:StartTouch( ent )
 	if ent:IsValid() then
 		if ent:IsValid() and ent.MyPlayer then
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, 100))
-			ent.MyPlayer:ChatPrint("+25 Armor")
+			ent:PowerUp("AP", 10)	
+			ent:EmitSound("MiniTankWars/reload.wav", 150, 100)
+			ent.MyPlayer:ChatPrint("AP Rounds loaded. Firepower Increased for 10 seconds!")
 			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
 			if (self.Entity.Chute:IsValid()) then

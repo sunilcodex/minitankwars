@@ -83,10 +83,10 @@ include('shared.lua');
  
 function ENT:Draw()
 	self.Entity:DrawModel();
-	if self.Entity.LastNum!=self.Entity:GetNWInt("Turret_Elevate", 0) then
-		self.Entity.LastNum=self.Entity:GetNWInt("Turret_Elevate", 0)
-		self.Entity:SetPoseParameter("Turret_Elevate", self.Entity.LastNum)
-	end
+	//if self.Entity.LastNum!=self.Entity:GetNWInt("Turret_Elevate", 0) then
+		//self.Entity.LastNum=self.Entity:GetNWInt("Turret_Elevate", 0)
+		self.Entity:SetPoseParameter("Turret_Elevate", self.Entity:GetNWInt("Turret_Elevate", 0))
+	//end
 end
 
 function ENT:Think()

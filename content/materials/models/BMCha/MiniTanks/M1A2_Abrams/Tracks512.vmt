@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/BMCha/MiniTanks/M1A2_Abrams/TracksBlur2"
+	"$model" 1
+	"Proxies"
+	{
+		"TextureScroll"
+		{
+			"texturescrollvar" "$baseTextureTransform"
+			"texturescrollrate" 8.0
+			"texturescrollangle" 270.00
+		}
+	}
+}

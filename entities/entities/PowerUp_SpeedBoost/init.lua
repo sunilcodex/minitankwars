@@ -35,6 +35,12 @@ function ENT:Think()
 		local TD = util.QuickTrace(self.Entity:GetPos(), Vector(0,0,-64), {self.Entity, self.Entity.Chute})
 		if (TD.HitWorld == true and self.Entity:GetVelocity().z < 10) then
 			self.Entity.Chute:Remove()
+			local card=ents.Create("PowerupCard")
+			card:SetPos(self.Entity:GetPos())
+			card:Spawn()
+			card:SetParent(self.Entity)
+			card:SetMaterial("MiniTankWars/Powerups/SpeedBoost")
+			self.Entity.Card=card
 			self.Entity.Dropping=false
 		end
 		local phys = self.Entity:GetPhysicsObject()
@@ -47,12 +53,16 @@ function ENT:StartTouch( ent )
 		if ent:IsValid() and ent.MyPlayer then
 			ent:PowerUp("SpeedBoost", 10)	
 			ent:EmitSound("MiniTankWars/turbo.wav", 150, 100)
+			ent:EmitSound("MiniTankWars/turbo.wav", 150, 100)
 			ent.MyPlayer:ChatPrint("Speed Increased for 10 seconds!")
 			ent.MyPlayer.TankEnt:SetNWFloat("SpeedMul", 1.5)
 			ActivePowerups=ActivePowerups-1
 			self.Entity:Remove()
 			if (self.Entity.Chute:IsValid()) then
 				self.Entity.Chute:Remove()
+			end
+			if (self.Entity.Card:IsValid()) then
+				self.Entity.Card:Remove()
 			end
 		end
 	end
