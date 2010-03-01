@@ -29,7 +29,7 @@ PowerupEnts[4]="Powerup_Ammo"
 PowerupEnts[5]="Powerup_Ammo"
 PowerupEnts[6]="Powerup_AP"
 PowerupEnts[7]="Powerup_QuickReload"
-ActivePowerups = 0
+SetGlobalInt("ActivePowerups",0)
 function GM:PowerupSpawn()
 	if ActivePowerups < 12 then
 		local PU = ents.Create(table.Random(PowerupEnts)) 
@@ -38,7 +38,7 @@ function GM:PowerupSpawn()
 		PU:SetAngles(Angle(0, math.random(359), 0))
 		PU:SetVelocity(Vector(math.random(1000)-500, math.random(1000)-500, -5))
 		PU:Spawn()
-		ActivePowerups=ActivePowerups+1
+		SetGlobalInt("ActivePowerups",GetGlobalInt("ActivePowerups")+1)
 	end
 end
 
