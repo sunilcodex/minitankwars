@@ -69,7 +69,9 @@ function SWEP:PrimaryAttack()
 	self.Owner:SetNWBool("Reloading", true)
 	timer.Simple(self.Owner:GetNWFloat("Delay", 2), function() self.Owner:SetNWBool("Reloading", false) end)
 	self.Weapon:SetNextPrimaryFire( CurTime() + self.Owner:GetNWFloat("Delay", 2) )
+	if (SERVER) then
 	timer.Simple((self.Owner:GetNWFloat("Delay", 2)/2), (function() self.Owner.TankEnt:EmitSound("MiniTankWars/reload.wav", 100, 90/(self.Owner:GetNWFloat("Delay", 2)/2)) end))
+	end
 	self:TakePrimaryAmmo(1)
 end
 
