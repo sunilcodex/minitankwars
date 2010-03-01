@@ -117,7 +117,7 @@ function ENT:PowerUp( PUName, PUTime )
 		self.Entity.MyPlayer:SetNWBool("AP", true)
 	end
 	if (PUName=="QuickReload") then
-		self.Entity.MyPlayer:SetNWFloat("Delay", 1)
+		self.Entity.MyPlayer:SetNWFloat("Delay",0.75)
 	end
 end
 
@@ -131,7 +131,7 @@ function ENT:EndPowerUp()
 		self.Entity.MyPlayer:SetNWBool("AP", false)
 	end
 	if (PUName=="QuickReload") then
-		self.Entity.MyPlayer:SetNWFloat("Delay", 2)
+		self.Entity.MyPlayer:SetNWFloat("Delay", 1.5)
 	end
 	//reset
 	self.Entity.MyPlayer:SetNWBool("PowerupActive", false)
