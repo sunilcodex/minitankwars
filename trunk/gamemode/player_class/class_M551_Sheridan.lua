@@ -50,7 +50,7 @@ function CLASS:OnSpawn( pl )
 	if (CLIENT) then pl:DestroyShadow() end
 	pl:SetColor( Color(0,0,0,0) )   //see above
 end
- 
+
 function CLASS:OnDeath( pl, attacker, dmginfo )
 	local Wreck = ents.Create( "TankWreck" )
 	Wreck:SetPos(pl.TankEnt:GetPos())
@@ -73,6 +73,14 @@ function CLASS:OnDeath( pl, attacker, dmginfo )
 		head:ApplyForceCenter(Vector(0,0,10000))
 	end
 end
+ 
+function CLASS:PlayerDisconnected(pl)
+	if (pl.TankEnt) then
+		pl.TankEnt:Remove()
+		pl.TankEnt=NULL
+	end
+	GAMEMODE:ChatBroadCast(pl.Nick().." deserted!")
+end 
  
 function CLASS:Think( pl )
 	if (pl.TankEnt and pl.TankEnt:IsValid() and pl:Alive()) then

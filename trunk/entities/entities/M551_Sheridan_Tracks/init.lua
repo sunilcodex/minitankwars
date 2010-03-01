@@ -17,8 +17,8 @@ function ENT:Initialize()
 	self.Entity.MyPlayer = NULL
 	
 	self.Entity:SetModel( "models/BMCha/MiniTanks/M551_Sheridan/M551_Sheridan_Tracks.mdl")
-	self.Entity:PhysicsInit( SOLID_NONE )
+	/*self.Entity:PhysicsInit( SOLID_NONE )
 	self.Entity:SetMoveType( MOVETYPE_NONE )
-	self.Entity:SetSolid( SOLID_NONE )
+	self.Entity:SetSolid( SOLID_NONE )*/
 	self.Entity:SetNotSolid(true)
 end
