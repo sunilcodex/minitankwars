@@ -95,8 +95,8 @@ function GM:OnHUDPaint()
 	surface.SetTexture( US_Flag )
 	surface.DrawTexturedRect( 16*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
-	draw.RoundedBox(6, 231*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USA), 4, 50)/50)*280)*SF, 22*SF, Color_USABlue)
-	draw.DrawText(team.GetScore(TEAM_USA), "CV22", (((math.Clamp(team.GetScore(TEAM_USA), 4, 50)*.01)*280)+231)*SF+XMV, 29*SF, Color_White, 1)
+	draw.RoundedBox(6, 231*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USA), 3, 40)/40)*280)*SF, 22*SF, Color_USABlue)
+	draw.DrawText(team.GetScore(TEAM_USA), "CV22", (((math.Clamp(team.GetScore(TEAM_USA), 3, 40)*.01)*280)+231)*SF+XMV, 29*SF, Color_White, 1)
 	
 	//USSR
 	draw.RoundedBox(4, 834*SF+XMV, 12*SF, 536*SF3, 152*SF3, Color_Gray)
@@ -104,13 +104,13 @@ function GM:OnHUDPaint()
 	surface.SetTexture( USSR_Flag)
 	surface.DrawTexturedRect( 838*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
-	draw.RoundedBox(6, (799-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280))*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)/50)*280)*SF, 22*SF, Color_USSRRed)
-	draw.DrawText(team.GetScore(TEAM_USSR), "CV22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 4, 50)*.01)*280))*SF+XMV, 29*SF, Color_White, 1)
+	draw.RoundedBox(6, (799-((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)/40)*280))*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)/40)*280)*SF, 22*SF, Color_USSRRed)
+	draw.DrawText(team.GetScore(TEAM_USSR), "CV22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)*.01)*280))*SF+XMV, 29*SF, Color_White, 1)
 	
 	//---
 	surface.SetDrawColor(Color_Gray2)
 	surface.DrawRect(HC-(2*SF)+XMV, 29*SF, 4*SF, 22*SF)
-	draw.DrawText("-50-", "CV22", HC+XMV, 29*SF, Color_White, 1)
+	draw.DrawText("-40-", "CV22", HC+XMV, 29*SF, Color_White, 1)
 	//---------------End Score Indicator---------------------------------
 
 	if LocalPlayer():Alive() then

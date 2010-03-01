@@ -9,6 +9,7 @@ init.lua
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_hud.lua" )
+AddCSLuaFile( "cl_gmchanger.lua" )
 AddCSLuaFile( "shared.lua" )
 
 include( "shared.lua" )
@@ -50,9 +51,9 @@ end
 // This is called every second to see if we can end the round
 function GM:CheckRoundEnd()
 	if ( !GAMEMODE:InRound() ) then return end 
-	if team.GetScore(TEAM_USA) >= 50 then
+	if team.GetScore(TEAM_USA) >= 40 then
 		GAMEMODE:RoundEndWithResult( TEAM_USA )
-	elseif team.GetScore(TEAM_USSR) >= 50 then
+	elseif team.GetScore(TEAM_USSR) >= 40 then
 		GAMEMODE:RoundEndWithResult(TEAM_USSR)
 	end
 end
@@ -64,4 +65,29 @@ function GM:OnRoundEnd( num )
 	end
 	team.SetScore(TEAM_USA, 0)
 	team.SetScore(TEAM_USSR, 0)
+end
+
+function GM:DoPlayerDeath( ply, attacker, dmginfo )
+	ply:CreateRagdoll()
+	ply:CallClassFunction( "OnDeath", attacker, dmginfo )
+	ply:AddDeaths( 1 )	
+	if ( attacker:IsValid() && attacker:IsPlayer() ) then	
+		if ( attacker == ply ) then		
+			if ( GAMEMODE.TakeFragOnSuicide ) then
+							attacker:AddFrags( -1 )			
+				if ( GAMEMODE.TeamBased && GAMEMODE.AddFragsToTeamScore ) then
+					team.AddScore( attacker:Team(), -1 )
+				end		
+			end			
+		else		
+			attacker:AddFrags( 1 )			
+			if ( GAMEMODE.TeamBased && GAMEMODE.AddFragsToTeamScore ) then
+				team.AddScore( attacker:Team(), 1 )
+			end		
+		end		
+	end	
+	if ( GAMEMODE.EnableFreezeCam && IsValid( attacker ) && attacker != ply ) then	
+		ply:SpectateEntity( attacker )
+		ply:Spectate( OBS_MODE_FREEZECAM )		
+	end
 end
