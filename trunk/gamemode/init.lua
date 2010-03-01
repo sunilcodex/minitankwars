@@ -31,7 +31,7 @@ PowerupEnts[6]="Powerup_AP"
 PowerupEnts[7]="Powerup_QuickReload"
 SetGlobalInt("ActivePowerups",0)
 function GM:PowerupSpawn()
-	if ActivePowerups < 12 then
+	if GetGlobalInt("ActivePowerups") < 12 then
 		local PU = ents.Create(table.Random(PowerupEnts)) 
 		local SpawnLoc=table.Random(ents.FindByClass("Powerup_Spawn")):GetPos()
 		PU:SetPos(SpawnLoc)
