@@ -65,13 +65,13 @@ GM.AddFragsToTeamScore = true		// Adds player's individual kills to team score (
  
 GM.NoAutomaticSpawning = false		// Players don't spawn automatically when they die, some other system spawns them
 GM.RoundBased = true   			// Round based, like CS
-GM.RoundLength = 60 * 7					// Round length, in seconds
+GM.RoundLength = 60 * 10					// Round length, in seconds
 GM.RoundPreStartTime = 5			// Preperation time before a round starts
 GM.RoundPostLength = 5				// Seconds to show the 'x team won!' screen at the end of a round
 GM.RoundEndsWhenOneTeamAlive = false	// CS Style rules
  
 GM.EnableFreezeCam = true			// TF2 Style Freezecam
-GM.DeathLingerTime = 3				// The time between you dying and it going into spectator mode, 0 disables
+GM.DeathLingerTime = 4				// The time between you dying and it going into spectator mode, 0 disables
  
 GM.SelectModel = true               // Can players use the playermodel picker in the F1 menu?
 GM.SelectColor = false				// Can players modify the colour of their name? (ie.. no teams)

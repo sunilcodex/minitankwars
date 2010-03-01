@@ -59,9 +59,9 @@ end
  
 // Called when the round ends
 function GM:OnRoundEnd( num )
- 
-       for k,v in pairs( player.GetAll() ) do
-             v:SetFrags( 0 ) // Reset their frags for next round
-       end
- 
+	for k,v in pairs( player.GetAll() ) do
+		 v:SetFrags( 0 ) // Reset their frags for next round
+	end
+	team.SetScore(TEAM_USA, 0)
+	team.SetScore(TEAM_USSR, 0)
 end
