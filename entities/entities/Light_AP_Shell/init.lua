@@ -47,7 +47,7 @@ function ENT:KABLOOEY(ent)
 	if ent:IsValid() then
 		if ent.MyPlayer then
 			if ent.MyPlayer:IsValid() then
-				ent.MyPlayer:SetHealth(ent.MyPlayer:Health()-25)
+				ent.MyPlayer:TakeDamage(30, self.Entity:GetOwner(), self.Entity)
 			end
 		end
 	end

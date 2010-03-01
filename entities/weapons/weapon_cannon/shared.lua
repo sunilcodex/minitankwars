@@ -23,6 +23,7 @@ util.PrecacheSound("MiniTankWars/reload.wav")
 SWEP.Sound = Sound ("MiniTankWars/cannon1.wav")
  
 function SWEP:Deploy()
+	if (SERVER) then self.Owner:DrawWorldModel(false) end
 	self.Owner:SetNWFloat("Delay", 2)
 	self.Owner:SetNWBool("AP", false)
 	return true

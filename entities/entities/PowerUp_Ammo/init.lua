@@ -28,7 +28,7 @@ function ENT:Initialize()
 	self.Entity.Chute=chute
 	self.Entity.Dropping=true
 	
-	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Die() end end end)
 end
 
 function ENT:Think()
@@ -54,12 +54,12 @@ function ENT:StartTouch( ent )
 		if ent:IsValid() and ent.MyPlayer then
 			ent.MyPlayer:GetActiveWeapon():SetClip1(ent.MyPlayer:GetActiveWeapon():Clip1()+25)
 			ent.MyPlayer:ChatPrint("+25 Shells")
-			self.Entity:Remove()
+			self.Entity:Die()
 		end
 	end
 end
 
-function ENT:Remove()
+function ENT:Die()
 	SetGlobalInt("ActivePowerups",GetGlobalInt("ActivePowerups")-1)
 	if (self.Entity.Chute:IsValid()) then
 		self.Entity.Chute:Remove()
@@ -67,4 +67,5 @@ function ENT:Remove()
 	if (self.Entity.Card:IsValid()) then
 		self.Entity.Card:Remove()
 	end
+	self.Entity:Remove()
 end

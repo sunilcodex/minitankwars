@@ -29,7 +29,7 @@ function ENT:Initialize()
 	self.Entity.Chute=chute
 	self.Entity.Dropping=true
 	
-	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Die() end end end)
 end
 
 function ENT:Think()
@@ -57,12 +57,12 @@ function ENT:StartTouch( ent )
 			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
 			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, 125))
 			ent.MyPlayer:ChatPrint("+25 Armor")
-			self.Entity:Remove()
+			self.Entity:Die()
 		end
 	end
 end
 
-function ENT:Remove()
+function ENT:Die()
 	SetGlobalInt("ActivePowerups",GetGlobalInt("ActivePowerups")-1)
 	if (self.Entity.Chute:IsValid()) then
 		self.Entity.Chute:Remove()
@@ -70,4 +70,5 @@ function ENT:Remove()
 	if (self.Entity.Card:IsValid()) then
 		self.Entity.Card:Remove()
 	end
+	self.Entity:Remove()
 end
