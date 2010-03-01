@@ -30,7 +30,7 @@ function ENT:Initialize()
 	self.Entity.Dropping=true
 	
 
-	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Remove() end end end)
+	timer.Simple(300, function() if self.Entity then if self.Entity:IsValid() then self.Entity:Die() end end end)
 end
 
 function ENT:Think()
@@ -56,12 +56,12 @@ function ENT:StartTouch( ent )
 		if ent:IsValid() and ent.MyPlayer then
 			ent:PowerUp("QuickReload", 10)	
 			ent.MyPlayer:ChatPrint("Rate of Fire Increased for 10 seconds!")
-			self.Entity:Remove()
+			self.Entity:Die()
 		end
 	end
 end
 
-function ENT:Remove()
+function ENT:Die()
 	SetGlobalInt("ActivePowerups",GetGlobalInt("ActivePowerups")-1)
 	if (self.Entity.Chute:IsValid()) then
 		self.Entity.Chute:Remove()
@@ -69,4 +69,5 @@ function ENT:Remove()
 	if (self.Entity.Card:IsValid()) then
 		self.Entity.Card:Remove()
 	end
+	self.Entity:Remove()
 end
