@@ -74,7 +74,8 @@ GM.EnableFreezeCam = true			// TF2 Style Freezecam
 GM.DeathLingerTime = 4				// The time between you dying and it going into spectator mode, 0 disables
  
 GM.SelectModel = true               // Can players use the playermodel picker in the F1 menu?
-GM.SelectColor = false				// Can players modify the colour of their name? (ie.. no teams)
+GM.SelectColor = false	
+GM.SelectClass = true			// Can players modify the colour of their name? (ie.. no teams)
  
 GM.PlayerRingSize = 48              // How big are the colored rings under the player's feet (if they are enabled) ?
 GM.HudSkin = "SimpleSkin"

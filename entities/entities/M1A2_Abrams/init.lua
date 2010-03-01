@@ -52,6 +52,8 @@ function ENT:Initialize()
 	
 	self.Entity.EngineSound=CreateSound(self.Entity, EngineSound)
 	self.Entity.EngineSound:Play()
+	
+	self.Entity.LastFlip=CurTime()
 end
 
 function ENT:OnRemove() 
@@ -142,12 +144,17 @@ end
 //////////////////////////////////////////////////////////////////
 
 function ENT:FlipTank()
+	if CurTime()-self.Entity.LastFlip < 2 then 
+		self.Entity.MyPlayer:ChatPrint("Wait a little longer..")
+		return
+	end
 	self.Entity:SetAngles(Angle(0, self.Entity:GetAngles().y, 0))
 	self.Entity:SetPos(self.Entity:GetPos()+Vector(0,0,100))
 	self.Entity.Speed=0
 	local phys=self.Entity:GetPhysicsObject()
 	phys:SetVelocity(Vector(0,0,100))
 	phys:AddAngleVelocity(phys:GetAngleVelocity()*-1)
+	self.Entity.LastFlip=CurTime()
 end
 
 function ENT:Recoil(force, vec)
@@ -157,6 +164,7 @@ end
 function ENT:PhysicsUpdate( phys )
 	local dt=CurTime()-self.Entity.LastTime
 	self.Entity.LastTime=CurTime()
+	if self.Entity.Flipping==true then return end
 	
 	phys:Wake()
 	local pl = self.Entity.MyPlayer
