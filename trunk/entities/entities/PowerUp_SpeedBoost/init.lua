@@ -63,7 +63,7 @@ function ENT:StartTouch( ent )
 end
 
 function ENT:Remove()
-	ActivePowerups=ActivePowerups-1
+	SetGlobalInt("ActivePowerups",GetGlobalInt("ActivePowerups")-1)
 	if (self.Entity.Chute:IsValid()) then
 		self.Entity.Chute:Remove()
 	end

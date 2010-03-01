@@ -53,10 +53,10 @@ end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
 	local Wreck = ents.Create( "TankWreck" )
-	Wreck:SetTank("T-90")
 	Wreck:SetPos(pl.TankEnt:GetPos())
 	Wreck:SetAngles(pl.TankEnt:GetAngles())
 	Wreck:Spawn()
+	Wreck:SetTank("T-90")
 	Wreck:GetPhysicsObject():ApplyForceCenter(Vector(0,0,1000))
 	
 	local ed = EffectData()
