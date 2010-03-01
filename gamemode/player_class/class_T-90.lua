@@ -74,6 +74,14 @@ function CLASS:OnDeath( pl, attacker, dmginfo )
 	end
 end
  
+ function CLASS:PlayerDisconnected(pl)
+	if (pl.TankEnt) then
+		pl.TankEnt:Remove()
+		pl.TankEnt=NULL
+	end
+	GAMEMODE:ChatBroadCast(pl.Nick().." deserted!")
+end 
+
 function CLASS:Think( pl )
 	if (pl.TankEnt and pl.TankEnt:IsValid() and pl:Alive()) then
 		pl:SetPos(pl.TankEnt:GetPos())
