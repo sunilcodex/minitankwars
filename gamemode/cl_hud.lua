@@ -58,11 +58,13 @@ local slowfadenumchange=2
 local PlayerTank=LocalPlayer():GetNWString("TankName", "")
 local TankHealthThumb = TankHealthThumbs[PlayerTank]
 local TankHealthThumbBlur = TankHealthThumbsBlur[PlayerTank]
+local StartHealth = 100
 
 function CheckTankChange()
 	if LocalPlayer():GetNWString("TankName") !=PlayerTank then
 		TankHealthThumb = TankHealthThumbs[LocalPlayer():GetNWString("TankName")]
 		TankHealthThumbBlur = TankHealthThumbsBlur[LocalPlayer():GetNWString("TankName")]
+		StartHealth = LocalPlayer():GetPlayerClass().StartHealth
 	end
 end
 timer.Create("TankChangeHUDTimer", 1, 0, CheckTankChange)
@@ -117,7 +119,7 @@ function GM:OnHUDPaint()
 		//----------------Armor Display--------------------------------------
 		draw.RoundedBox(8, 11*SF+XMV, 665*SF, 174*SF, 84*SF, Color_Gray)
 		draw.RoundedBox(8, 163*SF+XMV, 707*SF, 55*SF, 49*SF, Color_Gray)
-		local HealthColor = HSVToColor(   math.Clamp((((LocalPlayer():Health()*1.1)-10)/100)*130, 0,120), 1, 1)
+		local HealthColor = HSVToColor(   math.Clamp((((LocalPlayer():Health()*1.1)-10)/StartHealth)*130, 0,120), 1, 1)
 		
 		surface.SetDrawColor(HealthColor)
 		surface.SetTexture( TankHealthThumbBlur )
@@ -163,7 +165,8 @@ function GM:OnHUDPaint()
 		if TurretEnt:IsValid() then			
 			//TurretEnt:SetPoseParameter("Turret_Elevate", TurretEnt:GetNWFloat("Turret_Elevate", 0))
 			//local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
-			local BarPos, BarAng = TurretEnt:GetBonePosition(TurretEnt:LookupBone("Barrel"))
+			local BarPos = TurretEnt:GetBonePosition(TurretEnt:LookupBone("Barrel"))
+			local BarAng = TurretEnt:GetAngles()
 			BarAng:RotateAroundAxis(TurretEnt:GetRight(), TurretEnt:GetNWFloat("Turret_Elevate", 0) )
 			local CPos=util.QuickTrace(BarPos+BarAng:Forward()*150,BarAng:Forward()*10000, TurretEnt).HitPos:ToScreen()//util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
 			surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )

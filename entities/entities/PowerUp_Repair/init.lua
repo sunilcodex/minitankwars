@@ -55,7 +55,7 @@ function ENT:StartTouch( ent )
 		if ent:IsValid() and ent.MyPlayer then
 			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
 			ent:EmitSound("MiniTankWars/repair.wav", 150, 90)
-			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, 125))
+			ent.MyPlayer:SetHealth(math.Clamp(ent.MyPlayer:Health()+25, 0, ent.MyPlayer:GetMaxHealth()))
 			ent.MyPlayer:ChatPrint("+25 Armor")
 			self.Entity:Die()
 		end
