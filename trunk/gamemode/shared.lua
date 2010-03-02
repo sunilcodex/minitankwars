@@ -104,3 +104,25 @@ function GM:CreateTeams()
 	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start" } ) 
  
 end
+
+
+//Thank you Lexi
+// since this was posted to the wiki I'm pretty sure it's ok to use
+if (SERVER) then
+	local path = "../"..GM.Folder.."/content"
+	local folders = {""}
+	while true do
+		local curdir = table.remove(folders,1)
+		if not curdir then break end
+		local searchdir = path..curdir
+		for _, filename in ipairs(file.Find(searchdir.."/*")) do
+			if filename ~= ".svn" then
+				if file.IsDir(searchdir.."/"..filename) then
+					table.insert(folders,curdir.."/"..filename)
+				else
+					resource.AddSingleFile(string.sub(curdir.."/"..filename,2))
+				end
+			end
+		end
+	end
+end
