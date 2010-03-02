@@ -44,7 +44,7 @@ function ENT:Update(dt)
 		local TAng=tankEnt:GetAngles()
 		local DesiredRot=math.NormalizeAngle(self.Entity.MyPlayer:EyeAngles().y-TAng.y)
 		local AngDiff = math.NormalizeAngle(self.Entity.TurretYaw) - DesiredRot
-		local DeltaRot = math.Clamp((90*dt), -math.abs(AngDiff), math.abs(AngDiff))
+		local DeltaRot = math.Clamp((130*dt), -math.abs(AngDiff), math.abs(AngDiff))
 		if ((AngDiff > 0 or AngDiff < -180) and (AngDiff < 180)) then
 			self.Entity.TurretYaw=self.Entity.TurretYaw-DeltaRot
 		elseif AngDiff < 0 or AngDiff > 180 then
