@@ -12,6 +12,7 @@ local SHL = SH
 local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
+local NoReticleTex = surface.GetTextureID( "MiniTankWars/NoReticle" )
 local TankHealthThumbs = {}
 TankHealthThumbs[""] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/alpha" )
 TankHealthThumbs["M1A2_Abrams"] = surface.GetTextureID( "MiniTankWars/Tanks/HealthThumbs/M1A2_AbramsThumb" )
@@ -153,29 +154,31 @@ function GM:OnHUDPaint()
 			local Percentage=LocalPlayer():GetNWFloat("PowerupTime")/LocalPlayer():GetNWFloat("PowerupTotTime")
 			draw.RoundedBox(6, HC-(((Percentage*94)+6)*SF)+XMV, 55*SF, ((Percentage*182)+18)*SF, 22*SF, Color_HUDYellow)
 			//name
-			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC+(0.5*SF), 53.5*SF, Color_Black, 1)
-			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC, 53*SF, Color_White, 1)
+			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC+(0.5*SF)+XMV, 53.5*SF, Color_Black, 1)
+			draw.DrawText(LocalPlayer():GetNWString("PowerupName"), "CV22", HC+XMV, 53*SF, Color_White, 1)
 		end
 		//-------------End Powerup Bar----------------------------------------
 		
 		//Crosshair
 		surface.SetDrawColor(Color_White)
-		surface.SetTexture( ReticleTex )
+		if LocalPlayer():GetNWBool("Reloading", false)==true then
+			surface.SetTexture( NoReticleTex )
+		else
+			surface.SetTexture( ReticleTex )
+		end
 		local TurretEnt = LocalPlayer():GetNWEntity("TurretEnt")
 		if TurretEnt:IsValid() then			
-			//TurretEnt:SetPoseParameter("Turret_Elevate", TurretEnt:GetNWFloat("Turret_Elevate", 0))
-			//local AttachmentData = TurretEnt:GetAttachment(TurretEnt:LookupAttachment("BarrelTip"))
 			local BarPos = TurretEnt:GetBonePosition(TurretEnt:LookupBone("Barrel"))
 			local BarAng = TurretEnt:GetAngles()
 			BarAng:RotateAroundAxis(TurretEnt:GetRight(), TurretEnt:GetNWFloat("Turret_Elevate", 0) )
-			local CPos=util.QuickTrace(BarPos+BarAng:Forward()*150,BarAng:Forward()*10000, TurretEnt).HitPos:ToScreen()//util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
+			local CPos=util.QuickTrace(BarPos+BarAng:Forward()*TurretEnt.BarrelLength,BarAng:Forward()*10000, TurretEnt).HitPos:ToScreen()//util.QuickTrace(AttachmentData.Pos,AttachmentData.Ang:Forward()*10000, TurretEnt).HitPos:ToScreen()
 			surface.DrawTexturedRect( CPos.x-(32*SF), CPos.y-(32*SF), 64*SF, 64*SF )
 		end
 		
+		//Flip Prompt
 		if (LocalPlayer():GetNWBool("FlipPrompt", false)==true) then
-			//Flip Prompt
 			draw.RoundedBox(8, HC-(125*SF)+XMV, VC-(5*SF), 250*SF, 40*SF, Color_Gray_75A)
-			draw.DrawText("Press USE to Flip.", "CV27", HC, VC, Color(255,255,255,255-slowfadenum), 1 )
+			draw.DrawText("Press USE to Flip.", "CV27", HC+XMV, VC, Color(255,255,255,255-slowfadenum), 1 )
 		end
 		
 	end

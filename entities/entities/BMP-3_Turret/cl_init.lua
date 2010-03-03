@@ -156,8 +156,10 @@ function ENT:Think()
 		////////////////
 	end
 	//fix any PVS issues
-	self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
-	self.PlayerEnt:SetAngles(self.Entity:GetAngles())
+	if self.PlayerEnt:IsValid() then
+		self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
+		self.PlayerEnt:SetAngles(self.Entity:GetAngles())
+	end
 end
 
 function ENT:OnRemove() 

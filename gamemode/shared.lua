@@ -67,7 +67,7 @@ GM.NoAutomaticSpawning = false		// Players don't spawn automatically when they d
 GM.RoundBased = true   			// Round based, like CS
 GM.RoundLength = 60 * 10					// Round length, in seconds
 GM.RoundPreStartTime = 5			// Preperation time before a round starts
-GM.RoundPostLength = 5				// Seconds to show the 'x team won!' screen at the end of a round
+GM.RoundPostLength = 7				// Seconds to show the 'x team won!' screen at the end of a round
 GM.RoundEndsWhenOneTeamAlive = false	// CS Style rules
  
 GM.EnableFreezeCam = true			// TF2 Style Freezecam

@@ -35,6 +35,8 @@ function ENT:Initialize()
 	self.Entity.SoundPlaying = false
 	self.Entity.BarrelBone = self.Entity:LookupBone("Barrel")
 	self.Entity.LastElev=0
+	
+	self.Entity.BarrelLength = self.Entity:GetBonePosition(self.Entity:LookupBone("Barrel")):Distance(self.Entity:GetBonePosition(self.Entity:LookupBone("BarrelTip")))
 end
 
 function ENT:Update(dt)
