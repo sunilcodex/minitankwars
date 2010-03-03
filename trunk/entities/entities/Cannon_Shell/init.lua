@@ -41,6 +41,19 @@ function ENT:Think()
 	return true
 end
 
+function ENT:Move()  //shorter version of Think, to make sure the shell's out of the way of the tank
+	//setup teh trace
+	traceres=util.QuickTrace(self.Entity:GetPos(), self.Entity:GetForward()*200, self.Entity)
+	if traceres.Hit==true then  //time to kablooey
+		self.Entity:SetPos(traceres.HitPos)
+		self.Entity:KABLOOEY(traceres.Entity)
+		self.Entity:NextThink(CurTime()+3)//which will never come
+		return true
+	end
+	//drop off and move forward
+	self.Entity:SetPos(self.Entity:GetPos()+(self.Entity:GetForward()*190))
+end
+
 function ENT:KABLOOEY(ent)
 	//ow
 	util.BlastDamage(self.Entity, self.Entity:GetOwner(), self.Entity:GetPos(), 500, 20)

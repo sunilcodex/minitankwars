@@ -40,9 +40,12 @@ function SWEP:PrimaryAttack()
 	if ( !self:CanPrimaryAttack() ) then return end
 	self.Weapon:EmitSound ( self.Sound )
 	if(SERVER) then
-		local BarrelTip = self.Owner.TankEnt.TurretEnt:LookupAttachment("BarrelTip")
-		self.Owner.TankEnt.TurretEnt:SetPoseParameter("Turret_Elevate", self.Owner.TankEnt.TurretEnt:GetNWFloat("Turret_Elevate"))
-		local AttachData = self.Owner.TankEnt.TurretEnt:GetAttachment(BarrelTip)
+		local TurretEnt = self.Owner.TankEnt.TurretEnt
+		
+		local BarPos = TurretEnt:GetBonePosition(TurretEnt:LookupBone("Barrel"))
+		local BarrelAng = TurretEnt:GetAngles()
+		BarrelAng:RotateAroundAxis(TurretEnt:GetRight(), TurretEnt:GetNWFloat("Turret_Elevate", 0) )
+		BarrelPos = BarPos+BarrelAng:Forward()*(TurretEnt.BarrelLength+5)
 		
 		local shell
 		if (self.Owner:GetNWBool("AP", false)==true) then
@@ -50,21 +53,21 @@ function SWEP:PrimaryAttack()
 		else
 			shell = ents.Create( "Cannon_Shell" )
 		end
-		shell:SetPos( AttachData.Pos+AttachData.Ang:Forward()*100 )
-		shell:SetAngles(AttachData.Ang)
+		shell:SetPos( BarrelPos )
+		shell:SetAngles(BarrelAng)
 		shell:SetOwner( self.Owner )
 		shell:Spawn()
+		shell:Move()
 		
 		local ed = EffectData()
 		ed:SetEntity(self.Owner.TankEnt)
 		ed:SetOrigin(self.Owner.TankEnt:GetPos())
 		util.Effect("TankFireRing", ed, true, true)
-		ed:SetEntity(self.Owner.TankEnt.TurretEnt)
-		ed:SetAttachment(BarrelTip)
-		ed:SetOrigin(self.Owner.TankEnt.TurretEnt:GetPos())
+		ed:SetAngle(BarrelAng)
+		ed:SetOrigin(BarrelPos)
 		util.Effect("TankFire", ed, true, true)
 		
-		self.Owner.TankEnt:Recoil(100, AttachData.Ang:Forward())
+		self.Owner.TankEnt:Recoil(100, BarrelAng:Forward())
 	end
 	
 	self.Owner:SetNWBool("Reloading", true)

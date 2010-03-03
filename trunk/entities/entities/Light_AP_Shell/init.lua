@@ -41,6 +41,19 @@ function ENT:Think()
 	return true
 end
 
+function ENT:Move()  //shorter version of Think, to make sure the shell's out of the way of the tank
+	//setup teh trace
+	traceres=util.QuickTrace(self.Entity:GetPos(), self.Entity:GetForward()*300, self.Entity)
+	if traceres.Hit==true then  //time to kablooey
+		self.Entity:SetPos(traceres.HitPos)
+		self.Entity:KABLOOEY(traceres.Entity)
+		self.Entity:NextThink(CurTime()+3)//which will never come
+		return true
+	end
+	//drop off and move forward
+	self.Entity:SetPos(self.Entity:GetPos()+(self.Entity:GetForward()*290))
+end
+
 function ENT:KABLOOEY(ent)
 	//ow
 	util.BlastDamage(self.Entity, self.Entity:GetOwner(), self.Entity:GetPos(), 500, 5)
@@ -55,7 +68,7 @@ function ENT:KABLOOEY(ent)
 	self.Entity:EmitSound("weapons/explode4.wav", 125, 130)
 	local ed = EffectData()
 	ed:SetOrigin(self.Entity:GetPos())
-	util.Effect("ShellExplode", ed, true, true)
+	util.Effect("APShellExplode", ed, true, true)
 	//poof
 	self.Entity:SetNoDraw(true)
 	self.Entity:SetNotSolid(true)

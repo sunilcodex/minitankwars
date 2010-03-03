@@ -78,11 +78,12 @@ include('shared.lua');
 		end
 	end
 	////////////////
-	self.Entity.LastNum=0
+	self.Entity.LastEl=0
+	self.Entity.BarrelLength = self.Entity:GetBonePosition(self.Entity:LookupBone("Barrel")):Distance(self.Entity:GetBonePosition(self.Entity:LookupBone("BarrelTip")))
  end
-local mattt=Material("cable/cable")
 function ENT:Draw()
 	self.Entity:DrawModel();
+	local Elev = self.Entity:GetNWFloat("Turret_Elevate", 0)
 end
 
 function ENT:Think()
@@ -156,8 +157,10 @@ function ENT:Think()
 		////////////////
 	end
 	//fix any PVS issues
-	self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
-	self.PlayerEnt:SetAngles(self.Entity:GetAngles())
+	if self.PlayerEnt:IsValid() then
+		self.PlayerEnt:SetPos( self.Entity:GetAttachment(self.Entity:LookupAttachment("PlayerOrigin")).Pos  )
+		self.PlayerEnt:SetAngles(self.Entity:GetAngles())
+	end
 end
 
 function ENT:OnRemove() 

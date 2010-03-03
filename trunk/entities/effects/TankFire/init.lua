@@ -9,19 +9,17 @@ TankFireRing init.lua
 
 function EFFECT:Init( data )
 	
-	local TargetEntity = data:GetEntity()
-	if ( !TargetEntity || !TargetEntity:IsValid() ) then return end
+	local BarrelAng = data:GetAngle()
+	local BarrelPos = data:GetOrigin()
 	
-	local AttachmentData = TargetEntity:GetAttachment(data:GetAttachment())
-	
-	local emitter = ParticleEmitter( AttachmentData.Pos )
+	local emitter = ParticleEmitter( BarrelPos )
 	
 	//fire
 		for i=0, 16 do	
-			local vPos = AttachmentData.Pos+AttachmentData.Ang:Forward()*i*3
+			local vPos = BarrelPos+BarrelAng:Forward()*i*3
 			local particle = emitter:Add( "effects/fire_cloud2", vPos)
 			if (particle) then		
-				particle:SetVelocity( AttachmentData.Ang:Forward()*i*5 )
+				particle:SetVelocity( BarrelAng:Forward()*i*5 )
 				particle:SetLifeTime( 0 )
 				particle:SetDieTime( math.Rand( 0.1, 0.2 ) )
 				particle:SetStartAlpha( 200 )
@@ -38,10 +36,10 @@ function EFFECT:Init( data )
 		end
 	//smoke
 		for i=0, 32 do	
-			local vPos = AttachmentData.Pos+AttachmentData.Ang:Forward()*i*5+Vector(math.Rand(-20,20),math.Rand(-20,20),math.Rand(-20,20))
+			local vPos = BarrelPos+BarrelAng:Forward()*i*5+Vector(math.Rand(-20,20),math.Rand(-20,20),math.Rand(-20,20))
 			local particle = emitter:Add( "particle/particle_smokegrenade", vPos)
 			if (particle) then		
-				particle:SetVelocity( AttachmentData.Ang:Forward()*i*30 )
+				particle:SetVelocity( BarrelAng:Forward()*i*30 )
 				particle:SetLifeTime( 0 )
 				particle:SetDieTime( math.Rand( 0.5, 1.0 ) )
 				particle:SetStartAlpha( math.Rand( 200, 250 )*((32-i)+16)/32 )

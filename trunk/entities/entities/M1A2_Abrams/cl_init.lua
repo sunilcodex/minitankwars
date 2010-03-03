@@ -58,3 +58,7 @@ function ENT:Think()
 	end
 	self.Entity.LastTime=CurTime()
 end
+
+function ENT:Remove()
+	self.Entity.emitter:Finish()
+end
