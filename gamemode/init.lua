@@ -29,7 +29,6 @@ PowerupEnts[4]="Powerup_Ammo"
 PowerupEnts[5]="Powerup_Ammo"
 PowerupEnts[6]="Powerup_AP"
 PowerupEnts[7]="Powerup_QuickReload"
-SetGlobalInt("ActivePowerups",0)
 function GM:PowerupSpawn()
 	if GetGlobalInt("ActivePowerups") < 12 then
 		local PU = ents.Create(table.Random(PowerupEnts)) 
@@ -43,6 +42,7 @@ function GM:PowerupSpawn()
 end
 
 function GM:InitPostEntity()
+	SetGlobalInt("ActivePowerups",0)
 	GAMEMODE:PowerupSpawn()
 	timer.Create("PowerupSpawnTimer", 8, 0, function() GAMEMODE:PowerupSpawn() end)
 end
@@ -59,11 +59,22 @@ end
  
 // Called when the round ends
 function GM:OnRoundEnd( num )
+	if !(team.GetScore(TEAM_USA) >= 40 or team.GetScore(TEAM_USSR) >= 40) then
+		if team.GetScore(TEAM_USA) > team.GetScore(TEAM_USSR) then
+			GAMEMODE:RoundEndWithResult( TEAM_USA )
+		elseif team.GetScore(TEAM_USA) < team.GetScore(TEAM_USSR) then
+			GAMEMODE:RoundEndWithResult( TEAM_USA )
+		else  //tie!?!?
+			//everybody wins!
+		end
+	end
+	
 	for k,v in pairs( player.GetAll() ) do
 		 v:SetFrags( 0 ) // Reset their frags for next round
 	end
 	team.SetScore(TEAM_USA, 0)
 	team.SetScore(TEAM_USSR, 0)
+	SetGlobalInt("ActivePowerups",0)
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )

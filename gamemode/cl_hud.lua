@@ -11,6 +11,8 @@ local SHL = SH
 //textures
 local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
+local US_Flag_NoText = surface.GetTextureID( "MiniTankWars/US_Flag_NoText" )
+local USSR_Flag_NoText = surface.GetTextureID( "MiniTankWars/USSR_Flag_NoText" )
 local ReticleTex = surface.GetTextureID( "MiniTankWars/Reticle" )
 local NoReticleTex = surface.GetTextureID( "MiniTankWars/NoReticle" )
 local TankHealthThumbs = {}
@@ -35,7 +37,7 @@ local Color_Gray_75A = Color(60,60,60,191)
 local Color_Gray2 = Color(80,80,80)
 local Color_HUDYellow = Color(228,185,9)
 //fonts
-surface.CreateFont( "Trebuchet MS", 24*(ScrH()/768), 400, true, false, "CV22")
+surface.CreateFont( "Trebuchet MS", 24*(ScrH()/768), 400, true, false, "TB22")
 surface.CreateFont( "Coolvetica", 22*(ScrH()/768), 300, true, false, "CV22" )
 surface.CreateFont( "Coolvetica", 34*(ScrH()/768), 250, true, false, "CV27" )
 surface.CreateFont( "Coolvetica", 18*(ScrH()/768), 300, true, false, "CV18" )
@@ -87,6 +89,26 @@ function GM:OnHUDPaint()
 	end
 	
 	surface.SetDrawColor( Color_White ) 
+	//Team Tags
+	if LocalPlayer():Team() == 1 then
+		surface.SetTexture( US_Flag_NoText )
+	else 
+		surface.SetTexture( USSR_Flag_NoText )
+	end
+	for k, pl in pairs(team.GetPlayers(LocalPlayer():Team())) do
+		//get loc, are they even onscreen?
+		local TagPos = (pl:GetPos()+Vector(0,0,50)):ToScreen()
+		if TagPos.visible==true then
+			TagPos.y=TagPos.y-(50*SF)
+			//draw image
+			draw.RoundedBox(6, TagPos.x, TagPos.y, 536*SF4, 152*SF4, Color_Gray)
+			surface.SetDrawColor(Color_White)
+			surface.DrawTexturedRect( TagPos.x, TagPos.y, 512*SF4, 128*SF4 )
+			//draw name
+			draw.DrawText(pl:Nick(), "TB22", TagPos.x+SF, TagPos.y+SF, Color_Black, 0)
+			draw.DrawText(pl:Nick(), "TB22", TagPos.x, TagPos.y, Color_White, 0)
+		end
+	end
 	
 	//-----------------Score Indicator-----------------------------------
 	draw.RoundedBox(6, 229*SF+XMV, 27*SF, 572*SF, 26*SF, Color_Black)
@@ -99,7 +121,7 @@ function GM:OnHUDPaint()
 	surface.DrawTexturedRect( 16*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
 	draw.RoundedBox(6, 231*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USA), 3, 40)/40)*280)*SF, 22*SF, Color_USABlue)
-	draw.DrawText(team.GetScore(TEAM_USA), "CV22", (((math.Clamp(team.GetScore(TEAM_USA), 3, 40)*.01)*280)+231)*SF+XMV, 29*SF, Color_White, 1)
+	draw.DrawText(team.GetScore(TEAM_USA), "TB22", (((math.Clamp(team.GetScore(TEAM_USA), 3, 40)*.01)*280)+231)*SF+XMV, 29*SF, Color_White, 1)
 	
 	//USSR
 	draw.RoundedBox(4, 834*SF+XMV, 12*SF, 536*SF3, 152*SF3, Color_Gray)
@@ -108,12 +130,12 @@ function GM:OnHUDPaint()
 	surface.DrawTexturedRect( 838*SF+XMV, 16*SF, 512*SF3, 128*SF3 )
 	
 	draw.RoundedBox(6, (799-((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)/40)*280))*SF+XMV, 29*SF, ((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)/40)*280)*SF, 22*SF, Color_USSRRed)
-	draw.DrawText(team.GetScore(TEAM_USSR), "CV22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)*.01)*280))*SF+XMV, 29*SF, Color_White, 1)
+	draw.DrawText(team.GetScore(TEAM_USSR), "TB22", (798-((math.Clamp(team.GetScore(TEAM_USSR), 3, 40)*.01)*280))*SF+XMV, 29*SF, Color_White, 1)
 	
 	//---
 	surface.SetDrawColor(Color_Gray2)
 	surface.DrawRect(HC-(2*SF)+XMV, 29*SF, 4*SF, 22*SF)
-	draw.DrawText("-40-", "CV22", HC+XMV, 29*SF, Color_White, 1)
+	draw.DrawText("-40-", "TB22", HC+XMV, 29*SF, Color_White, 1)
 	//---------------End Score Indicator---------------------------------
 
 	if LocalPlayer():Alive() then

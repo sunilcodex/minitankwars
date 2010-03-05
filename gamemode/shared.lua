@@ -42,7 +42,7 @@ GM.TeamBased = true				// Team based game or a Free For All game?
 GM.AllowAutoTeam = true
 GM.AllowSpectating = true
 GM.SecondsBetweenTeamSwitches = 10
-GM.GameLength = 30
+GM.GameLength = 45
 GM.RoundLimit = 10				// Maximum amount of rounds to be played in round based games
 GM.VotingDelay = 5					// Delay between end of game, and vote. if you want to display any extra screens before the vote pops up
  
@@ -65,7 +65,7 @@ GM.AddFragsToTeamScore = true		// Adds player's individual kills to team score (
  
 GM.NoAutomaticSpawning = false		// Players don't spawn automatically when they die, some other system spawns them
 GM.RoundBased = true   			// Round based, like CS
-GM.RoundLength = 60 * 10					// Round length, in seconds
+GM.RoundLength = 60 * 15			// Round length, in seconds
 GM.RoundPreStartTime = 5			// Preperation time before a round starts
 GM.RoundPostLength = 7				// Seconds to show the 'x team won!' screen at the end of a round
 GM.RoundEndsWhenOneTeamAlive = false	// CS Style rules
