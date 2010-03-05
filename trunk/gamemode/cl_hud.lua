@@ -92,12 +92,12 @@ function GM:OnHUDPaint()
 	//Team Tags
 	for k, pl in pairs(team.GetPlayers(LocalPlayer():Team())) do
 		//get loc, are they even onscreen?
-		local TagPos = (pl:GetPos()+Vector(0,0,100)):ToScreen()
-		if TagPos.visible==true then
+		local TagPos = (pl:GetPos()+Vector(0,0,150)):ToScreen()
+		if TagPos.visible==true and pl!=LocalPlayer() then
 			TagPos.y=TagPos.y-(50*SF)
-			TagPos.x=TagPos.x-(128*SF)
+			TagPos.x=TagPos.x-(64*SF)
 			//draw image
-			draw.RoundedBox(6, TagPos.x, TagPos.y, 536*SF4, 152*SF4, Color_Gray)
+			draw.RoundedBox(6, TagPos.x-(4*SF), TagPos.y-(4*SF), 536*SF4, 152*SF4, Color_Gray)
 			surface.SetDrawColor(Color_White)
 			if pl:Team() == 1 then
 				surface.SetTexture( US_Flag_NoText )
@@ -106,8 +106,8 @@ function GM:OnHUDPaint()
 			end
 			surface.DrawTexturedRect( TagPos.x, TagPos.y, 512*SF4, 128*SF4 )
 			//draw name
-			draw.DrawText(pl:Nick(), "TB22", TagPos.x+SF, TagPos.y+(7*SF), Color_Black, 0)
-			draw.DrawText(pl:Nick(), "TB22", TagPos.x, TagPos.y+(6*SF), Color_White, 0)
+			draw.DrawText(pl:Nick(), "CV18", TagPos.x+(SF*5), TagPos.y+(7*SF), Color_Black, 0)
+			draw.DrawText(pl:Nick(), "CV18", TagPos.x+(SF*4), TagPos.y+(6*SF), Color_White, 0)
 		end
 	end
 	
