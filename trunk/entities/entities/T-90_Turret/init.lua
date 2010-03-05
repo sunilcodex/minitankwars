@@ -82,11 +82,12 @@ function ENT:Update(dt)
 		local off = EyeTrace.HitPos - self.Entity:GetBonePosition(self.Entity.BarrelBone)
 		//point the barrel along off
 		local Dir = -math.Clamp(math.NormalizeAngle((off:Angle()-self.Entity:GetAngles()).p), -25, 25)
-		self.Entity:SetNWFloat("Turret_Elevate", math.Round(Dir*100)/100)
-		self.Entity:SetPoseParameter("Turret_Elevate", math.Round(Dir))	
-		
-		
+		self.Entity:SetNWFloat("Turret_Elevate", Dir)
 	end
+end
+
+function ENT:Think()
+	self.Entity:SetPoseParameter("Turret_Elevate", math.Round(self.Entity:GetNWFloat("Turret_Elevate", 0)))	
 end
 
 function ENT:SetPlayerModel( playersmodel )

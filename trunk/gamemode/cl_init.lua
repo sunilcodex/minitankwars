@@ -58,7 +58,7 @@ function GM:ShowClassChooser( TEAMID )
 			displayname = Class.DisplayName
 		end
 		
-		local description = "Click to Deploy as " .. displayname
+		local description = "Click to Deploy as " .. displayname  //for somereason it cuts off at the space in "M1A2 Abrams" and "M551 Sheridan" >_>
 		
 		if( Class and Class.Description ) then
 			description = Class.Description
@@ -70,7 +70,6 @@ function GM:ShowClassChooser( TEAMID )
 		
 	end
 	
-	ClassChooser:AddCancelButton()
 	ClassChooser:MakePopup()
 	ClassChooser:NoFadeIn()
 
