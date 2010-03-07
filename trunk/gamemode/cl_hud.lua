@@ -62,6 +62,7 @@ local PlayerTank=LocalPlayer():GetNWString("TankName", "")
 local TankHealthThumb = TankHealthThumbs[PlayerTank]
 local TankHealthThumbBlur = TankHealthThumbsBlur[PlayerTank]
 local StartHealth = 100
+local SteamAvatars = {}
 
 function CheckTankChange()
 	if LocalPlayer():GetNWString("TankName") !=PlayerTank then
@@ -71,6 +72,7 @@ function CheckTankChange()
 	end
 end
 timer.Create("TankChangeHUDTimer", 1, 0, CheckTankChange)
+
 
 function GM:OnHUDPaint()
 	if SH!=SHL then
@@ -89,25 +91,46 @@ function GM:OnHUDPaint()
 	end
 	
 	surface.SetDrawColor( Color_White ) 
-	//Team Tags
+	//------------Team Tags----------------
 	for k, pl in pairs(team.GetPlayers(LocalPlayer():Team())) do
-		//get loc, are they even onscreen?
-		local TagPos = (pl:GetPos()+Vector(0,0,150)):ToScreen()
-		if TagPos.visible==true and pl!=LocalPlayer() then
-			TagPos.y=TagPos.y-(50*SF)
-			TagPos.x=TagPos.x-(64*SF)
-			//draw image
-			draw.RoundedBox(6, TagPos.x-(4*SF), TagPos.y-(4*SF), 536*SF4, 152*SF4, Color_Gray)
-			surface.SetDrawColor(Color_White)
-			if pl:Team() == 1 then
-				surface.SetTexture( US_Flag_NoText )
-			else 
-				surface.SetTexture( USSR_Flag_NoText )
+		local UID = pl:UniqueID()
+		if pl:Alive() then
+			//get loc, are they even onscreen?
+			local TagPos = (pl:GetPos()+Vector(0,0,125)):ToScreen()
+			if TagPos.visible==true and pl!=LocalPlayer() then
+				//steam avatar, does it exist?
+				if not SteamAvatars[UID] then
+					SteamAvatars[UID] = vgui.Create("AvatarImage")
+					SteamAvatars[UID]:SetPlayer(pl)
+					SteamAvatars[UID]:SetSize(32*SF, 32*SF)
+				end
+				local SteamAvatar = SteamAvatars[UID] 		
+				local PosX=math.Round((TagPos.x-(82*SF))/SF)*SF //center it up
+				local PosY=math.Round(TagPos.y/SF)*SF
+				//draw image
+				draw.RoundedBox(6, PosX-(3*SF), PosY-(3*SF), 172*SF, 38*SF, Color_Gray)
+				SteamAvatar:SetVisible(true)
+				SteamAvatar:SetPos(PosX, PosY)
+				surface.SetDrawColor(Color_White)
+				if pl:Team() == 1 then
+					surface.SetTexture( US_Flag_NoText )
+				else 
+					surface.SetTexture( USSR_Flag_NoText )
+				end
+				surface.DrawTexturedRect( PosX+(36*SF), PosY, 512*SF4, 128*SF4 )
+				//draw name
+				draw.DrawText(pl:Nick(), "CV18", PosX+(SF*104), PosY+(8*SF), Color_Black, 1)  //shadow
+				draw.DrawText(pl:Nick(), "CV18", PosX+(SF*103), PosY+(7*SF), Color_White, 1)
+			else
+				//hide ava
+				if SteamAvatars[UID] then
+					SteamAvatars[UID]:SetVisible(false)
+				end
 			end
-			surface.DrawTexturedRect( TagPos.x, TagPos.y, 512*SF4, 128*SF4 )
-			//draw name
-			draw.DrawText(pl:Nick(), "CV18", TagPos.x+(SF*5), TagPos.y+(7*SF), Color_Black, 0)
-			draw.DrawText(pl:Nick(), "CV18", TagPos.x+(SF*4), TagPos.y+(6*SF), Color_White, 0)
+		else
+			if SteamAvatars[UID] then
+				SteamAvatars[UID]:SetVisible(false)
+			end
 		end
 	end
 	
@@ -244,6 +267,12 @@ local ObserveMode = 0
 local ObserveTarget = NULL
 local InVote = false
 
+local BottomOfTheScreen=vgui.Create("DPanel")
+BottomOfTheScreen:SetSize(24*SF,24*SF)
+BottomOfTheScreen:SetPos(HC,ScrH()-(100*SF))
+function BottomOfTheScreen:Paint()
+end
+
 function GM:AddHUDItem( item, pos, parent )
 	hudScreen:AddItem( item, parent, pos )
 end
@@ -328,7 +357,7 @@ function GM:UpdateHUD_RoundResult( RoundResult, Alive )
 	local RespawnText = vgui.Create( "DHudElement" );
 		RespawnText:SizeToContents()
 		RespawnText:SetText( txt )
-	GAMEMODE:AddHUDItem( RespawnText, 8 )
+	GAMEMODE:AddHUDItem( RespawnText, 8, BottomOfTheScreen)
 
 end
 
@@ -369,7 +398,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 		local RespawnText = vgui.Create( "DHudElement" );
 			RespawnText:SizeToContents()
 			RespawnText:SetText( "Waiting for round start" )
-		GAMEMODE:AddHUDItem( RespawnText, 8 )
+		GAMEMODE:AddHUDItem( RespawnText, 8, BottomOfTheScreen)
 		return
 		
 	end
@@ -380,7 +409,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 			RespawnTimer:SizeToContents()
 			RespawnTimer:SetValueFunction( function() return LocalPlayer():GetNWFloat( "RespawnTime", 0 ) end )
 			RespawnTimer:SetLabel( "SPAWN IN" )
-		GAMEMODE:AddHUDItem( RespawnTimer, 8 )
+		GAMEMODE:AddHUDItem( RespawnTimer, 8, BottomOfTheScreen)
 		return
 
 	end
@@ -393,7 +422,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 											if ( GetGlobalFloat( "RoundStartTime", 0 ) > CurTime() ) then return GetGlobalFloat( "RoundStartTime", 0 )  end 
 											return GetGlobalFloat( "RoundEndTime" ) end )
 			RoundTimer:SetLabel( "TIME" )
-		GAMEMODE:AddHUDItem( RoundTimer, 8 )
+		GAMEMODE:AddHUDItem( RoundTimer, 8, BottomOfTheScreen)
 		return
 	
 	end
@@ -403,8 +432,7 @@ function GM:UpdateHUD_Dead( bWaitingToSpawn, InRound )
 		local RespawnText = vgui.Create( "DHudElement" );
 			RespawnText:SizeToContents()
 			RespawnText:SetText( "Press Fire to Spawn" )
-		GAMEMODE:AddHUDItem( RespawnText, 8 )
-		
+		GAMEMODE:AddHUDItem( RespawnText, 8, BottomOfTheScreen)
 	end
 
 end
