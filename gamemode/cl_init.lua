@@ -14,6 +14,13 @@ local US_Flag = surface.GetTextureID( "MiniTankWars/US_Flag" )
 local USSR_Flag = surface.GetTextureID( "MiniTankWars/USSR_Flag" )
 local MTW_Logo = surface.GetTextureID( "MiniTankWars/MiniTankWarsLogo" )
 
+local TankClassThumbs = {}
+TankClassThumbs[""] = "MiniTankWars/Tanks/HealthThumbs/alpha"
+TankClassThumbs["M1A2 Abrams"] = "MiniTankWars/Tanks/ClassThumbs/M1A2_Abrams"
+TankClassThumbs["T-90"] = "MiniTankWars/Tanks/ClassThumbs/T-90"
+TankClassThumbs["M551 Sheridan"] = "MiniTankWars/Tanks/ClassThumbs/M551_Sheridan"
+TankClassThumbs["BMP-3"] = "MiniTankWars/Tanks/ClassThumbs/BMP-3"
+
 local SH = ScrH()
 local SHL = SH
 local SF, SF2
@@ -21,6 +28,8 @@ local function RecalcSFs()
 	SF = ScrH()/768  //scalefactor
 	SF2 = SF/2
 	XMV=(ScrW()/2)-512*SF
+	VC = ScrH()/2
+	HC = 512*SF
 end
 RecalcSFs()
 
@@ -47,7 +56,12 @@ function GM:ShowClassChooser( TEAMID )
 
 	ClassChooser = vgui.CreateFromTable( vgui_Splash )
 	ClassChooser:SetHeaderText( "Choose Tank" )
-	ClassChooser:SetHoverText( "What tank do you want to use?" );
+	
+	local Descrip = vgui.Create("DLabel", ClassChooser)
+	Descrip:SetText("Which tank do you want to use?")
+	Descrip:SetFont("FRETTA_MEDIUM")
+	Descrip:SizeToContents()
+	Descrip:SetPos( HC+(24*SF), VC-(208*SF) )
 
 	Classes = team.GetClass( TEAMID )
 	for k, v in SortedPairs( Classes ) do
@@ -58,15 +72,28 @@ function GM:ShowClassChooser( TEAMID )
 			displayname = Class.DisplayName
 		end
 		
-		local description = "Click to Deploy as " .. displayname  //for somereason it cuts off at the space in "M1A2 Abrams" and "M551 Sheridan" >_>
-		
-		if( Class and Class.Description ) then
-			description = Class.Description
+		local ClassDescriptionPanel = vgui.Create("DPanel", ClassChooser)
+		ClassDescriptionPanel:SetPos( HC+(64*SF), VC-(136*SF) )
+		ClassDescriptionPanel:SetSize(300*SF, 300*SF)
+		function ClassDescriptionPanel:Paint()
+			//nothing
 		end
+		local InstructionsText = vgui.Create("DLabel", ClassDescriptionPanel)
+		InstructionsText:SetFont( "FRETTA_MEDIUM" )
+		InstructionsText:SetText("Click to deploy as:")	
+		InstructionsText:SizeToContents()
+		local ClassImage = vgui.Create("DImage", ClassDescriptionPanel)
+		ClassImage:SetImage(TankClassThumbs[displayname])
+		ClassImage:SetSize(256*SF, 256*SF)
+		ClassImage:MoveBelow(InstructionsText)
+		ClassImage.y = ClassImage.y-(40*SF)
+		ClassDescriptionPanel:SetVisible(false)
 		
 		local func = function() if( cl_classsuicide:GetBool() ) then RunConsoleCommand( "kill" ) end RunConsoleCommand( "changeclass", k ) end
-		local btn = ClassChooser:AddSelectButton( displayname, func, description )
+		local btn = ClassChooser:AddSelectButton( displayname, func )
 		btn.m_colBackground = team.GetColor( TEAMID )
+		btn.OnCursorEntered = function() ClassDescriptionPanel:SetVisible(true) end
+		btn.OnCursorExited = function() ClassDescriptionPanel:SetVisible(false) end
 		
 	end
 	
