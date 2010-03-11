@@ -65,7 +65,7 @@ function GM:OnRoundEnd( num )
 		elseif team.GetScore(TEAM_USA) < team.GetScore(TEAM_USSR) then
 			GAMEMODE:RoundEndWithResult( TEAM_USA )
 		else  //tie!?!?
-			//everybody wins!
+			GAMEMODE:RoundEnd()
 		end
 	end
 	
@@ -75,6 +75,7 @@ function GM:OnRoundEnd( num )
 	team.SetScore(TEAM_USA, 0)
 	team.SetScore(TEAM_USSR, 0)
 	SetGlobalInt("ActivePowerups",0)
+	game.CleanUpMap()
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )

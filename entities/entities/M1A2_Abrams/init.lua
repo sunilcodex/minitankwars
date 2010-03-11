@@ -86,6 +86,9 @@ end
 
 //////////////////////////////////////////////////////////////////
 function ENT:Think()
+	if !self.Entity.MyPlayer():Alive() then
+		self.Entity:Remove()
+	end
 	self.Entity:GetPhysicsObject():Wake()
 	//powerup management
 	if (self.Entity.MyPlayer and self.Entity.MyPlayer:IsValid() and self.Entity.MyPlayer:Alive()) then

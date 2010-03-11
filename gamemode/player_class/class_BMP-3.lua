@@ -52,19 +52,19 @@ function CLASS:OnSpawn( pl )
 end
  
 function CLASS:OnDeath( pl, attacker, dmginfo )
-	local Wreck = ents.Create( "TankWreck" )
-	Wreck:SetPos(pl.TankEnt:GetPos())
-	Wreck:SetAngles(pl.TankEnt:GetAngles())
-	Wreck:Spawn()
-	Wreck:SetTank("BMP-3")
-	Wreck:GetPhysicsObject():ApplyForceCenter(Vector(0,0,1000))
-	
-	local ed = EffectData()
-	ed:SetEntity(Wreck)
-	ed:SetOrigin(Wreck:GetPos())
-	util.Effect("TankSplode", ed, true, true)
-	
 	if (pl.TankEnt) then
+		local Wreck = ents.Create( "TankWreck" )
+		Wreck:SetPos(pl.TankEnt:GetPos())
+		Wreck:SetAngles(pl.TankEnt:GetAngles())
+		Wreck:Spawn()
+		Wreck:SetTank("BMP-3")
+		Wreck:GetPhysicsObject():ApplyForceCenter(Vector(0,0,1000))
+		
+		local ed = EffectData()
+		ed:SetEntity(Wreck)
+		ed:SetOrigin(Wreck:GetPos())
+		util.Effect("TankSplode", ed, true, true)
+	
 		pl.TankEnt:Remove()
 		pl.TankEnt=NULL
 	end
