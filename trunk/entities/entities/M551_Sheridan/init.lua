@@ -86,7 +86,7 @@ end
 
 //////////////////////////////////////////////////////////////////
 function ENT:Think()
-	if !self.Entity.MyPlayer():Alive() then
+	if !self.Entity.MyPlayer:Alive() then
 		self.Entity:Remove()
 	end
 	self.Entity:GetPhysicsObject():Wake()
