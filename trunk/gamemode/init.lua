@@ -56,7 +56,7 @@ function GM:CheckRoundEnd()
 		GAMEMODE:RoundEndWithResult(TEAM_USSR)
 	end
 end
- 
+
 // Called when the round ends
 function GM:OnRoundEnd( num )
 	if !(team.GetScore(TEAM_USA) >= 40 or team.GetScore(TEAM_USSR) >= 40) then

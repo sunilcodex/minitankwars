@@ -36,7 +36,9 @@ function ENT:Think()
 	if (self.Entity.Dropping==true) then
 		local TD = util.QuickTrace(self.Entity:GetPos(), Vector(0,0,-64), {self.Entity, self.Entity.Chute})
 		if (TD.HitWorld == true and self.Entity:GetVelocity().z < 10) then
-			self.Entity.Chute:Remove()
+			if (self.Entity.Chute:IsValid()) then
+				self.Entity.Chute:Remove()
+			end
 			local card=ents.Create("PowerupCard")
 			card:SetPos(self.Entity:GetPos())
 			card:Spawn()

@@ -86,6 +86,9 @@ end
 
 //////////////////////////////////////////////////////////////////
 function ENT:Think()
+	if !self.Entity.MyPlayer:IsValid() then
+		self.Entity:Remove()
+	end
 	if !self.Entity.MyPlayer:Alive() then
 		self.Entity:Remove()
 	end
