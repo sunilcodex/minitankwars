@@ -92,7 +92,7 @@ function GM:OnHUDPaint()
 	
 	surface.SetDrawColor( Color_White ) 
 	//------------Team Tags----------------
-	for k, pl in pairs(team.GetPlayers(LocalPlayer():Team())) do
+	/*for k, pl in pairs(team.GetPlayers(LocalPlayer():Team())) do
 		local UID = pl:UniqueID()
 		if pl:Alive() then
 			//get loc, are they even onscreen?
@@ -132,7 +132,7 @@ function GM:OnHUDPaint()
 				SteamAvatars[UID]:SetVisible(false)
 			end
 		end
-	end
+	end*/
 	
 	//-----------------Score Indicator-----------------------------------
 	draw.RoundedBox(6, 229*SF+XMV, 27*SF, 572*SF, 26*SF, Color_Black)
